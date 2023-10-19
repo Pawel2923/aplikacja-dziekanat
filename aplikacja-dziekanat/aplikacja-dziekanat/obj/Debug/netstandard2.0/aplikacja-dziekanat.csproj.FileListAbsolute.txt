@@ -1,0 +1,15 @@
+C:\Users\pawel\Source\Repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\bin\Debug\netstandard2.0\aplikacja-dziekanat.deps.json
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\bin\Debug\netstandard2.0\aplikacja-dziekanat.dll
+C:\Users\pawel\Source\Repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\bin\Debug\netstandard2.0\ref\aplikacja-dziekanat.dll
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\bin\Debug\netstandard2.0\aplikacja-dziekanat.pdb
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\aplikacja-dziekanat.csproj.AssemblyReference.cache
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\aplikacja-dziekanat.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\App.xaml.g.cs
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\aplikacja-dziekanat.AssemblyInfoInputs.cache
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\aplikacja-dziekanat.AssemblyInfo.cs
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\aplikacja-dziekanat.csproj.CoreCompileInputs.cache
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\XamlC.stamp
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\aplikacja-dziekanat.dll
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\refint\aplikacja-dziekanat.dll
+C:\Users\pawel\source\repos\aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat\obj\Debug\netstandard2.0\aplikacja-dziekanat.pdb
