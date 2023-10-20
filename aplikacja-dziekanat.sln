@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aplikacja-dziekanat.Android", "aplikacja-dziekanat\aplikacja-dziekanat.Android\aplikacja-dziekanat.Android.csproj", "{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aplikacja-dziekanat", "aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat.csproj", "{0DA66516-C95B-4B88-8B5A-A8C6301C2C43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0DA66516-C95B-4B88-8B5A-A8C6301C2C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA66516-C95B-4B88-8B5A-A8C6301C2C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA66516-C95B-4B88-8B5A-A8C6301C2C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA66516-C95B-4B88-8B5A-A8C6301C2C43}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3747699D-EA28-42B7-9BB8-F80689190FCE}
+	EndGlobalSection
+EndGlobal
