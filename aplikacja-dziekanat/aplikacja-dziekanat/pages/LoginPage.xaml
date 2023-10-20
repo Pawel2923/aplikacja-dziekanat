@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CustomRenderer"
+             x:DataType="Page"
+             x:Class="aplikacja_dziekanat.pages.LoginPage">
+    <ContentPage.Content>
+        <Grid VerticalOptions="FillAndExpand" BackgroundColor="#2D3138">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="60, 100">
+                <Frame BackgroundColor="#fff" CornerRadius="100" VerticalOptions="Center" HorizontalOptions="Center" Margin="0, 0, 0, 15" >
+                    <Ellipse Fill="#fff" WidthRequest="132" HeightRequest="132"/>
+                </Frame>
+                <Label Text="Aplikacja Dziekanat" TextColor="#fff" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 7" />
+                <Frame Padding="10, 0" Margin="0, 15" HorizontalOptions="FillAndExpand" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
+                    <local:Input Placeholder="Email" />
+                </Frame>
+                <Frame Padding="10, 0" HorizontalOptions="FillAndExpand" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
+                    <local:Input Placeholder="Hasło" />
+                </Frame>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

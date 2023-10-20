@@ -1,4 +1,5 @@
-﻿using System;
+﻿using aplikacja_dziekanat.pages;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,8 +11,10 @@ namespace aplikacja_dziekanat
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new LoginPage();
         }
+
+        public ContentPage LoginProp { get; }
 
         protected override void OnStart()
         {
