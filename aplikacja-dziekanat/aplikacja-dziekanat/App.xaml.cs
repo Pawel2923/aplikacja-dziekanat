@@ -11,10 +11,10 @@ namespace aplikacja_dziekanat
         {
             InitializeComponent();
 
-            MainPage = new LoginPage();
+            MainPage = new SignupPage();
         }
 
-        public ContentPage LoginProp { get; }
+        //public ContentPage LoginProp { get; }
 
         protected override void OnStart()
         {

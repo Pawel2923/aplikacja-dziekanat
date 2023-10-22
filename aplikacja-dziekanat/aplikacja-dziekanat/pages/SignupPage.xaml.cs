@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace aplikacja-dziekanat.pages
+namespace aplikacja_dziekanat.pages
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SignupPage : ContentPage
