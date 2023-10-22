@@ -7,6 +7,8 @@
             <Label Text="Tu bedzie pogoda"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
+            
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
