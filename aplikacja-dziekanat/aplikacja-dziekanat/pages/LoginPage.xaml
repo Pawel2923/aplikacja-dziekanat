@@ -5,23 +5,21 @@
              x:DataType="Page"
              x:Class="aplikacja_dziekanat.pages.LoginPage">
     <ContentPage.Content>
-        <Grid VerticalOptions="FillAndExpand" BackgroundColor="#2D3138">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="60, 100">
-                <Frame BackgroundColor="#fff" CornerRadius="100" VerticalOptions="Center" HorizontalOptions="Center" Margin="0, 0, 0, 15" >
-                    <Ellipse Fill="#fff" WidthRequest="132" HeightRequest="132"/>
-                </Frame>
-                <Label Text="Aplikacja Dziekanat" TextColor="#fff" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 7" />
-                <Frame Padding="10, 0" Margin="0, 15" HorizontalOptions="FillAndExpand" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                    <local:Input Placeholder="Email" />
-                </Frame>
-                <Frame Padding="10, 0" HorizontalOptions="FillAndExpand" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                    <local:Input Placeholder="Hasło" />
-                </Frame>
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Margin="60, 100">
+            <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 15">
+                <Image Source="Logo.png" Aspect="Fill" WidthRequest="132" HeightRequest="132" />
+            </Frame>
+            <Label Text="Aplikacja Dziekanat" TextColor="#fff" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 7" />
+            <Frame Padding="10, 0" Margin="0, 15" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
+                <local:Input Placeholder="Email" />
+            </Frame>
+            <Frame Padding="10, 0" Margin="0,0,0,10" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
+                <local:Input Placeholder="Hasło" IsPassword="True" />
+            </Frame>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                <Button Text="Zaloguj się" CornerRadius="25" Padding="10,5" HeightRequest="35" BackgroundColor="#006E9F" BorderColor="#006E9F" BorderWidth="1" TextColor="#fff" />
+                <Button Text="Zarejestruj się" CornerRadius="25" Padding="10,5" HeightRequest="35" BackgroundColor="Transparent" BorderColor="#006E9F" BorderWidth="1" TextColor="#fff" />
             </StackLayout>
-        </Grid>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
