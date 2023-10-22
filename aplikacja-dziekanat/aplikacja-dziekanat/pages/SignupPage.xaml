@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CustomRenderer"
              x:DataType="Page"
-             x:Class="aplikacja_dziekanat.pages.SignupPage">
+             x:Class="aplikacja_dziekanat.pages.SignupPage"
+             NavigationPage.HasNavigationBar="false" >
     <ContentPage.Content>
         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Margin="60, 100">
             <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 15">
@@ -20,8 +21,23 @@
                 <local:Input Placeholder="Powtórz hasło" IsPassword="True" />
             </Frame>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
-                <Button Text="Zarejestruj się" CornerRadius="25" Padding="10,5" HeightRequest="35" BackgroundColor="#006E9F" BorderColor="#006E9F" BorderWidth="1" TextColor="#fff" />
-                <Button Text="Zaloguj się" CornerRadius="25" Padding="10,5" HeightRequest="35" BackgroundColor="Transparent" BorderColor="#006E9F" BorderWidth="1" TextColor="#fff" />
+                <Button Text="Zarejestruj się" 
+                        CornerRadius="25" 
+                        Padding="10,5" 
+                        HeightRequest="35" 
+                        BackgroundColor="#006E9F" 
+                        BorderColor="#006E9F" 
+                        BorderWidth="1" 
+                        TextColor="#fff" />
+                <Button Text="Zaloguj się" 
+                        CornerRadius="25" 
+                        Padding="10,5" 
+                        HeightRequest="35" 
+                        BackgroundColor="Transparent" 
+                        BorderColor="#006E9F" 
+                        BorderWidth="1" 
+                        TextColor="#fff" 
+                        Clicked="LoginClickHandler"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

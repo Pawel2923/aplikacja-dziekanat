@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage
     {
         public LoginPage()
         {
             InitializeComponent();
+        }
+
+        async public void SignupClickHandler(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SignupPage());
         }
     }
 }

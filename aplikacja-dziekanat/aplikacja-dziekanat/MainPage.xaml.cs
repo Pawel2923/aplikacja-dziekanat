@@ -1,4 +1,5 @@
-﻿using System;
+﻿using aplikacja_dziekanat.pages;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,6 +14,12 @@ namespace aplikacja_dziekanat
         public MainPage()
         {
             InitializeComponent();
+            OnInit();
+        }
+
+        async public void OnInit ()
+        {
+            await Navigation.PushAsync(new LoginPage());
         }
     }
 }

@@ -16,5 +16,10 @@ namespace aplikacja_dziekanat.pages
 		{
 			InitializeComponent ();
 		}
+
+		async public void LoginClickHandler (object sender, EventArgs e)
+		{
+			await Navigation.PopAsync();
+		}
 	}
 }
