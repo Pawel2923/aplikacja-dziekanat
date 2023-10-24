@@ -4,8 +4,7 @@
              x:Class="aplikacja_dziekanat.pages.PlanZajec">
     <ContentPage.Content>
         <StackLayout>
-            <Frame BackgroundColor="Aqua" Padding="24" CornerRadius="0">
-            </Frame>
+            
             <Label Text="tu bedzie plan zajec"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
