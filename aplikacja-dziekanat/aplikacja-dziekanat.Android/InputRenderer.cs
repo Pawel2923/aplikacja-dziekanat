@@ -19,7 +19,7 @@ namespace CustomRenderer.Android
 
             if (Control != null)
             {
-                Control.SetBackgroundColor(global::Android.Graphics.Color.Rgb(217, 217, 217));
+                Control.SetBackgroundColor(global::Android.Graphics.Color.Transparent);
             }
         }
     }
