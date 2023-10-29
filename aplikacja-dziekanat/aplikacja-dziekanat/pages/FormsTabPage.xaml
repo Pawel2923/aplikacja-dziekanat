@@ -1,13 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="aplikacja_dziekanat.pages.FormsTabPage"
             xmlns:pages="clr-namespace:aplikacja_dziekanat.pages">
-    
+    <MasterDetailPage.Master>
+        <ContentPage Padding="10" BackgroundColor="Transparent" Title="master">
+            <ContentPage.Content>
+                <StackLayout Margin="5,30,5,5">
+                  
+                    <Button Text="Plan Zajeć" BackgroundColor="Aqua" Clicked="Handle_Clicked"></Button>
 
+                    
+                    <Button Text="Ogłoszenia" BackgroundColor="Aqua" Clicked="Handle_Clicked1"></Button>
+
+
+                    <Button Text="Pogoda " BackgroundColor="Aqua" Clicked="Handle_Clicked2"></Button>
+
+                    <Button Text="Powrot " BackgroundColor="Aqua" Clicked="Handle_Clicked3"></Button>
+                </StackLayout>
+            </ContentPage.Content>
+        </ContentPage>
+</MasterDetailPage.Master>
+
+   
+    <MasterDetailPage.Detail>
+        <ContentPage Padding="10">
+            <ContentPage.Content>
+                <StackLayout Margin="5,30,5,5">
+                    <Label Text="detail" ></Label>
+                    
+                </StackLayout>
+            </ContentPage.Content>
+        </ContentPage>
+
+    </MasterDetailPage.Detail> 
+    <TabbedPage>
     <TabbedPage.Children>
         <pages:PlanZajec Title="Plan Zajęc" />
         <pages:Ogloszenia Title="Ogłoszenia"/>
         <pages:Pogoda Title="Pogoda" />
-        </TabbedPage.Children>
-</TabbedPage>
+        
+    </TabbedPage.Children>
+    </TabbedPage>
+
+</MasterDetailPage>
