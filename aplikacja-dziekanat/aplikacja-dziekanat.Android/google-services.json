@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640456713542",
+    "project_id": "aplikacja-dziekanat",
+    "storage_bucket": "aplikacja-dziekanat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640456713542:android:1fbb85085f2a15789f3147",
+        "android_client_info": {
+          "package_name": "com.companyname.aplikacja_dziekanat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaZNDgLjPf5b79QlI6LwSo_dkL23CTii0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

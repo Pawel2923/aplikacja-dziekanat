@@ -4,6 +4,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using CustomRenderer;
+using System.Runtime.CompilerServices;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -11,6 +12,10 @@ namespace aplikacja_dziekanat.pages
 
     public partial class LoginPage : ContentPage
     {
+        private DbConnection connection;
+        private Input email;
+        private Input password;
+
         public LoginPage()
         {
             InitializeComponent();
@@ -29,9 +34,6 @@ namespace aplikacja_dziekanat.pages
 
         private bool CheckForm()
         {
-            Input email = new Input(emailInput);
-            Input password = new Input(passwordInput);
-
             Input.Result emailResult = email.CheckValidity(true);
             emailLabel.Text = emailResult.Message;
             emailLabel.IsVisible = emailResult.Message.Length > 0;
@@ -48,15 +50,48 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        public void LoginClickHandler(object sender, EventArgs e)
+        public async void LoginClickHandler(object sender, EventArgs e)
         {
-            Debug.WriteLine(CheckForm());
+            email = new Input(emailInput);
+            password = new Input(passwordInput);
+
+            Debug.WriteLine("Form is ok? " + CheckForm());
+            if (CheckForm())
+            {
+                IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+
+                try
+                {
+                    var token = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
+                    Debug.WriteLine(token);
+                    if (token != null)
+                    {
+                        Debug.WriteLine("Token: " + token);
+                        await Navigation.PopAsync();
+                    }
+                } catch (Exception ex) 
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+            }
         }
 
         async public void SignupClickHandler(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new SignupPage());
             ResetForm();
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            connection = new DbConnection();
+            var users = await connection.GetUsers();
+            Debug.WriteLine($"{users.Count} users");
+            foreach ( var user in users )
+            {
+                Debug.WriteLine("User: " + user.Email + ", id: " + user.Uid);
+            }
         }
     }
 }
