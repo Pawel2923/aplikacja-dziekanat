@@ -1,5 +1,8 @@
-﻿
-
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,27 +13,26 @@ public partial class FormsTabPage : MasterDetailPage
 {
     public FormsTabPage()
     {
+
         InitializeComponent();
     }
         private void Handle_Clicked(object sender, System.EventArgs e)
         {
-            Detail = new NavigationPage(new pages.PlanZajec());
+            MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
+            IsPresented =false;
 
         }
         private void Handle_Clicked1(object sender, System.EventArgs e)
         {
-            Detail = new NavigationPage(new pages.Ogloszenia());
-
+            MainTabbedPage.CurrentPage = MainTabbedPage.Children[1];
+            IsPresented = false;
         }
         private void Handle_Clicked2(object sender, System.EventArgs e)
         {
-            Detail = new NavigationPage(new pages.Pogoda());
-
+            MainTabbedPage.CurrentPage = MainTabbedPage.Children[2];
+            IsPresented = false;
         }
-        private void Handle_Clicked3(object sender, System.EventArgs e)
-        {
-            Detail = new NavigationPage(new pages.FormsTabPage());
-
-        }
+        
+       
     }
 }
