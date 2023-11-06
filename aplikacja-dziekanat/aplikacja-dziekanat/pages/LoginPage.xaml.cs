@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using CustomRenderer;
-using System.Runtime.CompilerServices;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -15,6 +13,7 @@ namespace aplikacja_dziekanat.pages
         private DbConnection connection;
         private Input email;
         private Input password;
+        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
 
         public LoginPage()
         {
@@ -44,7 +43,8 @@ namespace aplikacja_dziekanat.pages
             if (emailResult.IsValid && passwordResult.IsValid)
             {
                 return true;
-            } else
+            } 
+            else
             {
                 return false;
             }
@@ -58,8 +58,6 @@ namespace aplikacja_dziekanat.pages
             Debug.WriteLine("Form is ok? " + CheckForm());
             if (CheckForm())
             {
-                IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
-
                 try
                 {
                     string uid = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
@@ -94,6 +92,13 @@ namespace aplikacja_dziekanat.pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+
+            if (auth.Uid() != null)
+            {
+                Debug.WriteLine(auth.Uid());
+                await Navigation.PopAsync();
+            }
+
             connection = new DbConnection();
             var users = await connection.GetUsers();
             Debug.WriteLine($"{users.Count} users");

@@ -19,6 +19,7 @@
                 </FormattedString>
             </Label.FormattedText>
         </Label>
+        <Button Text="Wyloguj się" Style="{StaticResource btnPrimaryStyle}" Clicked="LogoutClickHandler" />
     </StackLayout>
 
 </ContentPage>

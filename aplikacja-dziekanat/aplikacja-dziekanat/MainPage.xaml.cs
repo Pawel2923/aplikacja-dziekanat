@@ -21,5 +21,13 @@ namespace aplikacja_dziekanat
         {
             await Navigation.PushAsync(new LoginPage());
         }
+
+        async public void LogoutClickHandler(object sender, EventArgs e)
+        {
+            IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+
+            auth.Logout();
+            await Navigation.PushAsync(new LoginPage());
+        }
     }
 }
