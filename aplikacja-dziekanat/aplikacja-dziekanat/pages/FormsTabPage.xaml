@@ -12,18 +12,18 @@
                 <StackLayout Margin="5,30,5,5">
 
 
-                    <Button Text="Plan Zajeć"   Clicked="Handle_Clicked" BackgroundColor="#00b0ff"></Button>
+                    <Button Text="Plan Zajeć"   Clicked="Handle_Clicked" Style="{StaticResource btnPrimaryStyle}"></Button>
 
 
-                    <Button Text="Ogłoszenia"  Clicked="Handle_Clicked1" BackgroundColor="#00b0ff"></Button>
+                    <Button Text="Ogłoszenia"  Clicked="Handle_Clicked1" Style="{StaticResource btnPrimaryStyle}"></Button>
 
 
-                    <Button Text="Pogoda "  Clicked="Handle_Clicked2"  BackgroundColor="#00b0ff"></Button>
+                    <Button Text="Pogoda "  Clicked="Handle_Clicked2"  Style="{StaticResource btnPrimaryStyle}"></Button>
 
 
-                    <Button Text="Profil Użytkownika" Clicked="Handle_Clicked3" BackgroundColor="#00b0ff"></Button>
+                    <Button Text="Profil Użytkownika" Clicked="Handle_Clicked3" Style="{StaticResource btnPrimaryStyle}"></Button>
 
-                    <Button Text="WYLOGUJ" BackgroundColor="#00b0ff"
+                    <Button Text="WYLOGUJ" Style="{StaticResource btnPrimaryStyle}"
                         VerticalOptions="EndAndExpand"
                        HorizontalOptions="Center"></Button>
                 </StackLayout>
