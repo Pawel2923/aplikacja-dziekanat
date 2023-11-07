@@ -4,7 +4,7 @@
              x:Class="aplikacja_dziekanat.pages.Pogoda">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Tu bedzie pogoda"
+            <Label Text="Tu bedzie pogoda " TextColor="Wheat"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             

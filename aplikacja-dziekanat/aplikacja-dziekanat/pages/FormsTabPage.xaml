@@ -3,36 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="aplikacja_dziekanat.pages.FormsTabPage"
             xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
+             
              MasterBehavior="Popover">
     
     <MasterDetailPage.Master>
-        <ContentPage Padding="10"  Title="master">
+        <ContentPage Padding="10"  Title="master" BackgroundColor="Transparent">
             <ContentPage.Content>
                 <StackLayout Margin="5,30,5,5">
 
 
-                    <Button Text="Plan Zajeć"  Clicked="Handle_Clicked"></Button>
-
-                    
-                    <Button Text="Ogłoszenia"  Clicked="Handle_Clicked1"></Button>
+                    <Button Text="Plan Zajeć"   Clicked="Handle_Clicked" BackgroundColor="#00b0ff"></Button>
 
 
-                    <Button Text="Pogoda "  Clicked="Handle_Clicked2"  ></Button>
+                    <Button Text="Ogłoszenia"  Clicked="Handle_Clicked1" BackgroundColor="#00b0ff"></Button>
 
-                    
+
+                    <Button Text="Pogoda "  Clicked="Handle_Clicked2"  BackgroundColor="#00b0ff"></Button>
+
+
+                    <Button Text="Profil Użytkownika" Clicked="Handle_Clicked3" BackgroundColor="#00b0ff"></Button>
+
+                    <Button Text="WYLOGUJ" BackgroundColor="#00b0ff"
+                        VerticalOptions="EndAndExpand"
+                       HorizontalOptions="Center"></Button>
                 </StackLayout>
             </ContentPage.Content>
         </ContentPage>
         
 </MasterDetailPage.Master>
 
-   
+
     <MasterDetailPage.Detail>
-        <TabbedPage x:Name="MainTabbedPage">
-            <TabbedPage.Children>
-        <pages:PlanZajec Title="Plan Zajęc" />
-        <pages:Ogloszenia Title="Ogłoszenia"/>
-        <pages:Pogoda Title="Pogoda" />
+        <TabbedPage x:Name="MainTabbedPage" BackgroundColor="#2e3238" BarBackgroundColor="#0088C5"> 
+            <TabbedPage.Children >
+                <pages:PlanZajec Title="Plan Zajęc"  />
+                <pages:Ogloszenia Title="Ogłoszenia" />
+                <pages:Pogoda Title="Pogoda" />
         
     </TabbedPage.Children>
     </TabbedPage>

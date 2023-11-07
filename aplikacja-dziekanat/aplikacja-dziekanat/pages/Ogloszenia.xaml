@@ -6,7 +6,7 @@
    
         <ContentPage.Content>
             <StackLayout>
-                <Label Text="Tu bedzie ogloszeia"
+            <Label Text="Tu bedzie ogloszeia" TextColor="Wheat"
              VerticalOptions="CenterAndExpand" 
              HorizontalOptions="CenterAndExpand" />
 
