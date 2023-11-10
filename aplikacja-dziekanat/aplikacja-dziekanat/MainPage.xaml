@@ -10,7 +10,6 @@
         <pages:FormsTabPage x:Name="flyout1"/>
     </FlyoutPage.Flyout>
     <FlyoutPage.Detail>
-
         <NavigationPage>
             <x:Arguments>
                 <pages:FormsTabPage/>

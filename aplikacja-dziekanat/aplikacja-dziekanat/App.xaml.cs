@@ -11,7 +11,6 @@ namespace aplikacja_dziekanat
         public App()
         {
             InitializeComponent();
-
             MainPage = new NavigationPage(new FormsTabPage());
         }
 
