@@ -2,7 +2,19 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="aplikacja_dziekanat.App">
+
     <Application.Resources>
+        <ResourceDictionary>
+            <Style x:Key="btnPrimaryStyle" TargetType="Button">
+                <Setter Property="CornerRadius" Value="25" />
+                <Setter Property="Padding" Value="10, 5" />
+                <Setter Property="HeightRequest" Value="35" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BackgroundColor" Value="#006E9F" />
+                <Setter Property="BorderColor" Value="#006E9F" />
+                <Setter Property="TextColor" Value="#fff" />
+            </Style>
+        </ResourceDictionary>
 
     </Application.Resources>
 </Application>

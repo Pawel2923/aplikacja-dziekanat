@@ -14,5 +14,12 @@
     <!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
     <!--<item name="colorAccent">#FF4081</item>-->
+
+	  <item name="colorAccent">#00b0ff</item>
+	  <item name="colorPrimary">#0088C5</item>
+	  <item name="colorPrimaryDark">#006E9F</item>
+	  <item name="android:windowBackground">#2e3238</item>
+	  <item name="android:navigationBarColor">#2e3238</item>
+	 
   </style>
 </resources>
