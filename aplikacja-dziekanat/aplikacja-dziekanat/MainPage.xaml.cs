@@ -14,21 +14,7 @@ namespace aplikacja_dziekanat
         public MainPage()
         {
             InitializeComponent();
-            OnInit();
            // flayout1.listview1.ItemSelected += OnSelectedItem;
-        }
-
-        async public void OnInit ()
-        {
-            await Navigation.PushAsync(new LoginPage());
-        }
-
-        async public void LogoutClickHandler(object sender, EventArgs e)
-        {
-            IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
-
-            auth.Logout();
-            await Navigation.PushAsync(new LoginPage());
         }
     }
 
