@@ -7,14 +7,12 @@ namespace XamarinFirebase.Model
 {
     public class User
     {
-        private int uid;
         private string email;
         private bool isAdmin;
-        private bool isLecturer;
+        private bool isTeacher;
 
-        public int Uid { get { return uid; } set { uid = value; } }
         public string Email { get { return email; } set { email = value; } }
         public bool IsAdmin { get { return isAdmin; } set { isAdmin = value; } }
-        public bool IsLecturer { get { return isLecturer; } set { isLecturer = value; } }
+        public bool IsTeacher { get { return isTeacher; } set { isTeacher = value; } }
     }
 }

@@ -22,8 +22,20 @@ namespace aplikacja_dziekanat
               .OnceAsync<User>()).Select(item => new User
               {
                   Email = item.Object.Email,
-                  Uid = item.Object.Uid
+                  IsAdmin = item.Object.IsAdmin,
+                  IsTeacher = item.Object.IsTeacher
               }).ToList();
+        }
+
+        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher)
+        {
+            firebase = new FirebaseClient("https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/");
+            try { 
+                await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher });
+                return true; 
+            } catch (Exception) { 
+                return false; 
+            }
         }
     }
 }
