@@ -35,7 +35,8 @@ public partial class FormsTabPage : MasterDetailPage
 
         private void Handle_Clicked3(object sender, System.EventArgs e)
         {
-            
+            MainTabbedPage.CurrentPage = MainTabbedPage.Children[3];
+            IsPresented = false;
         }
 
     }

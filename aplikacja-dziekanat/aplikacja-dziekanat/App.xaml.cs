@@ -23,17 +23,21 @@ namespace aplikacja_dziekanat
                 int indeksPlanZajec = 1;
                 int indeksOgloszenia = 2;
                 int indeksPogoda = 3;
+                int indeksProfilUzyt = 4;
 
                 if (indeksPlanZajec >= 0 && indeksPlanZajec < tabbedPage.Children.Count &&
                     indeksOgloszenia >= 0 && indeksOgloszenia < tabbedPage.Children.Count &&
-                    indeksPogoda >= 0 && indeksPogoda < tabbedPage.Children.Count)
+                    indeksPogoda >= 0 && indeksPogoda < tabbedPage.Children.Count&&
+                    indeksProfilUzyt>=0 && indeksProfilUzyt<tabbedPage.Children.Count)
                 {
                     // Stworzenie nowej listy zakładek z odpowiednią kolejnością
                     var noweZakladki = new List<Page>
         {
             tabbedPage.Children[indeksPlanZajec],
             tabbedPage.Children[indeksOgloszenia],
-            tabbedPage.Children[indeksPogoda]
+            tabbedPage.Children[indeksPogoda],
+            tabbedPage.Children[indeksProfilUzyt]
+            
         };
 
                     // Ustawienie nowej listy zakładek jako dzieci TabbedPage
