@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using CustomRenderer;
+using db;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -104,7 +105,7 @@ namespace aplikacja_dziekanat.pages
             Debug.WriteLine($"{users.Count} users");
             foreach ( var user in users )
             {
-                Debug.WriteLine("User: " + user.Email + ", id: " + user.Uid);
+                Debug.WriteLine("User: " + user.Email);
             }
         }
     }

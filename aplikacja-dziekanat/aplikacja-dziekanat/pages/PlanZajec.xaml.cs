@@ -1,20 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using db;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class PlanZajec : ContentPage
-{
-    public PlanZajec()
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class PlanZajec : ContentPage
     {
-        InitializeComponent();
+        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+        private DbConnection connection;
+        public PlanZajec()
+        {
+            InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (auth.Uid() != null)
+            {
+                GetSchedule();
+            }
+        }
+
+        private async void GetSchedule()
+        {
+            connection = new DbConnection();
+            var schedule = await connection.GetSchedule("it-s-2-1", "13112023");
+            if (schedule != null)
+            {
+                scheduleContent.TextColor = Color.Black;
+                scheduleContent.BackgroundColor = Color.FromHex("#d9d9d9");
+                scheduleContent.Text = "";
+                foreach (var item in schedule)
+                {
+                    Debug.WriteLine("Name: " + item.Name + " TimeStart: " + item.TimeStart + " Duration: " + item.Duration + " ClassType: " + item.ClassType + " Room: " + item.Room + " Teacher: " + item.Teacher);
+                    scheduleContent.Text += "Name: " + item.Name + " TimeStart: " + item.TimeStart + " Duration: " + item.Duration + " ClassType: " + item.ClassType + " Room: " + item.Room + " Teacher: " + item.Teacher + "\n";
+                }
+            }
+        }
     }
-}
 }

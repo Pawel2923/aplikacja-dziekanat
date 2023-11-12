@@ -5,12 +5,14 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using CustomRenderer;
 using Xamarin.Essentials;
+using db;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SignupPage : ContentPage
     {
+        private DbConnection connection;
         private Input email;
         private Input password;
         private Input confirmPassword;
@@ -57,6 +59,9 @@ namespace aplikacja_dziekanat.pages
                     if (uid != null)
                     {
                         Debug.WriteLine("Uid: " + uid);
+                        connection = new DbConnection();
+                        bool result = await connection.CreateUser(email.Value, false, false);
+                        Debug.WriteLine("Create user result: " + result);
                         await Navigation.PopAsync();
                     }
                 }
