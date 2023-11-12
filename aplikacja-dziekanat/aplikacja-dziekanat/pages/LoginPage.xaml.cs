@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using CustomRenderer;
+using db;
 
 namespace aplikacja_dziekanat.pages
 {

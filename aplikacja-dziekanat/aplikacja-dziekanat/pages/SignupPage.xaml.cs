@@ -5,10 +5,11 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using CustomRenderer;
 using Xamarin.Essentials;
+using db;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SignupPage : ContentPage
     {
         private DbConnection connection;
