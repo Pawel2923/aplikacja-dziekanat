@@ -4,6 +4,7 @@ using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -40,6 +41,7 @@ namespace aplikacja_dziekanat.pages
                     scheduleContent.Text += "Name: " + item.Name + " TimeStart: " + item.TimeStart + " Duration: " + item.Duration + " ClassType: " + item.ClassType + " Room: " + item.Room + " Teacher: " + item.Teacher + "\n";
                 }
             }
+
         }
     }
 }

@@ -34,13 +34,14 @@
 
 
     <MasterDetailPage.Detail>
-        <TabbedPage x:Name="MainTabbedPage" BackgroundColor="#2e3238" BarBackgroundColor="#0088C5"> 
+        <TabbedPage x:Name="MainTabbedPage" BackgroundColor="#2e3238" BarBackgroundColor="#0088C5">
             <TabbedPage.Children >
                 <pages:PlanZajec Title="Plan Zajęc"  />
                 <pages:Ogloszenia Title="Ogłoszenia" />
                 <pages:Pogoda Title="Pogoda" />
-        
-    </TabbedPage.Children>
+                <pages:profilUz Title="Profil" />
+
+            </TabbedPage.Children>
     </TabbedPage>
         
         

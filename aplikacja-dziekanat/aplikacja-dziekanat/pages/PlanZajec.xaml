@@ -5,10 +5,21 @@
     <ContentPage.Content>
         <StackLayout>
 
-            <Label Text="tu bedzie plan zajec" TextColor="Wheat"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" 
-                x:Name="scheduleContent"/>
+            <Label x:Name="aktualnaData" Text="Data: " TextColor="White" HorizontalOptions="Center"/>
+            <ListView x:Name="lessonListView" HasUnevenRows="True" SelectedItem="{Binding SelectedLesson, Mode=TwoWay}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Vertical" Padding="10">
+                                <Label Text="{Binding DisplayData}" FontAttributes="Bold" TextColor="White"/>
+                                <Label Text="{Binding DisplayGodzina}" TextColor="White"/>
+                                <Label Text="{Binding DisplayPrzedmiot}" TextColor="White"/>
+                                <Label Text="{Binding DisplaySala}" TextColor="White"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
