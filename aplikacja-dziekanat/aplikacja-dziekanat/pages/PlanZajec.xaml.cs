@@ -31,9 +31,13 @@ namespace aplikacja_dziekanat.pages
             var schedule = await connection.GetSchedule("it-s-2-1", "13112023");
             if (schedule != null)
             {
+                scheduleContent.TextColor = Color.Black;
+                scheduleContent.BackgroundColor = Color.FromHex("#d9d9d9");
+                scheduleContent.Text = "";
                 foreach (var item in schedule)
                 {
                     Debug.WriteLine("Name: " + item.Name + " TimeStart: " + item.TimeStart + " Duration: " + item.Duration + " ClassType: " + item.ClassType + " Room: " + item.Room + " Teacher: " + item.Teacher);
+                    scheduleContent.Text += "Name: " + item.Name + " TimeStart: " + item.TimeStart + " Duration: " + item.Duration + " ClassType: " + item.ClassType + " Room: " + item.Room + " Teacher: " + item.Teacher + "\n";
                 }
             }
         }

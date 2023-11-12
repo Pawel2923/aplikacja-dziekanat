@@ -7,7 +7,8 @@
 
             <Label Text="tu bedzie plan zajec" TextColor="Wheat"
                 VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                HorizontalOptions="CenterAndExpand" 
+                x:Name="scheduleContent"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
