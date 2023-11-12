@@ -1,4 +1,3 @@
-﻿using aplikacja_dziekanat;
 using aplikacja_dziekanat.pages;
 using System;
 using System.Collections.Generic;
@@ -12,8 +11,7 @@ namespace aplikacja_dziekanat
         public App()
         {
             InitializeComponent();
-
-            MainPage = new FormsTabPage();
+            MainPage = new NavigationPage(new FormsTabPage());
         }
 
         protected override void OnStart()

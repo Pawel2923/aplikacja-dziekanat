@@ -13,8 +13,8 @@ public partial class FormsTabPage : MasterDetailPage
 {
     public FormsTabPage()
     {
-
         InitializeComponent();
+        OnInit();
     }
         private void Handle_Clicked(object sender, System.EventArgs e)
         {
@@ -39,5 +39,18 @@ public partial class FormsTabPage : MasterDetailPage
             IsPresented = false;
         }
 
+        async public void OnInit()
+        {
+            await Navigation.PushAsync(new LoginPage());
+        }
+
+        async public void LogoutClickHandler(object sender, EventArgs e)
+        {
+            IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+
+            auth.Logout();
+            await Navigation.PushAsync(new LoginPage());
+        }
+
     }
-    }
+}

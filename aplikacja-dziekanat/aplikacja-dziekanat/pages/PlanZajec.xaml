@@ -4,6 +4,7 @@
              x:Class="aplikacja_dziekanat.pages.PlanZajec">
     <ContentPage.Content>
         <StackLayout>
+
             <Label x:Name="aktualnaData" Text="Data: " TextColor="White" HorizontalOptions="Center"/>
             <ListView x:Name="lessonListView" HasUnevenRows="True" SelectedItem="{Binding SelectedLesson, Mode=TwoWay}" >
                 <ListView.ItemTemplate>

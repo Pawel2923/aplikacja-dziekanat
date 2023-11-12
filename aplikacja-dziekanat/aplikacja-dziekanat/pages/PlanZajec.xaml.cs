@@ -1,48 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using db;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class PlanZajec : ContentPage
-{
-
-       
-        public PlanZajec()
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class PlanZajec : ContentPage
     {
-        InitializeComponent();
-            var zajecia = GetZajecia();
-            lessonListView.ItemsSource = zajecia;
+        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+        private DbConnection connection;
+        public PlanZajec()
+        {
+            InitializeComponent();
+        }
 
-
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (auth.Uid() != null)
             {
-                UpdateCurrentDate();
-                return true; // Powtarzaj co sekundę
-            });
-        }
-        private void UpdateCurrentDate()
-        {
-            
-            aktualnaData.Text = $"Data: {DateTime.Now.ToString("dddd, dd.MM.yyyy HH:mm:ss")}";
+                GetSchedule();
+            }
         }
 
-        private List<Zajecia> GetZajecia()
+        private async void GetSchedule()
         {
-            // na szytywno wpisane zajęcia
-            return new List<Zajecia>
-        {
-            new Zajecia { Data = "poniedzialek", Godzina = "9:00 ", Przedmiot = "Matematyka" , Sala="0.7"},
-            new Zajecia{ Data = "poniedziałek", Godzina = "10:00 ",Przedmiot = "Matematyka w podstawie informatyki", Sala="2.1" },
-            
-        };
+            connection = new DbConnection();
+            var schedule = await connection.GetSchedule("it-s-2-1", "13112023");
+            if (schedule != null)
+            {
+                scheduleContent.TextColor = Color.Black;
+                scheduleContent.BackgroundColor = Color.FromHex("#d9d9d9");
+                scheduleContent.Text = "";
+                foreach (var item in schedule)
+                {
+                    Debug.WriteLine("Name: " + item.Name + " TimeStart: " + item.TimeStart + " Duration: " + item.Duration + " ClassType: " + item.ClassType + " Room: " + item.Room + " Teacher: " + item.Teacher);
+                    scheduleContent.Text += "Name: " + item.Name + " TimeStart: " + item.TimeStart + " Duration: " + item.Duration + " ClassType: " + item.ClassType + " Room: " + item.Room + " Teacher: " + item.Teacher + "\n";
+                }
+            }
 
         }
     }

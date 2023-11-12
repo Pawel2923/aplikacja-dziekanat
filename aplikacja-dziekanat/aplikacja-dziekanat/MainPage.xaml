@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <FlyoutPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="aplikacja_dziekanat.MainPage"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="aplikacja_dziekanat.MainPage"
             xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
             Title="MENU">
 
@@ -10,7 +10,6 @@
         <pages:FormsTabPage x:Name="flyout1"/>
     </FlyoutPage.Flyout>
     <FlyoutPage.Detail>
-
         <NavigationPage>
             <x:Arguments>
                 <pages:FormsTabPage/>
