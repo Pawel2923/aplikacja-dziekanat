@@ -4,21 +4,9 @@
              x:Class="aplikacja_dziekanat.pages.PlanZajec">
     <ContentPage.Content>
         <StackLayout>
-
             <Label x:Name="aktualnaData" Text="Data: " TextColor="White" HorizontalOptions="Center"/>
-            <ListView x:Name="lessonListView" HasUnevenRows="True" SelectedItem="{Binding SelectedLesson, Mode=TwoWay}" >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Vertical" Padding="10">
-                                <Label Text="{Binding DisplayData}" FontAttributes="Bold" TextColor="White"/>
-                                <Label Text="{Binding DisplayGodzina}" TextColor="White"/>
-                                <Label Text="{Binding DisplayPrzedmiot}" TextColor="White"/>
-                                <Label Text="{Binding DisplaySala}" TextColor="White"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+            <ListView x:Name="lessonListView" HasUnevenRows="True" >
+
             </ListView>
         </StackLayout>
     </ContentPage.Content>
