@@ -49,6 +49,7 @@ public partial class FormsTabPage : MasterDetailPage
             IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
 
             auth.Logout();
+            IsPresented = false;
             await Navigation.PushAsync(new LoginPage());
         }
 

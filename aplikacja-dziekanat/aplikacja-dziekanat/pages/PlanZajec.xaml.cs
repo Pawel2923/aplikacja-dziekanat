@@ -57,14 +57,14 @@ namespace aplikacja_dziekanat.pages
         {
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
-            // Tutaj możesz dodać kod do odświeżenia listy zajęć na nowy dzień
+            
         }
 
         private void ScrollToPreviousDay()
         {
             currentDate = currentDate.AddDays(-1);
             UpdateCurrentDate();
-            // Tutaj możesz dodać kod do odświeżenia listy zajęć na nowy dzień
+            
         }
 
         protected override void OnAppearing()
@@ -79,7 +79,9 @@ namespace aplikacja_dziekanat.pages
         private async void GetSchedule()
         {
             connection = new DbConnection();
-            var schedule = await connection.GetSchedule("it-s-2-1", currentDate.ToString("ddMMyyyy"));
+            var schedule = await connection.GetSchedule("it-s-2-1","13112023");
+            Debug.WriteLine("data aktualna",currentDate.ToString("ddMMyyyy"));
+            
             if (schedule != null)
             {
                 lessonListView.ItemsSource = schedule;
