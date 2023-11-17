@@ -1,7 +1,6 @@
 ﻿using db;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,7 +19,7 @@ namespace aplikacja_dziekanat.pages
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 UpdateCurrentDate();
-                return true; 
+                return true;
             });
         }
         private void UpdateCurrentDate()
@@ -43,7 +42,7 @@ namespace aplikacja_dziekanat.pages
             var schedule = await connection.GetSchedule(classId, date);
             if (schedule != null)
             {
-                lessonListView.ItemsSource = schedule; 
+                lessonListView.ItemsSource = schedule;
             }
         }
 
@@ -69,7 +68,7 @@ namespace aplikacja_dziekanat.pages
                 var timeStartLabel = new Label();
                 timeStartLabel.SetBinding(Label.TextProperty, "TimeStart");
 
-                
+
 
                 var stackLayout = new StackLayout
                 {
@@ -89,7 +88,7 @@ namespace aplikacja_dziekanat.pages
                 if (e.SelectedItem != null)
                 {
                     Debug.WriteLine("Selected Item: " + e.SelectedItem);
-                    lessonListView.SelectedItem = null; 
+                    lessonListView.SelectedItem = null;
                 }
             };
         }

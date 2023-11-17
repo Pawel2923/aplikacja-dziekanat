@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CustomRenderer;
+using db;
+using System;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using CustomRenderer;
-using db;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -11,7 +11,6 @@ namespace aplikacja_dziekanat.pages
 
     public partial class LoginPage : ContentPage
     {
-        private DbConnection connection;
         private Input email;
         private Input password;
         private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
@@ -44,7 +43,7 @@ namespace aplikacja_dziekanat.pages
             if (emailResult.IsValid && passwordResult.IsValid)
             {
                 return true;
-            } 
+            }
             else
             {
                 return false;
@@ -65,7 +64,8 @@ namespace aplikacja_dziekanat.pages
                     {
                         await Navigation.PopAsync();
                     }
-                } catch (Exception ex) 
+                }
+                catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
                     if (ex.Message.Contains("INVALID_LOGIN_CREDENTIALS"))

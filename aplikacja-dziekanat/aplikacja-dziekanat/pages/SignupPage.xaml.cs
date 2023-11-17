@@ -1,28 +1,26 @@
-﻿using System;
+﻿using CustomRenderer;
+using db;
+using System;
 using System.Diagnostics;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using CustomRenderer;
-using Xamarin.Essentials;
-using db;
 
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SignupPage : ContentPage
+    public partial class SignupPage : ContentPage
     {
         private DbConnection connection;
         private Input email;
         private Input password;
         private Input confirmPassword;
-        public SignupPage ()
-		{
-			InitializeComponent ();
-		}
+        public SignupPage()
+        {
+            InitializeComponent();
+        }
 
-		private bool CheckForm()
-		{
+        private bool CheckForm()
+        {
             Input.Result emailResult = email.CheckValidity(true);
             emailLabel.Text = emailResult.Message;
             emailLabel.IsVisible = emailResult.Message.Length > 0;
@@ -33,10 +31,11 @@ namespace aplikacja_dziekanat.pages
             confirmPasswordLabel.Text = confirmPasswordResult.Message;
             confirmPasswordLabel.IsVisible = confirmPasswordResult.Message.Length > 0;
 
-            if (emailResult.IsValid && passwordResult.IsValid && confirmPasswordResult.IsValid) 
+            if (emailResult.IsValid && passwordResult.IsValid && confirmPasswordResult.IsValid)
             {
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
@@ -84,9 +83,9 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        async public void LoginClickHandler (object sender, EventArgs e)
-		{
-			await Navigation.PopAsync();
-		}
-	}
+        async public void LoginClickHandler(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
+    }
 }

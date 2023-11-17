@@ -1,11 +1,4 @@
-﻿using aplikacja_dziekanat.pages;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace aplikacja_dziekanat
 {
@@ -14,7 +7,7 @@ namespace aplikacja_dziekanat
         public MainPage()
         {
             InitializeComponent();
-           // flayout1.listview1.ItemSelected += OnSelectedItem;
+            // flayout1.listview1.ItemSelected += OnSelectedItem;
         }
     }
 
