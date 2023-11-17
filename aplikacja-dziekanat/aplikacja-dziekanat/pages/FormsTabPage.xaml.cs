@@ -45,8 +45,13 @@ namespace aplikacja_dziekanat.pages
             IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
 
             auth.Logout();
+            IsPresented = false;
             await Navigation.PushAsync(new LoginPage());
         }
 
+        public void MenuBtnTapHandler(object sender, EventArgs e)
+        {
+            IsPresented = !IsPresented;
+        }
     }
 }

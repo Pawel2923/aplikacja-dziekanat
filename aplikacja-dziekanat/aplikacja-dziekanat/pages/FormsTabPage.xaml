@@ -8,41 +8,32 @@
     <NavigationPage.TitleView>
         <FlexLayout AlignItems="Center">
             <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Start" VerticalOptions="Start">
-                <Image Source="hamburger.png" Aspect="Fill" WidthRequest="30" HeightRequest="30" VerticalOptions="Start"/>
+                <Image Source="hamburger.png" Aspect="Fill" WidthRequest="30" HeightRequest="30" VerticalOptions="Start">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="MenuBtnTapHandler" NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
             </Frame>
             <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
                 <Image Source="Logo.png" Aspect="Fill" WidthRequest="35" HeightRequest="35" HorizontalOptions="Start" VerticalOptions="Start"/>
             </Frame>
         </FlexLayout>
     </NavigationPage.TitleView>
-
     <FlyoutPage.Flyout>
         <ContentPage Padding="10"  Title="master" BackgroundColor="#2e3238">
             <ContentPage.Content>
                 <StackLayout Margin="5,30,5,5">
-
-
-                    <Button Text="Plan Zajeć"   Clicked="Handle_Clicked" Style="{StaticResource btnPrimaryStyle}"></Button>
-
-
+                    <Button Text="Plan Zajeć"  Clicked="Handle_Clicked" Style="{StaticResource btnPrimaryStyle}"></Button>
                     <Button Text="Ogłoszenia"  Clicked="Handle_Clicked1" Style="{StaticResource btnPrimaryStyle}"></Button>
-
-
                     <Button Text="Pogoda"  Clicked="Handle_Clicked2"  Style="{StaticResource btnPrimaryStyle}"></Button>
-
-
                     <Button Text="Profil Użytkownika" Clicked="Handle_Clicked3" Style="{StaticResource btnPrimaryStyle}"></Button>
-
                     <Button Text="WYLOGUJ" Style="{StaticResource btnPrimaryStyle}"
-                        VerticalOptions="EndAndExpand"
+                       VerticalOptions="EndAndExpand"
                        HorizontalOptions="Center" Clicked="LogoutClickHandler"></Button>
                 </StackLayout>
             </ContentPage.Content>
         </ContentPage>
-        
-</FlyoutPage.Flyout>
-
-
+    </FlyoutPage.Flyout>
     <FlyoutPage.Detail>
         <TabbedPage x:Name="MainTabbedPage" BackgroundColor="#2e3238" BarBackgroundColor="#56595d">
             <TabbedPage.Children >
@@ -52,12 +43,7 @@
                 <pages:profilUz Title="Profil" />
 
             </TabbedPage.Children>
-    </TabbedPage>
-        
-        
-
+        </TabbedPage>
     </FlyoutPage.Detail> 
-    
-
 </FlyoutPage>
   
