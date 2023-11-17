@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+<FlyoutPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="aplikacja_dziekanat.pages.FormsTabPage"
-             x:DataType="MasterDetailPage"
+             x:DataType="FlyoutPage"
              xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
-             MasterBehavior="Popover"
              NavigationPage.HasBackButton="False">
     <NavigationPage.TitleView>
         <FlexLayout AlignItems="Center">
@@ -16,8 +15,8 @@
             </Frame>
         </FlexLayout>
     </NavigationPage.TitleView>
-    
-    <MasterDetailPage.Master>
+
+    <FlyoutPage.Flyout>
         <ContentPage Padding="10"  Title="master" BackgroundColor="#2e3238">
             <ContentPage.Content>
                 <StackLayout Margin="5,30,5,5">
@@ -41,10 +40,10 @@
             </ContentPage.Content>
         </ContentPage>
         
-</MasterDetailPage.Master>
+</FlyoutPage.Flyout>
 
 
-    <MasterDetailPage.Detail>
+    <FlyoutPage.Detail>
         <TabbedPage x:Name="MainTabbedPage" BackgroundColor="#2e3238" BarBackgroundColor="#56595d">
             <TabbedPage.Children >
                 <pages:PlanZajec Title="Plan Zajęc"  />
@@ -57,8 +56,8 @@
         
         
 
-    </MasterDetailPage.Detail> 
+    </FlyoutPage.Detail> 
     
 
-</MasterDetailPage>
+</FlyoutPage>
   

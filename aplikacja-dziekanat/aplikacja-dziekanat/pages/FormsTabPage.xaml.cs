@@ -5,7 +5,7 @@ using Xamarin.Forms.Xaml;
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class FormsTabPage : MasterDetailPage
+    public partial class FormsTabPage : FlyoutPage
     {
         public FormsTabPage()
         {
