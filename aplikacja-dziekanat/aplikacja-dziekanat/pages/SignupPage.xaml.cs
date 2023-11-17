@@ -48,7 +48,6 @@ namespace aplikacja_dziekanat.pages
             password = new Input(passwordInput);
             confirmPassword = new Input(confirmPasswordInput);
 
-            Debug.WriteLine("Form is ok? " + CheckForm());
             if (CheckForm())
             {
                 IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
@@ -58,10 +57,8 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        Debug.WriteLine("Uid: " + uid);
                         connection = new DbConnection();
                         bool result = await connection.CreateUser(email.Value, false, false);
-                        Debug.WriteLine("Create user result: " + result);
                         await Navigation.PopAsync();
                     }
                 }

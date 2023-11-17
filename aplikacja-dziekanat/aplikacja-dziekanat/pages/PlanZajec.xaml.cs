@@ -25,7 +25,6 @@ namespace aplikacja_dziekanat.pages
         }
         private void UpdateCurrentDate()
         {
-
             aktualnaData.Text = $"Data: {DateTime.Now.ToString("dddd, dd.MM.yyyy HH:mm:ss")}";
         }
 
@@ -34,14 +33,14 @@ namespace aplikacja_dziekanat.pages
             base.OnAppearing();
             if (auth.Uid() != null)
             {
-                GetSchedule();
+                GetSchedule("it-s-2-1", DateTime.Now.DayOfWeek.ToString());
             }
         }
 
-        private async void GetSchedule()
+        private async void GetSchedule(string classId, string date)
         {
             connection = new DbConnection();
-            var schedule = await connection.GetSchedule("it-s-2-1", "13112023");
+            var schedule = await connection.GetSchedule(classId, date);
             if (schedule != null)
             {
                 lessonListView.ItemsSource = schedule; 
