@@ -27,6 +27,10 @@
                 <Setter Property="BorderColor" Value="#006E9F" />
                 <Setter Property="TextColor" Value="#fff" />
             </Style>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="#56595d"/>
+                <Setter Property="BarTextColor" Value="White"   />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
