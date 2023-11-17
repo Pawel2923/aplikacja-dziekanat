@@ -56,7 +56,6 @@ namespace aplikacja_dziekanat.pages
             email = new Input(emailInput);
             password = new Input(passwordInput);
 
-            Debug.WriteLine("Form is ok? " + CheckForm());
             if (CheckForm())
             {
                 try
@@ -64,7 +63,6 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        Debug.WriteLine("Uid: " + uid);
                         await Navigation.PopAsync();
                     }
                 } catch (Exception ex) 
@@ -96,16 +94,7 @@ namespace aplikacja_dziekanat.pages
 
             if (auth.Uid() != null)
             {
-                Debug.WriteLine(auth.Uid());
                 await Navigation.PopAsync();
-            }
-
-            connection = new DbConnection();
-            var users = await connection.GetUsers();
-            Debug.WriteLine($"{users.Count} users");
-            foreach ( var user in users )
-            {
-                Debug.WriteLine("User: " + user.Email);
             }
         }
     }
