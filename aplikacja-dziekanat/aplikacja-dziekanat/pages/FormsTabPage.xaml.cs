@@ -53,5 +53,10 @@ namespace aplikacja_dziekanat.pages
         {
             IsPresented = !IsPresented;
         }
+
+        public void LogoTapHandler(object sender, EventArgs e)
+        {
+            MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
+        }
     }
 }

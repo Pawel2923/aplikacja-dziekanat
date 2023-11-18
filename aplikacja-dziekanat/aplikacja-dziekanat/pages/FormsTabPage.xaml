@@ -22,7 +22,11 @@
                 </Image>
             </Frame>
             <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,0,17.5,0">
-                <Image Source="Logo.png" Aspect="Fill" WidthRequest="35" HeightRequest="35" />
+                <Image Source="Logo.png" Aspect="Fill" WidthRequest="35" HeightRequest="35">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="LogoTapHandler" NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
             </Frame>
         </Grid>
     </NavigationPage.TitleView>
