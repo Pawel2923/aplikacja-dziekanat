@@ -26,7 +26,12 @@ namespace aplikacja_dziekanat.pages
                 UpdateCurrentDate();
                 return true;
             });
-            
+            var calendarIcon = new Image
+            {
+                Source = "kanedarz1.jpg", 
+                HeightRequest = 30, 
+                WidthRequest = 30 
+            };
 
             var previousDayButton = new Button { Text = "Poprzedni dzień" };
             previousDayButton.Clicked += (sender, e) => ScrollToPreviousDay();
@@ -38,7 +43,7 @@ namespace aplikacja_dziekanat.pages
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Children = { previousDayButton,nextDayButton }
+                Children = { previousDayButton,calendarIcon, nextDayButton}
             };
 
             var mainStackLayout = new StackLayout
@@ -48,7 +53,7 @@ namespace aplikacja_dziekanat.pages
 
             Content = mainStackLayout;
         }
-
+      
         private void UpdateCurrentDate()
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
