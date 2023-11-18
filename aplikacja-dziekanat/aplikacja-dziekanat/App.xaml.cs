@@ -1,8 +1,6 @@
 using aplikacja_dziekanat.pages;
-using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat
 {
@@ -25,8 +23,8 @@ namespace aplikacja_dziekanat
 
                 if (indeksPlanZajec >= 0 && indeksPlanZajec < tabbedPage.Children.Count &&
                     indeksOgloszenia >= 0 && indeksOgloszenia < tabbedPage.Children.Count &&
-                    indeksPogoda >= 0 && indeksPogoda < tabbedPage.Children.Count&&
-                    indeksProfilUzyt>=0 && indeksProfilUzyt<tabbedPage.Children.Count)
+                    indeksPogoda >= 0 && indeksPogoda < tabbedPage.Children.Count &&
+                    indeksProfilUzyt >= 0 && indeksProfilUzyt < tabbedPage.Children.Count)
                 {
                     // Stworzenie nowej listy zakładek z odpowiednią kolejnością
                     var noweZakladki = new List<Page>
@@ -35,7 +33,7 @@ namespace aplikacja_dziekanat
             tabbedPage.Children[indeksOgloszenia],
             tabbedPage.Children[indeksPogoda],
             tabbedPage.Children[indeksProfilUzyt]
-            
+
         };
 
                     // Ustawienie nowej listy zakładek jako dzieci TabbedPage

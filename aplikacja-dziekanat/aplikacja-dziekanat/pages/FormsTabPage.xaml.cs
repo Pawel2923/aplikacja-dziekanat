@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class FormsTabPage : MasterDetailPage
-{
-    public FormsTabPage()
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class FormsTabPage : FlyoutPage
     {
-        InitializeComponent();
-        OnInit();
-    }
+        public FormsTabPage()
+        {
+            InitializeComponent();
+            OnInit();
+        }
         private void Handle_Clicked(object sender, System.EventArgs e)
         {
             MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
-            IsPresented =false;
+            IsPresented = false;
 
         }
         private void Handle_Clicked1(object sender, System.EventArgs e)
@@ -49,8 +45,18 @@ public partial class FormsTabPage : MasterDetailPage
             IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
 
             auth.Logout();
+            IsPresented = false;
             await Navigation.PushAsync(new LoginPage());
         }
 
+        public void MenuBtnTapHandler(object sender, EventArgs e)
+        {
+            IsPresented = !IsPresented;
+        }
+
+        public void LogoTapHandler(object sender, EventArgs e)
+        {
+            MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
+        }
     }
 }

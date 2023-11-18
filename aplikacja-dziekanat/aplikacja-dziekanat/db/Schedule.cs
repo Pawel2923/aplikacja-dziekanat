@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace db
+﻿namespace db
 {
     public class Schedule
     {
@@ -13,7 +8,7 @@ namespace db
         private string room;
         private string teacher;
         private string timeStart;
-        
+
         public string ClassType { get { return classType; } set { classType = value; } }
         public double Duration { get { return duration; } set { duration = value; } }
         public string Name { get { return name; } set { name = value; } }

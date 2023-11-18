@@ -18,6 +18,6 @@
 	  <item name="colorPrimary">#0088C5</item>
 	  <item name="colorPrimaryDark">#006E9F</item>
 	  <item name="android:windowBackground">#2e3238</item>
-	  <item name="android:navigationBarColor">#2e3238</item>
+	  <item name="android:navigationBarColor">@android:color/transparent</item>
   </style>
 </resources>
