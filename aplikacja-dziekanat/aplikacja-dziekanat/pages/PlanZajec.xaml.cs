@@ -1,5 +1,6 @@
 ﻿using db;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Xamarin.Forms;
@@ -25,8 +26,8 @@ namespace aplikacja_dziekanat.pages
                 UpdateCurrentDate();
                 return true;
             });
+            
 
-            // Dodaj przyciski do przewijania dni
             var previousDayButton = new Button { Text = "Poprzedni dzień" };
             previousDayButton.Clicked += (sender, e) => ScrollToPreviousDay();
 
@@ -37,7 +38,7 @@ namespace aplikacja_dziekanat.pages
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Children = { previousDayButton, nextDayButton }
+                Children = { previousDayButton,nextDayButton }
             };
 
             var mainStackLayout = new StackLayout
@@ -57,15 +58,16 @@ namespace aplikacja_dziekanat.pages
         {
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
-            
+            GetSchedule();
         }
 
         private void ScrollToPreviousDay()
         {
             currentDate = currentDate.AddDays(-1);
             UpdateCurrentDate();
-            
+            GetSchedule();
         }
+
 
         protected override void OnAppearing()
         {
@@ -79,87 +81,95 @@ namespace aplikacja_dziekanat.pages
         private async void GetSchedule()
         {
             connection = new DbConnection();
-            var schedule = await connection.GetSchedule("it-s-2-1","13112023");
-            Debug.WriteLine("data aktualna",currentDate.ToString("ddMMyyyy"));
-            
+            var dayOfWeekEnglish = currentDate.DayOfWeek.ToString();
+            var schedule = await connection.GetSchedule("it-s-2-1", dayOfWeekEnglish);
+
+            Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {dayOfWeekEnglish}");
+
             if (schedule != null)
             {
                 lessonListView.ItemsSource = schedule;
             }
+            
         }
-    
 
 
-private void InitializeListView()
+
+
+
+        private void InitializeListView()
         {
             lessonListView.ItemTemplate = new DataTemplate(() =>
             {
-                
-                
-                    var classTypeLabel1 = new Label
-                    {
+                var classTypeLabel1 = new Label
+                {
+                    TextColor = Color.White,
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                };
+                classTypeLabel1.SetBinding(Label.TextProperty, "ClassType");
 
-                        TextColor = Color.White,
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
-                    };
-                    classTypeLabel1.SetBinding(Label.TextProperty, "ClassType");
-
-                    var durationLabel = new Label
-                    {
-
-                        TextColor = Color.White,
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
-                    };
+                var durationLabel = new Label
+                {
+                    TextColor = Color.White,
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                };
                 durationLabel.SetBinding(Label.TextProperty, "Duration");
 
-                    var nameLabel = new Label
-                    {
-
-                        TextColor = Color.White,
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
-                    };
+                var nameLabel = new Label
+                {
+                    TextColor = Color.White,
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                };
                 nameLabel.SetBinding(Label.TextProperty, "Name");
 
-                    var roomLabel = new Label
-                    {
-
-                        TextColor = Color.White,
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
-                    };
-
+                var roomLabel = new Label
+                {
+                    TextColor = Color.White,
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                };
                 roomLabel.SetBinding(Label.TextProperty, "Room");
 
-                    var teacherLabel = new Label
-                    {
-
-                        TextColor = Color.White,
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
-                    };
+                var teacherLabel = new Label
+                {
+                    TextColor = Color.White,
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                };
                 teacherLabel.SetBinding(Label.TextProperty, "Teacher");
 
-                    var timeStartLabel = new Label
-                    {
-
-                        TextColor = Color.White,
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
-                    };
+                var timeStartLabel = new Label
+                {
+                    TextColor = Color.White,
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                };
                 timeStartLabel.SetBinding(Label.TextProperty, "TimeStart");
 
                
+                var grid = new Grid
+                {
+                    Margin = new Thickness(10),
+                    RowDefinitions = new RowDefinitionCollection
+            {
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto }
+            },
+                    ColumnDefinitions = new ColumnDefinitionCollection
+            {
+                new ColumnDefinition { Width = GridLength.Star }
+            }
+                };
 
+                grid.Children.Add(classTypeLabel1, 0, 0);
+                grid.Children.Add(durationLabel, 0, 1);
+                grid.Children.Add(nameLabel, 0, 2);
+                grid.Children.Add(timeStartLabel, 0, 3);
+                grid.Children.Add(roomLabel, 0, 4);
+                grid.Children.Add(teacherLabel, 0, 5);
 
-                    var stackLayout = new StackLayout
-                    {
-
-
-
-                        Children = { classTypeLabel1, durationLabel, nameLabel, timeStartLabel, roomLabel, teacherLabel }
-                    };
-
-                    var scrollView = new ScrollView { Content = stackLayout };
-
-                    return new ViewCell { View = stackLayout };
-                
+                return new ViewCell { View = grid };
             });
 
             lessonListView.ItemSelected += (sender, e) =>
@@ -167,9 +177,11 @@ private void InitializeListView()
                 if (e.SelectedItem != null)
                 {
                     Debug.WriteLine("Selected Item: " + e.SelectedItem);
-                    lessonListView.SelectedItem = null; 
+                    lessonListView.SelectedItem = null;
                 }
             };
         }
+
+
     }
 }
