@@ -1,7 +1,7 @@
 ﻿using db;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -28,24 +28,28 @@ namespace aplikacja_dziekanat.pages
             var calendarIcon = new Image
             {
                 Source = "kanedarz1.jpg", 
-                HeightRequest = 30, 
-                WidthRequest = 30 
+                HeightRequest = 30,
+                WidthRequest = 30,
+                Margin = new Thickness(0, 0, 0, 10)
             };
             var datePicker = new DatePicker();
 
-            var showDatePickerButton = new Button { Text = "Pokaż Kalendarz" };
+            var showDatePickerButton = new Button
+            {
+                Text = "Pokaż Kalendarz"
+            };
             showDatePickerButton.Clicked += (sender, e) =>
             {
                 datePicker.Focus();
             };
-            
+
             var grid = new Grid
             {
                 IsVisible = false,
                 Children =
-    {
-        datePicker
-    }
+                {
+                    datePicker
+                }
             };
 
             calendarIcon.GestureRecognizers.Add(new TapGestureRecognizer
@@ -59,24 +63,36 @@ namespace aplikacja_dziekanat.pages
 
             datePicker.DateSelected += (sender, e) =>
             {
-                currentDate = e.NewDate; 
+                currentDate = e.NewDate;
                 UpdateCurrentDate();
-                GetSchedule(); 
+                GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
 
-                grid.IsVisible = false; 
+                grid.IsVisible = false;
             };
 
-            var previousDayButton = new Button { Text = "Poprzedni dzień" };
+            datePicker.IsVisible = false;
+
+            var previousDayButton = new Button
+            {
+                Text = "Poprzedni dzień",
+                Style = (Style)Application.Current.Resources["btnPrimaryStyle"],
+                Margin = new Thickness(0, 0, 5, 10)
+            };
             previousDayButton.Clicked += (sender, e) => ScrollToPreviousDay();
 
-            var nextDayButton = new Button { Text = "Następny dzień" };
+            var nextDayButton = new Button
+            {
+                Text = "Następny dzień",
+                Style = (Style)Application.Current.Resources["btnPrimaryStyle"],
+                Margin = new Thickness(5, 0, 0, 10)
+            };
             nextDayButton.Clicked += (sender, e) => ScrollToNextDay();
 
             var buttonsStackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Children = { previousDayButton,calendarIcon, nextDayButton,grid}
+                Children = { previousDayButton, calendarIcon, nextDayButton, grid }
             };
 
             var mainStackLayout = new StackLayout
@@ -86,7 +102,7 @@ namespace aplikacja_dziekanat.pages
 
             Content = mainStackLayout;
         }
-      
+
         private void UpdateCurrentDate()
         {
 
@@ -97,7 +113,7 @@ namespace aplikacja_dziekanat.pages
         {
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
-            GetSchedule();
+            GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
 
         }
 
@@ -105,10 +121,10 @@ namespace aplikacja_dziekanat.pages
         {
             currentDate = currentDate.AddDays(-1);
             UpdateCurrentDate();
-            GetSchedule();
+            GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
         }
 
-      
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -118,34 +134,29 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        private async void GetSchedule(string classId, string date)
+        private async void GetSchedule(string classId, string day)
         {
             connection = new DbConnection();
+            var schedule = await connection.GetSchedule(classId, day);
 
-            var dayOfWeekEnglish = currentDate.DayOfWeek.ToString();
-            var schedule = await connection.GetSchedule("it-s-2-1", dayOfWeekEnglish);
-
-            Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {dayOfWeekEnglish}");
+            Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
             if (schedule != null)
             {
+                schedule = schedule.OrderBy(item => item.TimeStart).ToList();
+
                 foreach (var item in schedule)
                 {
-
-                    
-                    item.ClassType = "Rodzaj zajec: " + item.ClassType;
-                    //duration 
+                    item.ClassType = "Rodzaj zajęć: " + item.ClassType;
+                    item.Duration = "Czas trwania: " + item.Duration + "h";
                     item.Name = "Nazwa: " + item.Name;
                     item.Room = "Sala: " + item.Room;
                     item.Teacher = "Prowadzący: " + item.Teacher;
                     item.TimeStart = "Godzina rozpoczęcia: " + item.TimeStart;
-
-                   
                 }
 
                 lessonListView.ItemsSource = schedule;
             }
-            
         }
 
 
@@ -196,25 +207,23 @@ namespace aplikacja_dziekanat.pages
                 };
                 timeStartLabel.SetBinding(Label.TextProperty, "TimeStart");
 
-
-               
                 var grid = new Grid
 
                 {
                     Margin = new Thickness(10),
                     RowDefinitions = new RowDefinitionCollection
-            {
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = GridLength.Auto }
-            },
-                    ColumnDefinitions = new ColumnDefinitionCollection
-            {
-                new ColumnDefinition { Width = GridLength.Star }
-            }
+                    {
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto }
+                    },
+                        ColumnDefinitions = new ColumnDefinitionCollection
+                    {
+                        new ColumnDefinition { Width = GridLength.Star }
+                    }
                 };
 
                 grid.Children.Add(classTypeLabel1, 0, 0);

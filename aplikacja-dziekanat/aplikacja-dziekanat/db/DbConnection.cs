@@ -39,13 +39,13 @@ namespace db
             }
         }
 
-        public async Task<List<Schedule>> GetSchedule(string className, string date)
+        public async Task<List<Schedule>> GetSchedule(string classId, string day)
         {
             firebase = new FirebaseClient("https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/");
 
             try
             {
-                return (await firebase.Child("schedule").Child(className).Child(date).OnceAsync<Schedule>()).Select(item => new Schedule
+                return (await firebase.Child("schedule").Child(classId).Child(day).OnceAsync<Schedule>()).Select(item => new Schedule
                 {
                     ClassType = item.Object.ClassType,
                     Duration = item.Object.Duration,
