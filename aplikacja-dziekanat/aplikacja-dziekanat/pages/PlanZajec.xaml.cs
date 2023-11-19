@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -61,7 +62,7 @@ namespace aplikacja_dziekanat.pages
             {
                 currentDate = e.NewDate; 
                 UpdateCurrentDate();
-                GetSchedule(); 
+                GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString()); 
 
                 grid.IsVisible = false; 
             };
@@ -97,7 +98,7 @@ namespace aplikacja_dziekanat.pages
         {
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
-            GetSchedule();
+            GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
 
         }
 
@@ -105,7 +106,7 @@ namespace aplikacja_dziekanat.pages
         {
             currentDate = currentDate.AddDays(-1);
             UpdateCurrentDate();
-            GetSchedule();
+            GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
         }
 
       
@@ -118,34 +119,29 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        private async void GetSchedule(string classId, string date)
+        private async void GetSchedule(string classId, string day)
         {
             connection = new DbConnection();
+            var schedule = await connection.GetSchedule(classId, day);
 
-            var dayOfWeekEnglish = currentDate.DayOfWeek.ToString();
-            var schedule = await connection.GetSchedule("it-s-2-1", dayOfWeekEnglish);
-
-            Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {dayOfWeekEnglish}");
+            Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
             if (schedule != null)
             {
+                schedule = schedule.OrderBy(item => item.TimeStart).ToList();
+                
                 foreach (var item in schedule)
                 {
-
-                    
-                    item.ClassType = "Rodzaj zajec: " + item.ClassType;
-                    //duration 
+                    item.ClassType = "Rodzaj zajęć: " + item.ClassType;
+                    item.Duration = "Czas trwania: " + item.Duration + "h";
                     item.Name = "Nazwa: " + item.Name;
                     item.Room = "Sala: " + item.Room;
                     item.Teacher = "Prowadzący: " + item.Teacher;
                     item.TimeStart = "Godzina rozpoczęcia: " + item.TimeStart;
-
-                   
                 }
 
                 lessonListView.ItemsSource = schedule;
             }
-            
         }
 
 
