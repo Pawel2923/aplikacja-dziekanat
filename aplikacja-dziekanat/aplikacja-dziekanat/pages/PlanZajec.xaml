@@ -8,7 +8,6 @@
             <ListView x:Name="lessonListView" HasUnevenRows="True" >
 
             </ListView>
-
         </StackLayout>
     </ContentPage.Content>
     
