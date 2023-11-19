@@ -127,14 +127,23 @@ namespace aplikacja_dziekanat.pages
 
             if (schedule != null)
             {
-               
+                foreach (var item in schedule)
+                {
+
+                    
+                    item.ClassType = "Rodzaj zajec: " + item.ClassType;
+                    //duration 
+                    item.Name = "Nazwa: " + item.Name;
+                    item.Room = "Sala: " + item.Room;
+                    item.Teacher = "Prowadzący: " + item.Teacher;
+                    item.TimeStart = "Godzina rozpoczęcia: " + item.TimeStart;
+
+                   
+                }
                 lessonListView.ItemsSource = schedule;
             }
             
         }
-
-
-
 
 
         private void InitializeListView()
