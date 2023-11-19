@@ -32,6 +32,40 @@ namespace aplikacja_dziekanat.pages
                 HeightRequest = 30, 
                 WidthRequest = 30 
             };
+            var datePicker = new DatePicker();
+
+            var showDatePickerButton = new Button { Text = "Pokaż Kalendarz" };
+            showDatePickerButton.Clicked += (sender, e) =>
+            {
+                datePicker.Focus();
+            };
+            
+            var grid = new Grid
+            {
+                IsVisible = false,
+                Children =
+    {
+        datePicker
+    }
+            };
+
+            calendarIcon.GestureRecognizers.Add(new TapGestureRecognizer
+            {
+                Command = new Command(() =>
+                {
+                    grid.IsVisible = true;
+                    datePicker.Focus();
+                })
+            });
+
+            datePicker.DateSelected += (sender, e) =>
+            {
+                currentDate = e.NewDate; 
+                UpdateCurrentDate();
+                GetSchedule(); 
+
+                grid.IsVisible = false; 
+            };
 
             var previousDayButton = new Button { Text = "Poprzedni dzień" };
             previousDayButton.Clicked += (sender, e) => ScrollToPreviousDay();
@@ -43,7 +77,7 @@ namespace aplikacja_dziekanat.pages
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Children = { previousDayButton,calendarIcon, nextDayButton}
+                Children = { previousDayButton,calendarIcon, nextDayButton,grid}
             };
 
             var mainStackLayout = new StackLayout
@@ -73,7 +107,7 @@ namespace aplikacja_dziekanat.pages
             GetSchedule();
         }
 
-
+      
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -93,6 +127,7 @@ namespace aplikacja_dziekanat.pages
 
             if (schedule != null)
             {
+               
                 lessonListView.ItemsSource = schedule;
             }
             
@@ -108,6 +143,7 @@ namespace aplikacja_dziekanat.pages
             {
                 var classTypeLabel1 = new Label
                 {
+
                     TextColor = Color.White,
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
