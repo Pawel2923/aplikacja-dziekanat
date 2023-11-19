@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -90,6 +89,7 @@ namespace aplikacja_dziekanat.pages
       
         private void UpdateCurrentDate()
         {
+
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
         }
 
@@ -98,6 +98,7 @@ namespace aplikacja_dziekanat.pages
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
             GetSchedule();
+
         }
 
         private void ScrollToPreviousDay()
@@ -113,13 +114,14 @@ namespace aplikacja_dziekanat.pages
             base.OnAppearing();
             if (auth.Uid() != null)
             {
-                GetSchedule();
+                GetSchedule("it-s-2-1", DateTime.Now.DayOfWeek.ToString());
             }
         }
 
-        private async void GetSchedule()
+        private async void GetSchedule(string classId, string date)
         {
             connection = new DbConnection();
+
             var dayOfWeekEnglish = currentDate.DayOfWeek.ToString();
             var schedule = await connection.GetSchedule("it-s-2-1", dayOfWeekEnglish);
 
@@ -140,6 +142,7 @@ namespace aplikacja_dziekanat.pages
 
                    
                 }
+
                 lessonListView.ItemsSource = schedule;
             }
             
@@ -193,8 +196,10 @@ namespace aplikacja_dziekanat.pages
                 };
                 timeStartLabel.SetBinding(Label.TextProperty, "TimeStart");
 
+
                
                 var grid = new Grid
+
                 {
                     Margin = new Thickness(10),
                     RowDefinitions = new RowDefinitionCollection

@@ -1,53 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+<FlyoutPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="aplikacja_dziekanat.pages.FormsTabPage"
-             x:DataType="Page"
+             x:DataType="FlyoutPage"
              xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
-             MasterBehavior="Popover">
-    
-    <MasterDetailPage.Master>
-        <ContentPage Padding="10"  Title="master" BackgroundColor="Transparent">
+             NavigationPage.HasBackButton="False">
+    <NavigationPage.TitleView>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,15,0">
+                <Image Source="hamburger.png" Aspect="Fill" WidthRequest="30" HeightRequest="30">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="MenuBtnTapHandler" NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Frame>
+            <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,0,17.5,0">
+                <Image Source="Logo.png" Aspect="Fill" WidthRequest="35" HeightRequest="35">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="LogoTapHandler" NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Frame>
+        </Grid>
+    </NavigationPage.TitleView>
+    <FlyoutPage.Flyout>
+        <ContentPage Padding="10"  Title="master" BackgroundColor="#56595d">
             <ContentPage.Content>
                 <StackLayout Margin="5,30,5,5">
-
-
-                    <Button Text="Plan Zajeć"   Clicked="Handle_Clicked" Style="{StaticResource btnPrimaryStyle}"></Button>
-
-
+                    <Button Text="Plan Zajeć"  Clicked="Handle_Clicked" Style="{StaticResource btnPrimaryStyle}"></Button>
                     <Button Text="Ogłoszenia"  Clicked="Handle_Clicked1" Style="{StaticResource btnPrimaryStyle}"></Button>
-
-
-                    <Button Text="Pogoda "  Clicked="Handle_Clicked2"  Style="{StaticResource btnPrimaryStyle}"></Button>
-
-
+                    <Button Text="Pogoda"  Clicked="Handle_Clicked2"  Style="{StaticResource btnPrimaryStyle}"></Button>
                     <Button Text="Profil Użytkownika" Clicked="Handle_Clicked3" Style="{StaticResource btnPrimaryStyle}"></Button>
-
                     <Button Text="WYLOGUJ" Style="{StaticResource btnPrimaryStyle}"
-                        VerticalOptions="EndAndExpand"
+                       VerticalOptions="EndAndExpand"
                        HorizontalOptions="Center" Clicked="LogoutClickHandler"></Button>
                 </StackLayout>
             </ContentPage.Content>
         </ContentPage>
-        
-</MasterDetailPage.Master>
-
-
-    <MasterDetailPage.Detail>
-        <TabbedPage x:Name="MainTabbedPage" BackgroundColor="#2e3238" BarBackgroundColor="#0088C5">
+    </FlyoutPage.Flyout>
+    <FlyoutPage.Detail>
+        <TabbedPage x:Name="MainTabbedPage" BackgroundColor="#2e3238" BarBackgroundColor="#56595d">
             <TabbedPage.Children >
-                <pages:PlanZajec Title="Plan Zajęc"  />
+                <pages:PlanZajec Title="Plan Zajęc" />
                 <pages:Ogloszenia Title="Ogłoszenia" />
                 <pages:Pogoda Title="Pogoda" />
                 <pages:profilUz Title="Profil" />
-
             </TabbedPage.Children>
-    </TabbedPage>
-        
-        
-
-    </MasterDetailPage.Detail> 
-    
-
-</MasterDetailPage>
+        </TabbedPage>
+    </FlyoutPage.Detail> 
+</FlyoutPage>
   
