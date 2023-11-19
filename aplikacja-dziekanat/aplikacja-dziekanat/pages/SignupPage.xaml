@@ -6,7 +6,7 @@
              x:Class="aplikacja_dziekanat.pages.SignupPage"
              NavigationPage.HasNavigationBar="false" >
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Margin="60, 100">
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Margin="60, 80">
             <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 15">
                 <Image Source="Logo.png" Aspect="Fill" WidthRequest="132" HeightRequest="132" />
             </Frame>
@@ -23,6 +23,17 @@
                 <local:Input Placeholder="Powtórz hasło" PlaceholderColor="#575757" IsPassword="True" x:Name="confirmPasswordInput" />
             </Frame>
             <Label Text="" x:Name="confirmPasswordLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false" />
+            <Frame Padding="10, 0" Margin="0, 10, 0, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
+                <local:Select x:Name="classIdPicker" Title="Wybierz rok" TitleColor="#575757" TextColor="#575757" BackgroundColor="#D9D9D9">
+                    <Picker.Items>
+                        <x:String>til-s-1-1</x:String>
+                        <x:String>it-s-2-1</x:String>
+                        <x:String>it-n-2-2</x:String>
+                        <x:String>mt-s-1-1</x:String>
+                    </Picker.Items>
+                </local:Select>
+            </Frame>
+            <Label Text="" x:Name="classIdLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false" />
             <StackLayout Orientation="Horizontal" Margin="0, 10, 0, 0" HorizontalOptions="Center" Spacing="10">
                 <Button Text="Zarejestruj się" 
                         Style="{StaticResource btnPrimaryStyle}"
