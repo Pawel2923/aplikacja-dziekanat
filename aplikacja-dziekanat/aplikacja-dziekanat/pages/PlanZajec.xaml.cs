@@ -1,6 +1,7 @@
 ﻿using db;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -143,7 +144,14 @@ namespace aplikacja_dziekanat.pages
 
             if (schedule != null)
             {
-                schedule = schedule.OrderBy(item => item.TimeStart).ToList();
+                schedule = schedule.OrderBy(item =>
+                {
+                    var provider = new NumberFormatInfo
+                    {
+                        NumberDecimalSeparator = "."
+                    };
+                    return Convert.ToDouble(item.TimeStart.Replace(':', '.'), provider);
+                }).ToList();
 
                 foreach (var item in schedule)
                 {
