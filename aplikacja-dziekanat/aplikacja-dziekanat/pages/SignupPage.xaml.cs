@@ -14,6 +14,7 @@ namespace aplikacja_dziekanat.pages
         private Input email;
         private Input password;
         private Input confirmPassword;
+        private Select select;
         public SignupPage()
         {
             InitializeComponent();
@@ -30,8 +31,11 @@ namespace aplikacja_dziekanat.pages
             Input.Result confirmPasswordResult = confirmPassword.CheckValidity(false, passwordInput.Text == confirmPasswordInput.Text);
             confirmPasswordLabel.Text = confirmPasswordResult.Message;
             confirmPasswordLabel.IsVisible = confirmPasswordResult.Message.Length > 0;
+            Select.Result classIdResult = select.CheckValidity();
+            classIdLabel.Text = classIdResult.Message;
+            classIdLabel.IsVisible = classIdResult.Message.Length > 0;
 
-            if (emailResult.IsValid && passwordResult.IsValid && confirmPasswordResult.IsValid)
+            if (emailResult.IsValid && passwordResult.IsValid && confirmPasswordResult.IsValid && classIdResult.IsValid)
             {
                 return true;
             }
@@ -46,6 +50,7 @@ namespace aplikacja_dziekanat.pages
             email = new Input(emailInput);
             password = new Input(passwordInput);
             confirmPassword = new Input(confirmPasswordInput);
+            select = new Select(classIdSelect);
 
             if (CheckForm())
             {
@@ -66,18 +71,18 @@ namespace aplikacja_dziekanat.pages
                     Debug.WriteLine(ex);
                     if (ex.Message.Contains("INVALID_LOGIN_CREDENTIALS"))
                     {
-                        confirmPasswordLabel.Text = "Wprowadzono niepoprawny email lub hasło";
-                        confirmPasswordLabel.IsVisible = true;
+                        classIdLabel.Text = "Wprowadzono niepoprawny email lub hasło";
+                        classIdLabel.IsVisible = true;
                     }
                     else if (ex.Message.Contains("email address is already in use"))
                     {
-                        confirmPasswordLabel.Text = "Ten email jest już zajęty";
-                        confirmPasswordLabel.IsVisible = true;
+                        classIdLabel.Text = "Ten email jest już zajęty";
+                        classIdLabel.IsVisible = true;
                     }
                     else
                     {
-                        confirmPasswordLabel.Text = "Wystąpił problem z logowaniem";
-                        confirmPasswordLabel.IsVisible = true;
+                        classIdLabel.Text = "Wystąpił problem z logowaniem";
+                        classIdLabel.IsVisible = true;
                     }
                 }
             }
@@ -86,6 +91,20 @@ namespace aplikacja_dziekanat.pages
         async public void LoginClickHandler(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
+        }
+
+        public void SelectChangeHandler(object sender, EventArgs e)
+        {
+            if (classIdSelect.SelectedIndex > -1)
+            {
+                classIdSelect.TitleColor = Color.Black;
+                classIdSelect.Value = classIdSelect.Items[classIdSelect.SelectedIndex];
+                Debug.WriteLine(classIdSelect.Value);
+            }
+            else
+            {
+                classIdSelect.TitleColor = Color.FromHex("#575757");
+            }
         }
     }
 }
