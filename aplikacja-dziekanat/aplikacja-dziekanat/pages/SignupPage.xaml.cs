@@ -14,10 +14,12 @@ namespace aplikacja_dziekanat.pages
         private Input email;
         private Input password;
         private Input confirmPassword;
-        private Select select;
+        private readonly Select select;
         public SignupPage()
         {
             InitializeComponent();
+
+            select = new Select(classIdSelect);
         }
 
         private bool CheckForm()
@@ -50,7 +52,6 @@ namespace aplikacja_dziekanat.pages
             email = new Input(emailInput);
             password = new Input(passwordInput);
             confirmPassword = new Input(confirmPasswordInput);
-            select = new Select(classIdSelect);
 
             if (CheckForm())
             {
@@ -97,13 +98,12 @@ namespace aplikacja_dziekanat.pages
         {
             if (classIdSelect.SelectedIndex > -1)
             {
-                classIdSelect.TitleColor = Color.Black;
-                classIdSelect.Value = classIdSelect.Items[classIdSelect.SelectedIndex];
-                Debug.WriteLine(classIdSelect.Value);
+                select.TitleColor = Color.Black;
+                select.Value = classIdSelect.Items[classIdSelect.SelectedIndex];
             }
             else
             {
-                classIdSelect.TitleColor = Color.FromHex("#575757");
+                select.TitleColor = Color.FromHex("#575757");
             }
         }
     }

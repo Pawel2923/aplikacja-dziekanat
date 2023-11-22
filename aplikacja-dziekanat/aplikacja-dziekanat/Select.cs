@@ -23,8 +23,8 @@ namespace CustomRenderer
             public string Message { get { return message; } set { message = value; } }
         }
 
-        public Select() { value = SelectedIndex >= 0 ? Items[SelectedIndex] : null; isValid = false; select = this; }
-        public Select(Select select) { value = SelectedIndex >= 0 ? select.Items[select.SelectedIndex] : null; isValid = false; this.select = select; }
+        public Select() { isValid = false; select = this; }
+        public Select(Select select) { isValid = false; this.select = select; }
 
         public string Value { get { return value; } set { this.value = value; } }
 

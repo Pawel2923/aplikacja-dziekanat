@@ -27,9 +27,19 @@
                 <Setter Property="BorderColor" Value="#006E9F" />
                 <Setter Property="TextColor" Value="#fff" />
             </Style>
+            <Style x:Key="inputPrimaryStyle" TargetType="Entry">
+                <Setter Property="PlaceholderColor" Value="#575757" />
+                <Setter Property="TextColor" Value="#000" />
+                <Setter Property="BackgroundColor" Value="#D9D9D9" />
+            </Style>
+            <Style x:Key="selectPrimaryStyle" TargetType="Picker">
+                <Setter Property="TextColor" Value="#000" />
+                <Setter Property="TitleColor" Value="#575757" />
+                <Setter Property="BackgroundColor" Value="#D9D9D9" />
+            </Style>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="#56595d"/>
-                <Setter Property="BarTextColor" Value="White"   />
+                <Setter Property="BarTextColor" Value="White" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>
