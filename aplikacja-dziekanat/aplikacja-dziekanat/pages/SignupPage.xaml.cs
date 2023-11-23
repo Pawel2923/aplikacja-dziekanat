@@ -63,7 +63,7 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        connection = new DbConnection();
+                        connection = new DbConnection(AppInfo.DatabaseUrl);
                         bool result = await connection.CreateUser(email.Value, false, false);
                         await Navigation.PopAsync();
                     }
