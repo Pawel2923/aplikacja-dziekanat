@@ -10,42 +10,59 @@ namespace db
 {
     public class DbConnection
     {
-        private FirebaseClient firebase;
-        public FirebaseClient Firebase { get { return firebase; } set { firebase = value; } }
+        private readonly FirebaseClient firebase;
+        public DbConnection(string databaseUrl)
+        {
+            firebase = new FirebaseClient(databaseUrl);
+        }
+
         public async Task<List<User>> GetUsers()
         {
-            firebase = new FirebaseClient("https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/");
-            return (await firebase
-              .Child("users")
-              .OnceAsync<User>()).Select(item => new User
-              {
-                  Email = item.Object.Email,
-                  IsAdmin = item.Object.IsAdmin,
-                  IsTeacher = item.Object.IsTeacher
-              }).ToList();
+            try
+            {
+                var userItems = await firebase
+                    .Child("users")
+                    .OnceAsync<User>();
+
+                return userItems.Select(item => new User
+                {
+                    Email = item.Object.Email,
+                    IsAdmin = item.Object.IsAdmin,
+                    IsTeacher = item.Object.IsTeacher
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
         }
 
         public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher)
         {
-            firebase = new FirebaseClient("https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/");
             try
             {
                 await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher });
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine("Exception: " + ex);
                 return false;
             }
         }
 
         public async Task<List<Schedule>> GetSchedule(string classId, string day)
         {
-            firebase = new FirebaseClient("https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/");
-
             try
             {
-                return (await firebase.Child("schedule").Child(classId).Child(day).OnceAsync<Schedule>()).Select(item => new Schedule
+                var scheduleItems = await firebase
+                    .Child("schedule")
+                    .Child(classId)
+                    .Child(day)
+                    .OnceAsync<Schedule>();
+
+                return scheduleItems.Select(item => new Schedule
                 {
                     ClassType = item.Object.ClassType,
                     Duration = item.Object.Duration,
@@ -62,5 +79,21 @@ namespace db
             }
         }
 
+        public async Task<List<string>> GetClassIds()
+        {
+            try
+            {
+                var classIdItems = await firebase
+                    .Child("classIds")
+                    .OnceAsListAsync<string>();
+
+                return classIdItems.Select(item => item.Object).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
+        }   
     }
 }

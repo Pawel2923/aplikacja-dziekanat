@@ -1,5 +1,4 @@
 ﻿using CustomRenderer;
-using db;
 using System;
 using System.Diagnostics;
 using Xamarin.Forms;

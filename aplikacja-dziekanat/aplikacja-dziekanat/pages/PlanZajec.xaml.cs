@@ -1,5 +1,6 @@
 ﻿using db;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace aplikacja_dziekanat.pages
         private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
         private DbConnection connection;
         private DateTime currentDate;
+        private readonly StackLayout mainStackLayout;
+        private readonly StackLayout buttonsStackLayout;
 
         public PlanZajec()
         {
@@ -89,14 +92,14 @@ namespace aplikacja_dziekanat.pages
             };
             nextDayButton.Clicked += (sender, e) => ScrollToNextDay();
 
-            var buttonsStackLayout = new StackLayout
+            buttonsStackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Children = { previousDayButton, calendarIcon, nextDayButton, grid }
             };
 
-            var mainStackLayout = new StackLayout
+            mainStackLayout = new StackLayout
             {
                 Children = { aktualnaData, lessonListView, buttonsStackLayout }
             };
@@ -131,19 +134,27 @@ namespace aplikacja_dziekanat.pages
             base.OnAppearing();
             if (auth.Uid() != null)
             {
-                GetSchedule("it-s-2-1", DateTime.Now.DayOfWeek.ToString());
+                GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
             }
         }
 
         private async void GetSchedule(string classId, string day)
         {
-            connection = new DbConnection();
+            connection = new DbConnection(AppInfo.DatabaseUrl);
             var schedule = await connection.GetSchedule(classId, day);
 
             Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
-            if (schedule != null)
+            if (schedule != null && schedule.Count > 0)
             {
+                if (!mainStackLayout.Children.Contains(lessonListView))
+                {
+                    mainStackLayout.Children.Clear();
+                    mainStackLayout.Children.Add(aktualnaData);
+                    mainStackLayout.Children.Add(lessonListView);
+                    mainStackLayout.Children.Add(buttonsStackLayout);
+                }
+
                 schedule = schedule.OrderBy(item =>
                 {
                     var provider = new NumberFormatInfo
@@ -164,6 +175,20 @@ namespace aplikacja_dziekanat.pages
                 }
 
                 lessonListView.ItemsSource = schedule;
+            }
+            else if (schedule.Count == 0) 
+            {
+                lessonListView.ItemsSource = null;
+                mainStackLayout.Children.Clear();
+                mainStackLayout.Children.Add(aktualnaData);
+                mainStackLayout.Children.Add(new Label
+                {
+                    Text = "Brak zajęć",
+                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))
+                });
+                mainStackLayout.Children.Add(buttonsStackLayout);
             }
         }
 
