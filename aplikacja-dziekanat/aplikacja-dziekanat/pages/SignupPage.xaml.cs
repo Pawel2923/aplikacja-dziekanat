@@ -3,6 +3,7 @@ using db;
 using System;
 using System.Diagnostics;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
@@ -18,7 +19,7 @@ namespace aplikacja_dziekanat.pages
         public SignupPage()
         {
             InitializeComponent();
-
+            classIdSelect.ItemsSource = new SelectModel().Classes;
             select = new Select(classIdSelect);
         }
 
@@ -100,10 +101,12 @@ namespace aplikacja_dziekanat.pages
             {
                 select.TitleColor = Color.Black;
                 select.Value = classIdSelect.Items[classIdSelect.SelectedIndex];
+                selectAngleDown.Source = "angleDownSolidAlt.png";
             }
             else
             {
                 select.TitleColor = Color.FromHex("#575757");
+                selectAngleDown.Source = "angleDownSolid.png";
             }
         }
     }
