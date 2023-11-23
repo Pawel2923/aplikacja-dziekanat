@@ -78,5 +78,22 @@ namespace db
                 return null;
             }
         }
+
+        public async Task<List<string>> GetClassIds()
+        {
+            try
+            {
+                var classIdItems = await firebase
+                    .Child("classIds")
+                    .OnceAsListAsync<string>();
+
+                return classIdItems.Select(item => item.Object).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
+        }   
     }
 }

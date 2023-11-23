@@ -1,4 +1,4 @@
-﻿namespace aplikacja_dziekanat
+﻿namespace db
 {
     class AppInfo 
     {
