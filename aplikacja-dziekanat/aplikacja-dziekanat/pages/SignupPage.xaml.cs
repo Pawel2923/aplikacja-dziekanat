@@ -1,9 +1,9 @@
 ﻿using CustomRenderer;
 using db;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
@@ -11,7 +11,7 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SignupPage : ContentPage
     {
-        private DbConnection connection;
+        private readonly DbConnection connection;
         private Input email;
         private Input password;
         private Input confirmPassword;
@@ -19,8 +19,15 @@ namespace aplikacja_dziekanat.pages
         public SignupPage()
         {
             InitializeComponent();
-            classIdSelect.ItemsSource = new SelectModel().Classes;
+            connection = new DbConnection(AppInfo.DatabaseUrl);
+            classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
+            SetSelectItems();
             select = new Select(classIdSelect);
+        }
+
+        private async void SetSelectItems()
+        {
+            classIdSelect.ItemsSource = await connection.GetClassIds();
         }
 
         private bool CheckForm()
@@ -63,7 +70,6 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        connection = new DbConnection(AppInfo.DatabaseUrl);
                         bool result = await connection.CreateUser(email.Value, false, false);
                         await Navigation.PopAsync();
                     }

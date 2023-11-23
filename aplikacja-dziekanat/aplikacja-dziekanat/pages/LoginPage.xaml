@@ -7,7 +7,7 @@
              NavigationPage.HasNavigationBar="false" >
     
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Margin="60, 80">
+        <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,80,0,0">
             <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 15">
                 <Image Source="Logo.png" Aspect="Fill" WidthRequest="132" HeightRequest="132" />
             </Frame>
