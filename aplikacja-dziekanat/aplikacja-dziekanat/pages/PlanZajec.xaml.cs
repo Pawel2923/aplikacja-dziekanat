@@ -1,6 +1,5 @@
 ﻿using db;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace aplikacja_dziekanat.pages
             });
             var calendarIcon = new Image
             {
-                Source = "kanedarz1.jpg", 
+                Source = "kanedarz1.jpg",
                 HeightRequest = 30,
                 WidthRequest = 30,
                 Margin = new Thickness(0, 0, 0, 10)
@@ -176,7 +175,7 @@ namespace aplikacja_dziekanat.pages
 
                 lessonListView.ItemsSource = schedule;
             }
-            else if (schedule.Count == 0) 
+            else if (schedule.Count == 0)
             {
                 lessonListView.ItemsSource = null;
                 mainStackLayout.Children.Clear();
@@ -253,7 +252,7 @@ namespace aplikacja_dziekanat.pages
                         new RowDefinition { Height = GridLength.Auto },
                         new RowDefinition { Height = GridLength.Auto }
                     },
-                        ColumnDefinitions = new ColumnDefinitionCollection
+                    ColumnDefinitions = new ColumnDefinitionCollection
                     {
                         new ColumnDefinition { Width = GridLength.Star }
                     }

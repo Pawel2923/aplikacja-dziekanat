@@ -1,19 +1,19 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Graphics.Drawables;
+using Android.Views;
 using Android.Widget;
+using aplikacja_dziekanat.Droid;
 using CustomRenderer;
 using CustomRenderer.Android;
 using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
-using Android.Views;
-using aplikacja_dziekanat.Droid;
 using static Android.Widget.AdapterView;
+using AndrButton = Android.Widget.Button;
+using AndrColor = Android.Graphics.Color;
 using ListView = Android.Widget.ListView;
 using View = Android.Views.View;
-using AndrColor = Android.Graphics.Color;
-using AndrButton = Android.Widget.Button;
-using Android.Graphics.Drawables;
 
 [assembly: ExportRenderer(typeof(Select), typeof(SelectRenderer))]
 namespace CustomRenderer.Android
@@ -81,29 +81,20 @@ namespace CustomRenderer.Android
                 mList = itemsSource;
             }
 
-
-
             public override int Count => mList.Count;
-
-
 
             public override Java.Lang.Object GetItem(int position)
             {
                 return mList[position];
             }
 
-
-
             public override long GetItemId(int position)
             {
                 return position;
             }
 
-
-
             public override View GetView(int position, View convertView, ViewGroup parent)
             {
-                View view = convertView;
                 convertView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.celllayout, null);
                 TextView text = convertView.FindViewById<TextView>(Resource.Id.textview1);
                 text.Text = mList[position];

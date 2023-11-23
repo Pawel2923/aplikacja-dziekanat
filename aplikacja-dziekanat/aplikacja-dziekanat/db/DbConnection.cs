@@ -94,6 +94,6 @@ namespace db
                 Debug.WriteLine("Exception: " + ex);
                 return null;
             }
-        }   
+        }
     }
 }
