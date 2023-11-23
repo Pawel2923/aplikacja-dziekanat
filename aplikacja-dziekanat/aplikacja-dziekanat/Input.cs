@@ -1,5 +1,4 @@
-﻿using aplikacja_dziekanat.pages;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Net.Mail;
 using Xamarin.Forms;
@@ -27,7 +26,7 @@ namespace CustomRenderer
         public Input() { value = Text; isValid = false; input = this; }
         public Input(Input input) { value = input.Text; isValid = false; this.input = input; }
 
-        public string Value {  get { return value; } set { this.value = value; } }
+        public string Value { get { return value; } set { this.value = value; } }
 
         public Result CheckValidity(bool isEmail = false, bool passwordsMatch = true)
         {
@@ -51,7 +50,8 @@ namespace CustomRenderer
                     {
                         MailAddress address = new MailAddress(value);
                         isValid = address.Address == value.Trim();
-                    } catch (Exception)
+                    }
+                    catch (Exception)
                     {
                         throw new Exception("Podany adres email jest niepoprawny");
                     }

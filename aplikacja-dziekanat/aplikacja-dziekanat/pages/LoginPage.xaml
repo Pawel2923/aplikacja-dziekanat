@@ -5,6 +5,7 @@
              x:DataType="Page"
              x:Class="aplikacja_dziekanat.pages.LoginPage"
              NavigationPage.HasNavigationBar="false" >
+    
     <ContentPage.Content>
         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Margin="60, 100">
             <Frame BackgroundColor="Transparent" CornerRadius="100" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 15">

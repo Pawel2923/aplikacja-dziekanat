@@ -2,6 +2,7 @@
 <resources>
 
   <style name="MainTheme" parent="MainTheme.Base">
+	  <item name="android:datePickerDialogTheme">@style/CustomDatePickerDialog</item>
     <!-- As of Xamarin.Forms 4.6 the theme has moved into the Forms binary -->
     <!-- If you want to override anything you can do that here. -->
     <!-- Underneath are a couple of entries to get you started. -->
@@ -18,6 +19,35 @@
 	  <item name="colorPrimary">#0088C5</item>
 	  <item name="colorPrimaryDark">#006E9F</item>
 	  <item name="android:windowBackground">#2e3238</item>
-	  <item name="android:navigationBarColor">#2e3238</item>
-  </style>
+
+	   <item name="android:navigationBarColor">@android:color/transparent</item>
+
+	</style>
+	
+	<style name="CustomDatePickerDialog" parent="ThemeOverlay.AppCompat.Dialog">
+		
+		<item name="colorAccent">#00b0ff</item>
+		
+		<item name="android:textColorPrimaryInverse">#ffffff</item>
+	
+		<item name="android:windowBackground">#2e3238</item>
+	
+		<item name="android:colorControlActivated">#006E9F</item>
+	
+		<item name="android:textColorPrimary">#ffffff</item>
+		
+		<item name="android:textColorSecondary">#0088C5</item>
+		
+		<item name="android:textColor">#ffffff</item>
+	</style>
+
+
+
+
+
+
+
+
+    
 </resources>
+

@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using aplikacja_dziekanat.Droid;
 using Firebase.Auth;
-using aplikacja_dziekanat.Droid;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(FirebaseAuthentication))]
@@ -9,7 +9,7 @@ namespace aplikacja_dziekanat.Droid
     public class FirebaseAuthentication : IFirebaseAuth
     {
         private string uid;
-        
+
         public string Uid()
         {
             return uid;

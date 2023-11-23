@@ -1,8 +1,8 @@
-﻿using Xamarin.Forms.Platform.Android;
-using Xamarin.Forms;
+﻿using Android.Content;
 using CustomRenderer;
 using CustomRenderer.Android;
-using Android.Content;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(Input), typeof(InputRenderer))]
 namespace CustomRenderer.Android
