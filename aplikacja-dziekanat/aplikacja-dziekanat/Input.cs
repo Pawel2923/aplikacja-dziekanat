@@ -28,6 +28,21 @@ namespace CustomRenderer
 
         public string Value { get { return value; } set { this.value = value; } }
 
+        public void SetMessageLabel(Label label, string message)
+        {
+            label.Text = message;
+            label.IsVisible = true;
+        }
+
+        public void SetMessageLabel(Label[] label, string message)
+        {
+            foreach (Label l in label)
+            {
+                l.Text = message;
+                l.IsVisible = true;
+            }
+        }
+
         public Result CheckValidity(bool isEmail = false, bool passwordsMatch = true)
         {
             Result result = new Result();

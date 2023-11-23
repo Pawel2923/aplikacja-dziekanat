@@ -38,11 +38,11 @@ namespace db
             }
         }
 
-        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher)
+        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
         {
             try
             {
-                await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher });
+                await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher, ClassId = classId });
                 return true;
             }
             catch (Exception ex)

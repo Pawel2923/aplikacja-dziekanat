@@ -70,7 +70,7 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        bool result = await connection.CreateUser(email.Value, false, false);
+                        bool result = await connection.CreateUser(email.Value, false, false, select.Value);
                         await Navigation.PopAsync();
                     }
                 }
@@ -79,18 +79,24 @@ namespace aplikacja_dziekanat.pages
                     Debug.WriteLine(ex);
                     if (ex.Message.Contains("INVALID_LOGIN_CREDENTIALS"))
                     {
-                        classIdLabel.Text = "Wprowadzono niepoprawny email lub hasło";
-                        classIdLabel.IsVisible = true;
+                        email.SetMessageLabel(emailLabel, "Wprowadzono niepoprawny email lub hasło");
                     }
                     else if (ex.Message.Contains("email address is already in use"))
                     {
-                        classIdLabel.Text = "Ten email jest już zajęty";
-                        classIdLabel.IsVisible = true;
+                        email.SetMessageLabel(emailLabel, "Ten email jest już zajęty");
+                    }
+                    else if (ex.Message.Contains("email address is badly formatted"))
+                    {
+                        email.SetMessageLabel(emailLabel, "Wprowadzono niepoprawny email");
+                    }
+                    else if (ex.Message.Contains("Password should be at least"))
+                    {
+                        Label[] passwordLabels = { passwordLabel, confirmPasswordLabel };
+                        email.SetMessageLabel(passwordLabels, "Hasło powinno mieć co najmniej 6 znaków");
                     }
                     else
                     {
-                        classIdLabel.Text = "Wystąpił problem z logowaniem";
-                        classIdLabel.IsVisible = true;
+                        email.SetMessageLabel(classIdLabel, "Wystąpił problem z logowaniem");
                     }
                 }
             }
