@@ -137,7 +137,7 @@ namespace aplikacja_dziekanat.pages
 
         private async void GetSchedule(string classId, string day)
         {
-            connection = new DbConnection();
+            connection = new DbConnection(AppInfo.DatabaseUrl);
             var schedule = await connection.GetSchedule(classId, day);
 
             Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
