@@ -58,6 +58,7 @@ namespace db
         {
             try
             {
+
                 var scheduleItems = await firebase
                     .Child("schedule")
                     .Child(classId)
@@ -65,6 +66,7 @@ namespace db
                     .OnceAsync<Schedule>();
 
                 return scheduleItems.Select(item => new Schedule
+
                 {
                     ClassType = item.Object.ClassType,
                     Duration = item.Object.Duration,
