@@ -37,7 +37,7 @@ namespace aplikacja_dziekanat.pages
             });
             var calendarIcon = new Image
             {
-                Source = "kanedarz1.jpg",
+                Source = "calendar.png",
                 HeightRequest = 30,
                 WidthRequest = 30,
                 Margin = new Thickness(0, 0, 0, 10)
