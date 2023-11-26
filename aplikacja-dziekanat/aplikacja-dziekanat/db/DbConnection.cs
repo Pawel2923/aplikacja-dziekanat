@@ -11,6 +11,7 @@ namespace db
     public class DbConnection
     {
         private readonly FirebaseClient firebase;
+
         public DbConnection(string databaseUrl)
         {
             firebase = new FirebaseClient(databaseUrl);
@@ -28,7 +29,8 @@ namespace db
                 {
                     Email = item.Object.Email,
                     IsAdmin = item.Object.IsAdmin,
-                    IsTeacher = item.Object.IsTeacher
+                    IsTeacher = item.Object.IsTeacher,
+                    ClassId = item.Object.ClassId
                 }).ToList();
             }
             catch (Exception ex)
