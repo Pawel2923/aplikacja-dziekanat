@@ -146,6 +146,8 @@ namespace aplikacja_dziekanat.pages
 
             if (schedule != null)
             {
+
+
                 schedule = schedule.OrderBy(item => item.TimeStart).ToList();
                 foreach (var item in schedule)
                 {
@@ -183,7 +185,9 @@ namespace aplikacja_dziekanat.pages
                 var nameLabel = new Label
                 {
                     TextColor = Color.White,
-                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                    FontAttributes = FontAttributes.Bold
+                    
                 };
                 nameLabel.SetBinding(Label.TextProperty, "Name");
 
