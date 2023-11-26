@@ -1,12 +1,13 @@
 ﻿using db;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using System.Linq;
 using Xamarin.Forms.Xaml;
+
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -16,10 +17,8 @@ namespace aplikacja_dziekanat.pages
         private readonly DbConnection connection;
         private List<User> users;
         private DateTime currentDate;
-
         private readonly StackLayout mainStackLayout;
         private readonly StackLayout buttonsStackLayout;
-
 
         public PlanZajec()
         {
@@ -45,8 +44,6 @@ namespace aplikacja_dziekanat.pages
             };
             var datePicker = new DatePicker();
 
-
-
             var showDatePickerButton = new Button
             {
                 Text = "Pokaż Kalendarz"
@@ -64,6 +61,7 @@ namespace aplikacja_dziekanat.pages
                     datePicker
                 }
             };
+
             calendarIcon.GestureRecognizers.Add(new TapGestureRecognizer
             {
                 Command = new Command(() =>
@@ -72,12 +70,12 @@ namespace aplikacja_dziekanat.pages
                     datePicker.Focus();
                 })
             });
+
             datePicker.DateSelected += (sender, e) =>
             {
                 currentDate = e.NewDate;
                 UpdateCurrentDate();
                 GetSchedule();
-
 
                 grid.IsVisible = false;
             };
@@ -92,7 +90,6 @@ namespace aplikacja_dziekanat.pages
             };
             previousDayButton.Clicked += (sender, e) => ScrollToPreviousDay();
 
-
             var nextDayButton = new Button
             {
                 Text = "Następny dzień",
@@ -101,21 +98,18 @@ namespace aplikacja_dziekanat.pages
             };
             nextDayButton.Clicked += (sender, e) => ScrollToNextDay();
 
-
             buttonsStackLayout = new StackLayout
-
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Children = { previousDayButton, calendarIcon, nextDayButton, grid }
             };
 
-
             mainStackLayout = new StackLayout
-
             {
                 Children = { aktualnaData, lessonListView, buttonsStackLayout }
             };
+
             Content = mainStackLayout;
         }
 
@@ -133,7 +127,6 @@ namespace aplikacja_dziekanat.pages
         {
             foreach (var user in users)
             {
-                Debug.WriteLine($"User: {user.Email}, {user.ClassId}");
                 if (user.Email == email)
                 {
                     return user.ClassId;
@@ -146,12 +139,14 @@ namespace aplikacja_dziekanat.pages
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
         }
+
         private void ScrollToNextDay()
         {
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
             GetSchedule();
         }
+
         private void ScrollToPreviousDay()
         {
             currentDate = currentDate.AddDays(-1);
@@ -160,6 +155,12 @@ namespace aplikacja_dziekanat.pages
         }
 
         private async void GetSchedule()
+        {
+            if (auth.Uid() == null || auth.Email() == null || users.Count <= 0)
+            {
+                return;
+            }
+
             try
             {
                 string day = currentDate.DayOfWeek.ToString();
@@ -172,7 +173,8 @@ namespace aplikacja_dziekanat.pages
                 {
                     if (!mainStackLayout.Children.Contains(lessonListView))
                     {
-                        Device.BeginInvokeOnMainThread(() => {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
                             mainStackLayout.Children.Clear();
                             mainStackLayout.Children.Add(aktualnaData);
                             mainStackLayout.Children.Add(lessonListView);
@@ -203,7 +205,8 @@ namespace aplikacja_dziekanat.pages
                 }
                 else if (schedule.Count == 0)
                 {
-                    Device.BeginInvokeOnMainThread(() => {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
                         lessonListView.ItemsSource = null;
                         mainStackLayout.Children.Clear();
                         mainStackLayout.Children.Add(aktualnaData);
@@ -217,14 +220,14 @@ namespace aplikacja_dziekanat.pages
                         mainStackLayout.Children.Add(buttonsStackLayout);
                     });
                 }
-            } 
+            }
             catch (Exception ex)
             {
                 await DisplayAlert("Błąd", ex.Message, "OK");
                 Debug.WriteLine("Exception: " + ex);
             }
-
         }
+
         private bool isExpanded = false;
         private void InitializeListView()
         {
@@ -275,18 +278,20 @@ namespace aplikacja_dziekanat.pages
                 {
                     Margin = new Thickness(10),
                     RowDefinitions = new RowDefinitionCollection
-                    {
-                        new RowDefinition { Height = GridLength.Auto },
-                        new RowDefinition { Height = GridLength.Auto },
-                        new RowDefinition { Height = GridLength.Auto },
-                        new RowDefinition { Height = 0 },
-                        new RowDefinition { Height = 0 },
-                        new RowDefinition { Height = 0 }
-                    },
-                            ColumnDefinitions = new ColumnDefinitionCollection
-                    {
-                        new ColumnDefinition { Width = GridLength.Star }
-                    }
+
+            {
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = 0 },
+                new RowDefinition { Height = 0 },
+                new RowDefinition { Height = 0 }
+            },
+                    ColumnDefinitions = new ColumnDefinitionCollection
+            {
+                new ColumnDefinition { Width = GridLength.Star }
+            }
+
                 };
                 grid.Children.Add(timeStartLabel, 0, 0);
                 grid.Children.Add(nameLabel, 0, 1);
@@ -310,13 +315,13 @@ namespace aplikacja_dziekanat.pages
 
 
             lessonListView.ItemSelected += (sender, e) =>
+            {
+                if (e.SelectedItem != null)
                 {
-                    if (e.SelectedItem != null)
-                    {
-                        Debug.WriteLine("Selected Item: " + e.SelectedItem);
-                        lessonListView.SelectedItem = null;
-                    }
-                };
+                    Debug.WriteLine("Selected Item: " + e.SelectedItem);
+                    lessonListView.SelectedItem = null;
+                }
+            };
 
 
 
@@ -325,9 +330,4 @@ namespace aplikacja_dziekanat.pages
     }
 
 }
-    
-    
-    
-
-    
 
