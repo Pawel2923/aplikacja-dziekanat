@@ -1,6 +1,8 @@
 ﻿using db;
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using Xamarin.Forms;
 using System.Linq;
 using Xamarin.Forms.Xaml;
@@ -12,6 +14,11 @@ namespace aplikacja_dziekanat.pages
         private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
         private DbConnection connection;
         private DateTime currentDate;
+
+        private readonly StackLayout mainStackLayout;
+        private readonly StackLayout buttonsStackLayout;
+
+
         public PlanZajec()
         {
             InitializeComponent();
@@ -25,12 +32,17 @@ namespace aplikacja_dziekanat.pages
             });
             var calendarIcon = new Image
             {
-                Source = "kanedarz1.jpg",
+
+                Source = "kanedarz1.jpg", 
+
                 HeightRequest = 30,
                 WidthRequest = 30,
                 Margin = new Thickness(0, 0, 0, 10)
             };
             var datePicker = new DatePicker();
+
+
+
             var showDatePickerButton = new Button
             {
                 Text = "Pokaż Kalendarz"
@@ -39,6 +51,7 @@ namespace aplikacja_dziekanat.pages
             {
                 datePicker.Focus();
             };
+
             var grid = new Grid
             {
                 IsVisible = false,
@@ -60,9 +73,13 @@ namespace aplikacja_dziekanat.pages
                 currentDate = e.NewDate;
                 UpdateCurrentDate();
                 GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
+
+
                 grid.IsVisible = false;
             };
+
             datePicker.IsVisible = false;
+
             var previousDayButton = new Button
             {
                 Text = "Poprzedni dzień",
@@ -70,6 +87,8 @@ namespace aplikacja_dziekanat.pages
                 Margin = new Thickness(0, 0, 5, 10)
             };
             previousDayButton.Clicked += (sender, e) => ScrollToPreviousDay();
+
+
             var nextDayButton = new Button
             {
                 Text = "Następny dzień",
@@ -77,18 +96,25 @@ namespace aplikacja_dziekanat.pages
                 Margin = new Thickness(5, 0, 0, 10)
             };
             nextDayButton.Clicked += (sender, e) => ScrollToNextDay();
-            var buttonsStackLayout = new StackLayout
+
+
+            buttonsStackLayout = new StackLayout
+
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Children = { previousDayButton, calendarIcon, nextDayButton, grid }
             };
-            var mainStackLayout = new StackLayout
+
+
+            mainStackLayout = new StackLayout
+
             {
                 Children = { aktualnaData, lessonListView, buttonsStackLayout }
             };
             Content = mainStackLayout;
         }
+
         private void UpdateCurrentDate()
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
@@ -98,6 +124,7 @@ namespace aplikacja_dziekanat.pages
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
             GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
+
         }
         private void ScrollToPreviousDay()
         {
@@ -105,28 +132,48 @@ namespace aplikacja_dziekanat.pages
             UpdateCurrentDate();
             GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
         }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
             if (auth.Uid() != null)
             {
-                GetSchedule("it-s-2-1", DateTime.Now.DayOfWeek.ToString());
+                GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
             }
         }
+
+
         private async void GetSchedule(string classId, string day)
         {
-            connection = new DbConnection();
-            var dayOfWeekEnglish = currentDate.DayOfWeek.ToString();
+            connection = new DbConnection(AppInfo.DatabaseUrl);
             var schedule = await connection.GetSchedule(classId, day);
+
+
             Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
-            if (schedule != null)
+            if (schedule != null && schedule.Count > 0)
             {
 
+                if (!mainStackLayout.Children.Contains(lessonListView))
+                {
+                    mainStackLayout.Children.Clear();
+                    mainStackLayout.Children.Add(aktualnaData);
+                    mainStackLayout.Children.Add(lessonListView);
+                    mainStackLayout.Children.Add(buttonsStackLayout);
+                }
 
-                schedule = schedule.OrderBy(item => item.TimeStart).ToList();
+                schedule = schedule.OrderBy(item =>
+                {
+                    var provider = new NumberFormatInfo
+                    {
+                        NumberDecimalSeparator = "."
+                    };
+                    return Convert.ToDouble(item.TimeStart.Replace(':', '.'), provider);
+                }).ToList();
+
                 foreach (var item in schedule)
                 {
+
                     item.ClassType = "Rodzaj zajęć: " + item.ClassType;
                     item.Duration = "Czas trwania: " + item.Duration + "h";
                     item.Name = "Nazwa: " + item.Name;
@@ -137,6 +184,22 @@ namespace aplikacja_dziekanat.pages
                 lessonListView.ItemsSource = schedule;
 
             }
+
+            else if (schedule.Count == 0) 
+            {
+                lessonListView.ItemsSource = null;
+                mainStackLayout.Children.Clear();
+                mainStackLayout.Children.Add(aktualnaData);
+                mainStackLayout.Children.Add(new Label
+                {
+                    Text = "Brak zajęć",
+                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))
+                });
+                mainStackLayout.Children.Add(buttonsStackLayout);
+            }
+
         }
         private bool isExpanded = false;
         private void InitializeListView()
@@ -175,6 +238,7 @@ namespace aplikacja_dziekanat.pages
                     TextColor = Color.White,
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
+
                 durationLabel.SetBinding(Label.TextProperty, "Duration");
                 var classTypeLabel1 = new Label
                 {
@@ -182,10 +246,12 @@ namespace aplikacja_dziekanat.pages
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
                 classTypeLabel1.SetBinding(Label.TextProperty, "ClassType");
+
                 var grid = new Grid
                 {
                     Margin = new Thickness(10),
                     RowDefinitions = new RowDefinitionCollection
+
             {
                 new RowDefinition { Height = GridLength.Auto },
                 new RowDefinition { Height = GridLength.Auto },
@@ -198,6 +264,7 @@ namespace aplikacja_dziekanat.pages
             {
                 new ColumnDefinition { Width = GridLength.Star }
             }
+
                 };
                 grid.Children.Add(timeStartLabel, 0, 0);
                 grid.Children.Add(nameLabel, 0, 1);
