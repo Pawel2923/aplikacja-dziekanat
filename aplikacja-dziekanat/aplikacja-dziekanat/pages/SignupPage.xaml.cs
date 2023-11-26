@@ -1,6 +1,7 @@
 ﻿using CustomRenderer;
 using db;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,13 +11,23 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SignupPage : ContentPage
     {
-        private DbConnection connection;
+        private readonly DbConnection connection;
         private Input email;
         private Input password;
         private Input confirmPassword;
+        private readonly Select select;
         public SignupPage()
         {
             InitializeComponent();
+            connection = new DbConnection(AppInfo.DatabaseUrl);
+            classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
+            SetSelectItems();
+            select = new Select(classIdSelect);
+        }
+
+        private async void SetSelectItems()
+        {
+            classIdSelect.ItemsSource = await connection.GetClassIds();
         }
 
         private bool CheckForm()
@@ -30,8 +41,11 @@ namespace aplikacja_dziekanat.pages
             Input.Result confirmPasswordResult = confirmPassword.CheckValidity(false, passwordInput.Text == confirmPasswordInput.Text);
             confirmPasswordLabel.Text = confirmPasswordResult.Message;
             confirmPasswordLabel.IsVisible = confirmPasswordResult.Message.Length > 0;
+            Select.Result classIdResult = select.CheckValidity();
+            classIdLabel.Text = classIdResult.Message;
+            classIdLabel.IsVisible = classIdResult.Message.Length > 0;
 
-            if (emailResult.IsValid && passwordResult.IsValid && confirmPasswordResult.IsValid)
+            if (emailResult.IsValid && passwordResult.IsValid && confirmPasswordResult.IsValid && classIdResult.IsValid)
             {
                 return true;
             }
@@ -56,8 +70,7 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        connection = new DbConnection(AppInfo.DatabaseUrl);
-                        bool result = await connection.CreateUser(email.Value, false, false);
+                        bool result = await connection.CreateUser(email.Value, false, false, select.Value);
                         await Navigation.PopAsync();
                     }
                 }
@@ -66,18 +79,24 @@ namespace aplikacja_dziekanat.pages
                     Debug.WriteLine(ex);
                     if (ex.Message.Contains("INVALID_LOGIN_CREDENTIALS"))
                     {
-                        confirmPasswordLabel.Text = "Wprowadzono niepoprawny email lub hasło";
-                        confirmPasswordLabel.IsVisible = true;
+                        email.SetMessageLabel(emailLabel, "Wprowadzono niepoprawny email lub hasło");
                     }
                     else if (ex.Message.Contains("email address is already in use"))
                     {
-                        confirmPasswordLabel.Text = "Ten email jest już zajęty";
-                        confirmPasswordLabel.IsVisible = true;
+                        email.SetMessageLabel(emailLabel, "Ten email jest już zajęty");
+                    }
+                    else if (ex.Message.Contains("email address is badly formatted"))
+                    {
+                        email.SetMessageLabel(emailLabel, "Wprowadzono niepoprawny email");
+                    }
+                    else if (ex.Message.Contains("Password should be at least"))
+                    {
+                        Label[] passwordLabels = { passwordLabel, confirmPasswordLabel };
+                        email.SetMessageLabel(passwordLabels, "Hasło powinno mieć co najmniej 6 znaków");
                     }
                     else
                     {
-                        confirmPasswordLabel.Text = "Wystąpił problem z logowaniem";
-                        confirmPasswordLabel.IsVisible = true;
+                        email.SetMessageLabel(classIdLabel, "Wystąpił problem z logowaniem");
                     }
                 }
             }
@@ -86,6 +105,21 @@ namespace aplikacja_dziekanat.pages
         async public void LoginClickHandler(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
+        }
+
+        public void SelectChangeHandler(object sender, EventArgs e)
+        {
+            if (classIdSelect.SelectedIndex > -1)
+            {
+                select.TitleColor = Color.Black;
+                select.Value = classIdSelect.Items[classIdSelect.SelectedIndex];
+                selectAngleDown.Source = "angleDownSolidAlt.png";
+            }
+            else
+            {
+                select.TitleColor = Color.FromHex("#575757");
+                selectAngleDown.Source = "angleDownSolid.png";
+            }
         }
     }
 }

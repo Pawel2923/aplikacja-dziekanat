@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
 using Xamarin.Forms.Xaml;
@@ -11,8 +12,9 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlanZajec : ContentPage
     {
-        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
-        private DbConnection connection;
+        private readonly IFirebaseAuth auth;
+        private readonly DbConnection connection;
+        private List<User> users;
         private DateTime currentDate;
 
         private readonly StackLayout mainStackLayout;
@@ -21,6 +23,10 @@ namespace aplikacja_dziekanat.pages
 
         public PlanZajec()
         {
+            auth = DependencyService.Get<IFirebaseAuth>();
+            connection = new DbConnection(AppInfo.DatabaseUrl);
+            users = new List<User> { };
+            InitUsers();
             InitializeComponent();
             InitializeListView();
             currentDate = DateTime.Now;
@@ -32,9 +38,7 @@ namespace aplikacja_dziekanat.pages
             });
             var calendarIcon = new Image
             {
-
-                Source = "kanedarz1.jpg", 
-
+                Source = "calendar.png",
                 HeightRequest = 30,
                 WidthRequest = 30,
                 Margin = new Thickness(0, 0, 0, 10)
@@ -72,7 +76,7 @@ namespace aplikacja_dziekanat.pages
             {
                 currentDate = e.NewDate;
                 UpdateCurrentDate();
-                GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
+                GetSchedule();
 
 
                 grid.IsVisible = false;
@@ -115,6 +119,29 @@ namespace aplikacja_dziekanat.pages
             Content = mainStackLayout;
         }
 
+        public async void InitUsers()
+        {
+            if (auth.Uid() != null)
+            {
+                users = await connection.GetUsers();
+
+                GetSchedule();
+            }
+        }
+
+        public string FindClassId(string email)
+        {
+            foreach (var user in users)
+            {
+                Debug.WriteLine($"User: {user.Email}, {user.ClassId}");
+                if (user.Email == email)
+                {
+                    return user.ClassId;
+                }
+            }
+            return null;
+        }
+
         private void UpdateCurrentDate()
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
@@ -123,81 +150,78 @@ namespace aplikacja_dziekanat.pages
         {
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
-            GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
-
+            GetSchedule();
         }
         private void ScrollToPreviousDay()
         {
             currentDate = currentDate.AddDays(-1);
             UpdateCurrentDate();
-            GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
+            GetSchedule();
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            if (auth.Uid() != null)
+        private async void GetSchedule()
+            try
             {
-                GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
-            }
-        }
+                string day = currentDate.DayOfWeek.ToString();
+                string classId = FindClassId(auth.Email()) ?? throw new Exception("Nie znaleziono roku i kierunku");
+                var schedule = await connection.GetSchedule(classId, day);
 
+                Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
-        private async void GetSchedule(string classId, string day)
-        {
-            connection = new DbConnection(AppInfo.DatabaseUrl);
-            var schedule = await connection.GetSchedule(classId, day);
-
-
-            Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
-
-            if (schedule != null && schedule.Count > 0)
-            {
-
-                if (!mainStackLayout.Children.Contains(lessonListView))
+                if (schedule != null && schedule.Count > 0)
                 {
-                    mainStackLayout.Children.Clear();
-                    mainStackLayout.Children.Add(aktualnaData);
-                    mainStackLayout.Children.Add(lessonListView);
-                    mainStackLayout.Children.Add(buttonsStackLayout);
-                }
-
-                schedule = schedule.OrderBy(item =>
-                {
-                    var provider = new NumberFormatInfo
+                    if (!mainStackLayout.Children.Contains(lessonListView))
                     {
-                        NumberDecimalSeparator = "."
-                    };
-                    return Convert.ToDouble(item.TimeStart.Replace(':', '.'), provider);
-                }).ToList();
+                        Device.BeginInvokeOnMainThread(() => {
+                            mainStackLayout.Children.Clear();
+                            mainStackLayout.Children.Add(aktualnaData);
+                            mainStackLayout.Children.Add(lessonListView);
+                            mainStackLayout.Children.Add(buttonsStackLayout);
+                        });
+                    }
 
-                foreach (var item in schedule)
-                {
+                    schedule = schedule.OrderBy(item =>
+                    {
+                        var provider = new NumberFormatInfo
+                        {
+                            NumberDecimalSeparator = "."
+                        };
+                        return Convert.ToDouble(item.TimeStart.Replace(':', '.'), provider);
+                    }).ToList();
 
-                    item.ClassType = "Rodzaj zajęć: " + item.ClassType;
-                    item.Duration = "Czas trwania: " + item.Duration + "h";
-                    item.Name = "Nazwa: " + item.Name;
-                    item.Room = "Sala: " + item.Room;
-                    item.Teacher = "Prowadzący: " + item.Teacher;
-                    item.TimeStart = "Godzina rozpoczęcia: " + item.TimeStart;
+                    foreach (var item in schedule)
+                    {
+                        item.ClassType = "Rodzaj zajęć: " + item.ClassType;
+                        item.Duration = "Czas trwania: " + item.Duration + "h";
+                        item.Name = "Nazwa: " + item.Name;
+                        item.Room = "Sala: " + item.Room;
+                        item.Teacher = "Prowadzący: " + item.Teacher;
+                        item.TimeStart = "Godzina rozpoczęcia: " + item.TimeStart;
+                    }
+
+                    Device.BeginInvokeOnMainThread(() => lessonListView.ItemsSource = schedule);
                 }
-                lessonListView.ItemsSource = schedule;
-
-            }
-
-            else if (schedule.Count == 0) 
-            {
-                lessonListView.ItemsSource = null;
-                mainStackLayout.Children.Clear();
-                mainStackLayout.Children.Add(aktualnaData);
-                mainStackLayout.Children.Add(new Label
+                else if (schedule.Count == 0)
                 {
-                    Text = "Brak zajęć",
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand,
-                    FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))
-                });
-                mainStackLayout.Children.Add(buttonsStackLayout);
+                    Device.BeginInvokeOnMainThread(() => {
+                        lessonListView.ItemsSource = null;
+                        mainStackLayout.Children.Clear();
+                        mainStackLayout.Children.Add(aktualnaData);
+                        mainStackLayout.Children.Add(new Label
+                        {
+                            Text = "Brak zajęć",
+                            HorizontalOptions = LayoutOptions.CenterAndExpand,
+                            VerticalOptions = LayoutOptions.CenterAndExpand,
+                            FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))
+                        });
+                        mainStackLayout.Children.Add(buttonsStackLayout);
+                    });
+                }
+            } 
+            catch (Exception ex)
+            {
+                await DisplayAlert("Błąd", ex.Message, "OK");
+                Debug.WriteLine("Exception: " + ex);
             }
 
         }
@@ -251,20 +275,18 @@ namespace aplikacja_dziekanat.pages
                 {
                     Margin = new Thickness(10),
                     RowDefinitions = new RowDefinitionCollection
-
-            {
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = 0 },
-                new RowDefinition { Height = 0 },
-                new RowDefinition { Height = 0 }
-            },
-                    ColumnDefinitions = new ColumnDefinitionCollection
-            {
-                new ColumnDefinition { Width = GridLength.Star }
-            }
-
+                    {
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = 0 },
+                        new RowDefinition { Height = 0 },
+                        new RowDefinition { Height = 0 }
+                    },
+                            ColumnDefinitions = new ColumnDefinitionCollection
+                    {
+                        new ColumnDefinition { Width = GridLength.Star }
+                    }
                 };
                 grid.Children.Add(timeStartLabel, 0, 0);
                 grid.Children.Add(nameLabel, 0, 1);

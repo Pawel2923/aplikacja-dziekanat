@@ -11,6 +11,7 @@ namespace db
     public class DbConnection
     {
         private readonly FirebaseClient firebase;
+
         public DbConnection(string databaseUrl)
         {
             firebase = new FirebaseClient(databaseUrl);
@@ -28,7 +29,8 @@ namespace db
                 {
                     Email = item.Object.Email,
                     IsAdmin = item.Object.IsAdmin,
-                    IsTeacher = item.Object.IsTeacher
+                    IsTeacher = item.Object.IsTeacher,
+                    ClassId = item.Object.ClassId
                 }).ToList();
             }
             catch (Exception ex)
@@ -38,11 +40,11 @@ namespace db
             }
         }
 
-        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher)
+        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
         {
             try
             {
-                await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher });
+                await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher, ClassId = classId });
                 return true;
             }
             catch (Exception ex)
@@ -96,6 +98,6 @@ namespace db
                 Debug.WriteLine("Exception: " + ex);
                 return null;
             }
-        }   
+        }
     }
 }

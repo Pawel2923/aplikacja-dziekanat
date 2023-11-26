@@ -61,7 +61,7 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        await Navigation.PopAsync();
+                        await Navigation.PushAsync(new FormsTabPage());
                     }
                 }
                 catch (Exception ex)
@@ -69,13 +69,11 @@ namespace aplikacja_dziekanat.pages
                     Debug.WriteLine(ex);
                     if (ex.Message.Contains("INVALID_LOGIN_CREDENTIALS"))
                     {
-                        passwordLabel.Text = "Wprowadzono niepoprawny email lub hasło";
-                        passwordLabel.IsVisible = true;
+                        password.SetMessageLabel(passwordLabel, "Wprowadzono niepoprawny email lub hasło");
                     }
                     else
                     {
-                        passwordLabel.Text = "Wystąpił problem z logowaniem";
-                        passwordLabel.IsVisible = true;
+                        password.SetMessageLabel(passwordLabel, "Wystąpił błąd podczas logowania");
                     }
                 }
             }
@@ -93,7 +91,7 @@ namespace aplikacja_dziekanat.pages
 
             if (auth.Uid() != null)
             {
-                await Navigation.PopAsync();
+                await Navigation.PushAsync(new FormsTabPage());
             }
         }
     }

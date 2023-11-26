@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aplikacja-dziekanat.Android", "aplikacja-dziekanat\aplikacja-dziekanat.Android\aplikacja-dziekanat.Android.csproj", "{D7E9CA9C-2700-40DC-9EE3-471A8B51898E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aplikacja-dziekanat", "aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat.csproj", "{0DA66516-C95B-4B88-8B5A-A8C6301C2C43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aplikacja-dziekanat", "aplikacja-dziekanat\aplikacja-dziekanat\aplikacja-dziekanat.csproj", "{0DA66516-C95B-4B88-8B5A-A8C6301C2C43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

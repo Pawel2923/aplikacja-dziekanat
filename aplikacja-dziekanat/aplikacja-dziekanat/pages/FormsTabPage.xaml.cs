@@ -7,10 +7,10 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FormsTabPage : FlyoutPage
     {
+        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
         public FormsTabPage()
         {
             InitializeComponent();
-            OnInit();
         }
         private void Handle_Clicked(object sender, System.EventArgs e)
         {
@@ -35,7 +35,7 @@ namespace aplikacja_dziekanat.pages
             IsPresented = false;
         }
 
-        async public void OnInit()
+        async public void NavigateToLoginPage()
         {
             await Navigation.PushAsync(new LoginPage());
         }
@@ -57,6 +57,16 @@ namespace aplikacja_dziekanat.pages
         public void LogoTapHandler(object sender, EventArgs e)
         {
             MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (auth.Uid() == null)
+            {
+                NavigateToLoginPage();
+            }
         }
     }
 }
