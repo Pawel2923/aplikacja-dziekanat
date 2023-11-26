@@ -4,7 +4,6 @@ using System.Diagnostics;
 using Xamarin.Forms;
 using System.Linq;
 using Xamarin.Forms.Xaml;
-
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -13,8 +12,6 @@ namespace aplikacja_dziekanat.pages
         private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
         private DbConnection connection;
         private DateTime currentDate;
-
-
         public PlanZajec()
         {
             InitializeComponent();
@@ -34,7 +31,6 @@ namespace aplikacja_dziekanat.pages
                 Margin = new Thickness(0, 0, 0, 10)
             };
             var datePicker = new DatePicker();
-
             var showDatePickerButton = new Button
             {
                 Text = "Pokaż Kalendarz"
@@ -43,7 +39,6 @@ namespace aplikacja_dziekanat.pages
             {
                 datePicker.Focus();
             };
-
             var grid = new Grid
             {
                 IsVisible = false,
@@ -52,7 +47,6 @@ namespace aplikacja_dziekanat.pages
                     datePicker
                 }
             };
-
             calendarIcon.GestureRecognizers.Add(new TapGestureRecognizer
             {
                 Command = new Command(() =>
@@ -61,18 +55,14 @@ namespace aplikacja_dziekanat.pages
                     datePicker.Focus();
                 })
             });
-
             datePicker.DateSelected += (sender, e) =>
             {
                 currentDate = e.NewDate;
                 UpdateCurrentDate();
                 GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
-
                 grid.IsVisible = false;
             };
-
             datePicker.IsVisible = false;
-
             var previousDayButton = new Button
             {
                 Text = "Poprzedni dzień",
@@ -80,7 +70,6 @@ namespace aplikacja_dziekanat.pages
                 Margin = new Thickness(0, 0, 5, 10)
             };
             previousDayButton.Clicked += (sender, e) => ScrollToPreviousDay();
-
             var nextDayButton = new Button
             {
                 Text = "Następny dzień",
@@ -88,44 +77,34 @@ namespace aplikacja_dziekanat.pages
                 Margin = new Thickness(5, 0, 0, 10)
             };
             nextDayButton.Clicked += (sender, e) => ScrollToNextDay();
-
             var buttonsStackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Children = { previousDayButton, calendarIcon, nextDayButton, grid }
             };
-
             var mainStackLayout = new StackLayout
             {
                 Children = { aktualnaData, lessonListView, buttonsStackLayout }
             };
-
             Content = mainStackLayout;
         }
-
         private void UpdateCurrentDate()
         {
-
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
         }
-
         private void ScrollToNextDay()
         {
             currentDate = currentDate.AddDays(1);
             UpdateCurrentDate();
             GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
-
         }
-
         private void ScrollToPreviousDay()
         {
             currentDate = currentDate.AddDays(-1);
             UpdateCurrentDate();
             GetSchedule("it-s-2-1", currentDate.DayOfWeek.ToString());
         }
-
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -134,14 +113,11 @@ namespace aplikacja_dziekanat.pages
                 GetSchedule("it-s-2-1", DateTime.Now.DayOfWeek.ToString());
             }
         }
-
         private async void GetSchedule(string classId, string day)
         {
             connection = new DbConnection();
-
             var dayOfWeekEnglish = currentDate.DayOfWeek.ToString();
             var schedule = await connection.GetSchedule(classId, day);
-
             Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
             if (schedule != null)
@@ -151,27 +127,20 @@ namespace aplikacja_dziekanat.pages
                 schedule = schedule.OrderBy(item => item.TimeStart).ToList();
                 foreach (var item in schedule)
                 {
-
-
                     item.ClassType = "Rodzaj zajęć: " + item.ClassType;
                     item.Duration = "Czas trwania: " + item.Duration + "h";
                     item.Name = "Nazwa: " + item.Name;
                     item.Room = "Sala: " + item.Room;
                     item.Teacher = "Prowadzący: " + item.Teacher;
                     item.TimeStart = "Godzina rozpoczęcia: " + item.TimeStart;
-
-
                 }
-
                 lessonListView.ItemsSource = schedule;
-            }
 
+            }
         }
         private bool isExpanded = false;
-
         private void InitializeListView()
         {
-            
 
             lessonListView.ItemTemplate = new DataTemplate(() =>
             {
@@ -181,16 +150,14 @@ namespace aplikacja_dziekanat.pages
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
                 timeStartLabel.SetBinding(Label.TextProperty, "TimeStart");
-
                 var nameLabel = new Label
                 {
                     TextColor = Color.White,
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                     FontAttributes = FontAttributes.Bold
-                    
+
                 };
                 nameLabel.SetBinding(Label.TextProperty, "Name");
-
                 var roomLabel = new Label
                 {
                     TextColor = Color.White,
@@ -203,21 +170,18 @@ namespace aplikacja_dziekanat.pages
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
                 teacherLabel.SetBinding(Label.TextProperty, "Teacher");
-
-                 var durationLabel = new Label
+                var durationLabel = new Label
                 {
                     TextColor = Color.White,
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
                 durationLabel.SetBinding(Label.TextProperty, "Duration");
-
                 var classTypeLabel1 = new Label
                 {
                     TextColor = Color.White,
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
                 };
                 classTypeLabel1.SetBinding(Label.TextProperty, "ClassType");
-
                 var grid = new Grid
                 {
                     Margin = new Thickness(10),
@@ -226,7 +190,7 @@ namespace aplikacja_dziekanat.pages
                 new RowDefinition { Height = GridLength.Auto },
                 new RowDefinition { Height = GridLength.Auto },
                 new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = 0 }, 
+                new RowDefinition { Height = 0 },
                 new RowDefinition { Height = 0 },
                 new RowDefinition { Height = 0 }
             },
@@ -235,21 +199,16 @@ namespace aplikacja_dziekanat.pages
                 new ColumnDefinition { Width = GridLength.Star }
             }
                 };
-
                 grid.Children.Add(timeStartLabel, 0, 0);
                 grid.Children.Add(nameLabel, 0, 1);
                 grid.Children.Add(roomLabel, 0, 2);
                 grid.Children.Add(teacherLabel, 0, 3);
                 grid.Children.Add(durationLabel, 0, 4);
                 grid.Children.Add(classTypeLabel1, 0, 5);
-
                 var viewCell = new ViewCell { View = grid };
-
                 viewCell.Tapped += (sender, e) =>
                 {
                     Console.WriteLine("Tapped event triggered");
-
-                    
                     grid.RowDefinitions[3].Height = isExpanded ? 0 : GridLength.Auto;
                     grid.RowDefinitions[4].Height = isExpanded ? 0 : GridLength.Auto;
                     grid.RowDefinitions[5].Height = isExpanded ? 0 : GridLength.Auto;
