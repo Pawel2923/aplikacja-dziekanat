@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -14,7 +15,7 @@ namespace aplikacja_dziekanat.pages
         private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
         private readonly DbConnection connection = new DbConnection(AppInfo.DatabaseUrl);
         private List<User> users = new List<User>();
-        private Notice notice = new Notice();
+        private List<Notice> notices = new List<Notice>();
 
         public Ogloszenia()
         {
@@ -31,34 +32,105 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
+        private void PrintNotices()
+        {
+            try
+            {
+                var noticesLayout = new StackLayout();
+                var frames = new List<Frame>();
+                Debug.WriteLine("Liczba notices: " + notices.Count);
+                foreach (var notice in notices)
+                {
+                    Label pageTitle = new Label
+                    {
+                        Text = notice.Title,
+                        FontSize = 24,
+                        FontAttributes = FontAttributes.Bold,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        Margin = new Thickness(0, 10, 0, 10),
+                        TextDecorations = TextDecorations.Underline,
+                        TextTransform = TextTransform.Uppercase,
+                        HorizontalTextAlignment = TextAlignment.Center
+
+                    };
+
+                    Label ogloszenieLabel = new Label
+                    {
+                        Text = notice.Content,
+                        FontSize = 18,
+                        Margin = new Thickness(10),
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand
+
+                    };
+                    Label dataLabel = new Label
+                    {
+                        Text = "Data utworzenia: " + notice.Date,
+                        FontSize = 12,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand
+                    };
+                    Label authorLabel = new Label
+                    {
+                        Text = "Autor: " + notice.Author,
+                        FontSize = 12,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand
+                    };
+
+                    Frame frame = new Frame
+                    {
+                        Content = new StackLayout
+                        {
+                            Children = { pageTitle, ogloszenieLabel, dataLabel, authorLabel }
+                        },
+                        HasShadow = true,
+                        Padding = new Thickness(15),
+                        Margin = new Thickness(20),
+                        CornerRadius = 10
+                    };
+
+                    frames.Add(frame);
+                }
+
+                foreach (var frame in frames)
+                {
+                    noticesLayout.Children.Add(frame);
+                }
+
+                Device.BeginInvokeOnMainThread(() => {
+                    Content = new ScrollView
+                    {
+                        Content = noticesLayout
+                    };
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         private async void GetNotices()
         {
-            bool noticesFound = false;
             try
             {
                 users = await connection.GetUsers();
                 string classId = connection.FindClassId(auth.Email(), users);
-                var notices = await connection.GetNotice(classId);
+                notices = await connection.GetNotice(classId);
 
-                foreach (var notice in notices)
-                {
-                    this.notice = notice;
-                }
-
-                noticesFound = true;
+                PrintNotices();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                notice.Content = "Brak nowych ogłoszeń";
-            }
+                notices.Add(new Notice());
+                notices[0].Content = "Brak nowych ogłoszeń";
 
-            if (!noticesFound)
-            {
                 Device.BeginInvokeOnMainThread(() => {
                     Label ogloszenieLabel = new Label
                     {
-                        Text = notice.Content,
+                        Text = notices[0].Content,
                         FontSize = 18,
                         Margin = new Thickness(10),
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
@@ -82,66 +154,7 @@ namespace aplikacja_dziekanat.pages
                         Children = { frame }
                     };
                 });
-                return;
             }
-
-            Device.BeginInvokeOnMainThread(() => {
-                Label pageTitle = new Label
-                {
-                    Text = notice.Title,
-                    FontSize = 24,
-                    FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    Margin = new Thickness(0, 10, 0, 10),
-                    TextDecorations = TextDecorations.Underline,
-                    TextTransform = TextTransform.Uppercase,
-                    HorizontalTextAlignment = TextAlignment.Center
-
-                };
-
-                Label ogloszenieLabel = new Label
-                {
-                    Text = notice.Content,
-                    FontSize = 18,
-                    Margin = new Thickness(10),
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
-
-                };
-                Label dataLabel = new Label
-                {
-
-                    Text = "Data utworzenia: " + notice.Date,
-                    FontSize = 12,
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
-                };
-                Label authorLabel = new Label
-                {
-                    Text = "Autor: " + notice.Author,
-                    FontSize = 12,
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
-                };
-
-                Frame frame = new Frame
-                {
-                    Content = new StackLayout
-                    {
-                        Children = { pageTitle, ogloszenieLabel, dataLabel, authorLabel }
-                    },
-                    HasShadow = true,
-                    Padding = new Thickness(15),
-                    Margin = new Thickness(20),
-                    CornerRadius = 10
-                };
-
-
-                Content = new StackLayout
-                {
-                    Children = { frame }
-                };
-            });
         }
     }
 }

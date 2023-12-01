@@ -6,7 +6,7 @@
         <StackLayout>
             <Label x:Name="aktualnaData" Text="Data: " TextColor="White" HorizontalOptions="Center" FontSize="20"/>
             <ListView x:Name="lessonListView" HasUnevenRows="True" >
-
+                
             </ListView>
         </StackLayout>
     </ContentPage.Content>

@@ -103,7 +103,7 @@ namespace db
             catch (Exception ex)
             {
                 Debug.WriteLine("Exception: " + ex);
-                return null;
+                throw new Exception(ex.Message);
             }
         }
 
