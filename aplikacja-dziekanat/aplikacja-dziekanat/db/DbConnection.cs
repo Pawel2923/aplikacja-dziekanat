@@ -123,5 +123,31 @@ namespace db
                 return null;
             }
         }
+
+        public string FindClassId(string email, List<User> users)
+        {
+            try
+            {
+                string userClassId = null;
+                foreach (var user in users)
+                {
+                    if (user.Email == email)
+                    {
+                        userClassId = user.ClassId;
+                        break;
+                    }
+                }
+                if (userClassId != null)
+                {
+                    return userClassId;
+                }
+
+                throw new Exception();
+            }
+            catch (Exception)
+            {
+                return "Nie znalezino roku i kierunku";
+            }
+        }
     }
 }
