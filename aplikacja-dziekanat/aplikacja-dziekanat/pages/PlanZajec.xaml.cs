@@ -123,18 +123,6 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        public string FindClassId(string email)
-        {
-            foreach (var user in users)
-            {
-                if (user.Email == email)
-                {
-                    return user.ClassId;
-                }
-            }
-            return null;
-        }
-
         private void UpdateCurrentDate()
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
@@ -164,7 +152,7 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 string day = currentDate.DayOfWeek.ToString();
-                string classId = FindClassId(auth.Email()) ?? throw new Exception("Nie znaleziono roku i kierunku");
+                string classId = connection.FindClassId(auth.Email(), users);
                 var schedule = await connection.GetSchedule(classId, day);
 
                 Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
@@ -213,6 +201,7 @@ namespace aplikacja_dziekanat.pages
                         mainStackLayout.Children.Add(new Label
                         {
                             Text = "Brak zajęć",
+                            TextColor = Color.FromHex("#aaaaaa"),
                             HorizontalOptions = LayoutOptions.CenterAndExpand,
                             VerticalOptions = LayoutOptions.CenterAndExpand,
                             FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))

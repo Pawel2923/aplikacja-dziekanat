@@ -83,6 +83,30 @@ namespace db
             }
         }
 
+        public async Task<List<Notice>> GetNotice(string classId)
+        {
+            try
+            {
+                var scheduleItems = await firebase
+                    .Child("notice")
+                    .OnceAsync<Notice>();
+
+                return scheduleItems.Select(item => item.Object.To == classId ? (new Notice
+                {
+                    Author = item.Object.Author,
+                    Date = item.Object.Date,
+                    Content = item.Object.Content,
+                    Title = item.Object.Title,
+                    To = item.Object.To,
+                }) : throw new Exception("Brak nowych ogłoszeń")).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<string>> GetClassIds()
         {
             try
@@ -97,6 +121,32 @@ namespace db
             {
                 Debug.WriteLine("Exception: " + ex);
                 return null;
+            }
+        }
+
+        public string FindClassId(string email, List<User> users)
+        {
+            try
+            {
+                string userClassId = null;
+                foreach (var user in users)
+                {
+                    if (user.Email == email)
+                    {
+                        userClassId = user.ClassId;
+                        break;
+                    }
+                }
+                if (userClassId != null)
+                {
+                    return userClassId;
+                }
+
+                throw new Exception();
+            }
+            catch (Exception)
+            {
+                return "Nie znalezino roku i kierunku";
             }
         }
     }
