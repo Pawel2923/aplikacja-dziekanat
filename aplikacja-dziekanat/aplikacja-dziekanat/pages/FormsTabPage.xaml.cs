@@ -46,7 +46,7 @@ namespace aplikacja_dziekanat.pages
 
             auth.Logout();
             IsPresented = false;
-            await Navigation.PushAsync(new LoginPage());
+            await Navigation.PopAsync();
         }
 
         public void MenuBtnTapHandler(object sender, EventArgs e)

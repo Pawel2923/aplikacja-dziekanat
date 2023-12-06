@@ -44,6 +44,7 @@ namespace aplikacja_dziekanat.pages
                     Label pageTitle = new Label
                     {
                         Text = notice.Title,
+                        TextColor = Color.Black,
                         FontSize = 24,
                         FontAttributes = FontAttributes.Bold,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
@@ -57,6 +58,7 @@ namespace aplikacja_dziekanat.pages
                     Label ogloszenieLabel = new Label
                     {
                         Text = notice.Content,
+                        TextColor = Color.Black,
                         FontSize = 18,
                         Margin = new Thickness(10),
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
@@ -66,13 +68,15 @@ namespace aplikacja_dziekanat.pages
                     Label dataLabel = new Label
                     {
                         Text = "Data utworzenia: " + notice.Date,
+                        TextColor = Color.Black,
                         FontSize = 12,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
                     };
-                    Label authorLabel = new Label
-                    {
-                        Text = "Autor: " + notice.Author,
+        Label authorLabel = new Label
+        {
+            Text = "Autor: " + notice.Author,
+            TextColor = Color.Black,
                         FontSize = 12,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
