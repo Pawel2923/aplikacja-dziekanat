@@ -21,7 +21,7 @@ namespace aplikacja_dziekanat.pages
         public Ogloszenia()
         {
             InitializeComponent();
-            DodajObrazPlusa();
+            DodajObrazPlusa(); 
         }
 
         protected override void OnAppearing()
@@ -101,10 +101,6 @@ namespace aplikacja_dziekanat.pages
                 Device.BeginInvokeOnMainThread(() => {
                     Content = new Grid
                     {
-                        RowDefinitions = {
-                            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                            new RowDefinition { Height = GridLength.Auto }
-                        },
                         Children = {
                             new ScrollView
                             {
@@ -113,7 +109,7 @@ namespace aplikacja_dziekanat.pages
                                     Children = { noticesLayout }
                                 }
                             },
-                            { plusImage, 0, 1 } // Dodaj obraz plusa do drugiej kolumny (0 - pierwsza kolumna, 1 - druga kolumna)
+                            plusImage
                         }
                     };
                 });
