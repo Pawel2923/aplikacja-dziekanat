@@ -16,10 +16,12 @@ namespace aplikacja_dziekanat.pages
         private readonly DbConnection connection = new DbConnection(AppInfo.DatabaseUrl);
         private List<User> users = new List<User>();
         private List<Notice> notices = new List<Notice>();
+        private Image plusImage;
 
         public Ogloszenia()
         {
             InitializeComponent();
+            DodajObrazPlusa();
         }
 
         protected override void OnAppearing()
@@ -51,7 +53,6 @@ namespace aplikacja_dziekanat.pages
                         TextDecorations = TextDecorations.Underline,
                         TextTransform = TextTransform.Uppercase,
                         HorizontalTextAlignment = TextAlignment.Center
-
                     };
 
                     Label ogloszenieLabel = new Label
@@ -61,7 +62,6 @@ namespace aplikacja_dziekanat.pages
                         Margin = new Thickness(10),
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
-
                     };
                     Label dataLabel = new Label
                     {
@@ -99,9 +99,22 @@ namespace aplikacja_dziekanat.pages
                 }
 
                 Device.BeginInvokeOnMainThread(() => {
-                    Content = new ScrollView
+                    Content = new Grid
                     {
-                        Content = noticesLayout
+                        RowDefinitions = {
+                            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                            new RowDefinition { Height = GridLength.Auto }
+                        },
+                        Children = {
+                            new ScrollView
+                            {
+                                Content = new StackLayout
+                                {
+                                    Children = { noticesLayout }
+                                }
+                            },
+                            { plusImage, 0, 1 } // Dodaj obraz plusa do drugiej kolumny (0 - pierwsza kolumna, 1 - druga kolumna)
+                        }
                     };
                 });
             }
@@ -154,6 +167,33 @@ namespace aplikacja_dziekanat.pages
                         Children = { frame }
                     };
                 });
+            }
+        }
+
+        private void DodajObrazPlusa()
+        {
+            try
+            {
+                plusImage = new Image
+                {
+                    Source = "plus.png",
+                    WidthRequest = 40,
+                    HeightRequest = 40,
+                    Margin = new Thickness(0, 0, 20, 20),
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.End
+                };
+
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += (s, e) => {
+                    // Obsługa zdarzenia dotknięcia, na przykład nawigacja do innej strony
+                    // lub wykonanie jakiejś akcji po dotknięciu obrazu plusa
+                };
+                plusImage.GestureRecognizers.Add(tapGestureRecognizer);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
