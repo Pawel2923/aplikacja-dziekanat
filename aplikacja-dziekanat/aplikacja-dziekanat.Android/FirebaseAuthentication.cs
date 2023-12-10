@@ -3,14 +3,22 @@ using Firebase.Auth;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using Firebase;
 
 [assembly: Dependency(typeof(FirebaseAuthentication))]
 namespace aplikacja_dziekanat.Droid
 {
     public class FirebaseAuthentication : IFirebaseAuth
     {
+        private FirebaseAuth auth;
         private string uid;
         private string email;
+
+        public FirebaseAuthentication()
+        {
+            var app = FirebaseApp.InitializeApp(Android.App.Application.Context);
+            auth = Firebase.Auth.FirebaseAuth.GetInstance(app);
+        }
 
         public string Uid()
         {
@@ -24,8 +32,8 @@ namespace aplikacja_dziekanat.Droid
 
         public async Task<string> LoginWithEmailAndPassword(string email, string password)
         {
-            _ = await FirebaseAuth.Instance.SignInWithEmailAndPasswordAsync(email, password);
-            uid = FirebaseAuth.Instance.CurrentUser.Uid;
+            _ = await auth.SignInWithEmailAndPasswordAsync(email, password);
+            uid = auth.CurrentUser.Uid;
             this.email = email;
 
             return uid;
@@ -33,8 +41,8 @@ namespace aplikacja_dziekanat.Droid
 
         public async Task<string> RegisterWithEmailAndPassword(string email, string password)
         {
-            _ = await FirebaseAuth.Instance.CreateUserWithEmailAndPasswordAsync(email, password);
-            uid = FirebaseAuth.Instance.CurrentUser.Uid;
+            _ = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
+            uid = auth.CurrentUser.Uid;
             this.email = email;
 
             return uid;
@@ -44,7 +52,7 @@ namespace aplikacja_dziekanat.Droid
         {
             uid = null;
             email = null;
-            FirebaseAuth.Instance.SignOut();
+            auth.SignOut();
         }
     }
 }

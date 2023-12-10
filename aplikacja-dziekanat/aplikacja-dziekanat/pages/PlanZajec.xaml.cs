@@ -13,8 +13,6 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlanZajec : ContentPage
     {
-        private readonly IFirebaseAuth auth;
-        private readonly DbConnection connection;
         private List<User> users;
         private DateTime currentDate;
         private readonly StackLayout mainStackLayout;
@@ -22,8 +20,6 @@ namespace aplikacja_dziekanat.pages
 
         public PlanZajec()
         {
-            auth = DependencyService.Get<IFirebaseAuth>();
-            connection = new DbConnection(AppInfo.DatabaseUrl);
             users = new List<User> { };
             InitUsers();
             InitializeComponent();
@@ -115,9 +111,10 @@ namespace aplikacja_dziekanat.pages
 
         public async void InitUsers()
         {
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
             if (auth.Uid() != null)
             {
-                users = await connection.GetUsers();
+                users = await DbConnection.GetUsers();
 
                 GetSchedule();
             }
@@ -144,6 +141,7 @@ namespace aplikacja_dziekanat.pages
 
         private async void GetSchedule()
         {
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
             if (auth.Uid() == null || auth.Email() == null || users.Count <= 0)
             {
                 return;
@@ -152,8 +150,8 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 string day = currentDate.DayOfWeek.ToString();
-                string classId = connection.FindClassId(auth.Email(), users);
-                var schedule = await connection.GetSchedule(classId, day);
+                string classId = DbConnection.FindClassId(auth.Email(), users);
+                var schedule = await DbConnection.GetSchedule(classId, day);
 
                 Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
