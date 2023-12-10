@@ -8,16 +8,12 @@ using System.Threading.Tasks;
 
 namespace db
 {
-    public class DbConnection
+    public static class DbConnection
     {
-        private readonly FirebaseClient firebase;
+        private static string databaseUrl = "https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/";
+        private static FirebaseClient firebase = new FirebaseClient(databaseUrl);
 
-        public DbConnection(string databaseUrl)
-        {
-            firebase = new FirebaseClient(databaseUrl);
-        }
-
-        public async Task<List<User>> GetUsers()
+        public static async Task<List<User>> GetUsers()
         {
             try
             {
@@ -40,7 +36,7 @@ namespace db
             }
         }
 
-        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
+        public static async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
         {
             try
             {
@@ -54,7 +50,7 @@ namespace db
             }
         }
 
-        public async Task<List<Schedule>> GetSchedule(string classId, string day)
+        public static async Task<List<Schedule>> GetSchedule(string classId, string day)
         {
             try
             {
@@ -83,7 +79,7 @@ namespace db
             }
         }
 
-        public async Task<List<Notice>> GetNotice(string classId)
+        public static async Task<List<Notice>> GetNotice(string classId)
         {
             try
             {
@@ -107,7 +103,7 @@ namespace db
             }
         }
 
-        public async Task<List<string>> GetClassIds()
+        public static async Task<List<string>> GetClassIds()
         {
             try
             {
@@ -124,7 +120,7 @@ namespace db
             }
         }
 
-        public string FindClassId(string email, List<User> users)
+        public static string FindClassId(string email, List<User> users)
         {
             try
             {
