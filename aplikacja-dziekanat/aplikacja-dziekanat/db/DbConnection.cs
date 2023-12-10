@@ -1,10 +1,13 @@
-﻿using Firebase.Database;
+﻿using aplikacja_dziekanat;
+using Firebase.Database;
 using Firebase.Database.Query;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace db
 {
@@ -30,7 +33,8 @@ namespace db
                     Email = item.Object.Email,
                     IsAdmin = item.Object.IsAdmin,
                     IsTeacher = item.Object.IsTeacher,
-                    ClassId = item.Object.ClassId
+                    ClassId = item.Object.ClassId,
+                    Profile = item.Object.Profile
                 }).ToList();
             }
             catch (Exception ex)
@@ -40,11 +44,24 @@ namespace db
             }
         }
 
-        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
+        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId, Profile profile)
         {
             try
             {
-                await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher, ClassId = classId });
+                if (profile == null)
+                {
+                    profile = new Profile();
+                }
+
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                await firebase.Child("users").Child(auth.Uid()).PutAsync(new User
+                {
+                    Email = email,
+                    IsAdmin = isAdmin,
+                    IsTeacher = isTeacher,
+                    ClassId = classId,
+                    Profile = profile
+                });
                 return true;
             }
             catch (Exception ex)
