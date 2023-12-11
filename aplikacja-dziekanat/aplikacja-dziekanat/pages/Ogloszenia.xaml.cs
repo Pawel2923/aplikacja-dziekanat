@@ -4,8 +4,6 @@ using db;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -17,11 +15,16 @@ namespace aplikacja_dziekanat.pages
         private List<User> users = new List<User>();
         private List<Notice> notices = new List<Notice>();
         private Image plusImage;
+        private Entry titleEntry;
+        private Entry contentEntry;
+        private Entry authorEntry;
+        private Button submitButton;
+        private StackLayout noticesLayout;
 
         public Ogloszenia()
         {
             InitializeComponent();
-            DodajObrazPlusa(); 
+            DodajObrazPlusa();
         }
 
         protected override void OnAppearing()
@@ -38,7 +41,7 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
-                var noticesLayout = new StackLayout();
+                noticesLayout = new StackLayout();
                 var frames = new List<Frame>();
                 Debug.WriteLine("Liczba notices: " + notices.Count);
                 foreach (var notice in notices)
@@ -98,7 +101,8 @@ namespace aplikacja_dziekanat.pages
                     noticesLayout.Children.Add(frame);
                 }
 
-                Device.BeginInvokeOnMainThread(() => {
+                Device.BeginInvokeOnMainThread(() =>
+                {
                     Content = new Grid
                     {
                         Children = {
@@ -106,7 +110,7 @@ namespace aplikacja_dziekanat.pages
                             {
                                 Content = new StackLayout
                                 {
-                                    Children = { noticesLayout }
+                                    Children = { noticesLayout, titleEntry, contentEntry, authorEntry, submitButton }
                                 }
                             },
                             plusImage
@@ -116,7 +120,7 @@ namespace aplikacja_dziekanat.pages
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Debug.WriteLine("Error in PrintNotices: " + ex.Message);
             }
         }
 
@@ -126,43 +130,18 @@ namespace aplikacja_dziekanat.pages
             {
                 users = await connection.GetUsers();
                 string classId = connection.FindClassId(auth.Email(), users);
+
+                // Wyczyść listę przed dodaniem nowych ogłoszeń
+                notices.Clear();
+
                 notices = await connection.GetNotice(classId);
 
                 PrintNotices();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
-                notices.Add(new Notice());
-                notices[0].Content = "Brak nowych ogłoszeń";
-
-                Device.BeginInvokeOnMainThread(() => {
-                    Label ogloszenieLabel = new Label
-                    {
-                        Text = notices[0].Content,
-                        FontSize = 18,
-                        Margin = new Thickness(10),
-                        HorizontalOptions = LayoutOptions.CenterAndExpand,
-                        VerticalOptions = LayoutOptions.CenterAndExpand
-                    };
-
-                    Frame frame = new Frame
-                    {
-                        Content = new StackLayout
-                        {
-                            Children = { ogloszenieLabel }
-                        },
-                        HasShadow = true,
-                        Padding = new Thickness(15),
-                        Margin = new Thickness(20),
-                        CornerRadius = 10
-                    };
-
-                    Content = new StackLayout
-                    {
-                        Children = { frame }
-                    };
-                });
+                Debug.WriteLine("Error in GetNotices: " + ex.Message);
+                // Reszta kodu...
             }
         }
 
@@ -180,16 +159,80 @@ namespace aplikacja_dziekanat.pages
                     VerticalOptions = LayoutOptions.End
                 };
 
+                titleEntry = new Entry
+                {
+                    Placeholder = "Tytuł ogłoszenia...",
+                    Margin = new Thickness(20, 0, 20, 0),
+                    IsVisible = false // Ukryj pole na początku
+                };
+
+                contentEntry = new Entry
+                {
+                    Placeholder = "Treść ogłoszenia...",
+                    Margin = new Thickness(20, 0, 20, 0),
+                    IsVisible = false // Ukryj pole na początku
+                };
+
+                authorEntry = new Entry
+                {
+                    Placeholder = "Autor ogłoszenia...",
+                    Margin = new Thickness(20, 0, 20, 0),
+                    IsVisible = false // Ukryj pole na początku
+                };
+
+                submitButton = new Button
+                {
+                    Text = "Dodaj",
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.End
+                };
+
+                submitButton.Clicked += OnSubmitButtonClicked;
+
                 var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += (s, e) => {
-                    // Obsługa zdarzenia dotknięcia, na przykład nawigacja do innej strony
-                    // lub wykonanie jakiejś akcji po dotknięciu obrazu plusa
+                tapGestureRecognizer.Tapped += (s, e) =>
+                {
+                    // Pokaż lub ukryj pola Entry po dotknięciu obrazu plusa
+                    titleEntry.IsVisible = !titleEntry.IsVisible;
+                    contentEntry.IsVisible = !contentEntry.IsVisible;
+                    authorEntry.IsVisible = !authorEntry.IsVisible;
+                    submitButton.IsVisible = !submitButton.IsVisible;
                 };
                 plusImage.GestureRecognizers.Add(tapGestureRecognizer);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Debug.WriteLine("Error in DodajObrazPlusa: " + ex.Message);
+            }
+        }
+
+        private void OnSubmitButtonClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                // Pobierz treść ogłoszenia, tytuł i autora
+                string noticeContent = contentEntry.Text;
+                string noticeTitle = titleEntry.Text;
+                string noticeAuthor = authorEntry.Text;
+
+                // Stwórz nowe ogłoszenie
+                Notice newNotice = new Notice
+                {
+                    Content = noticeContent,
+                    Title = noticeTitle,
+                    Author = noticeAuthor,
+                    Date = DateTime.Now.ToString() // Dodaj bieżącą datę
+                };
+
+                // Dodaj nowe ogłoszenie do listy
+                notices.Add(newNotice);
+
+                // Wywołaj PrintNotices(), aby zaktualizować widok
+                PrintNotices();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error in OnSubmitButtonClicked: " + ex.Message);
             }
         }
     }
