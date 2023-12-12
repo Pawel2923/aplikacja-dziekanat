@@ -131,7 +131,7 @@ namespace aplikacja_dziekanat.pages
                 users = await connection.GetUsers();
                 string classId = connection.FindClassId(auth.Email(), users);
 
-                // Wyczyść listę przed dodaniem nowych ogłoszeń
+                
                 notices.Clear();
 
                 notices = await connection.GetNotice(classId);
@@ -141,7 +141,7 @@ namespace aplikacja_dziekanat.pages
             catch (Exception ex)
             {
                 Debug.WriteLine("Error in GetNotices: " + ex.Message);
-                // Reszta kodu...
+                .
             }
         }
 
@@ -163,40 +163,44 @@ namespace aplikacja_dziekanat.pages
                 {
                     Placeholder = "Tytuł ogłoszenia...",
                     Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false // Ukryj pole na początku
+                    IsVisible = false 
                 };
 
                 contentEntry = new Entry
                 {
                     Placeholder = "Treść ogłoszenia...",
                     Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false // Ukryj pole na początku
+                    IsVisible = false 
                 };
 
                 authorEntry = new Entry
                 {
-                    Placeholder = "Autor ogłoszenia...",
+                    Placeholder = "Twój nick...",
                     Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false // Ukryj pole na początku
+                    IsVisible = false 
                 };
 
                 submitButton = new Button
                 {
-                    Text = "Dodaj",
+                    Text = "Dodaj ogłoszenie",
                     HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.End
+                    VerticalOptions = LayoutOptions.End,
+                    IsVisible = false 
                 };
 
                 submitButton.Clicked += OnSubmitButtonClicked;
 
+                
+
                 var tapGestureRecognizer = new TapGestureRecognizer();
                 tapGestureRecognizer.Tapped += (s, e) =>
                 {
-                    // Pokaż lub ukryj pola Entry po dotknięciu obrazu plusa
+                    
                     titleEntry.IsVisible = !titleEntry.IsVisible;
                     contentEntry.IsVisible = !contentEntry.IsVisible;
                     authorEntry.IsVisible = !authorEntry.IsVisible;
                     submitButton.IsVisible = !submitButton.IsVisible;
+                    
                 };
                 plusImage.GestureRecognizers.Add(tapGestureRecognizer);
             }
@@ -210,24 +214,28 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
-                // Pobierz treść ogłoszenia, tytuł i autora
-                string noticeContent = contentEntry.Text;
-                string noticeTitle = titleEntry.Text;
-                string noticeAuthor = authorEntry.Text;
+                titleEntry.IsVisible = false;
+                contentEntry.IsVisible = false;
+                authorEntry.IsVisible = false;
+                submitButton.IsVisible = false;
+                
 
-                // Stwórz nowe ogłoszenie
+                string title = titleEntry.Text;
+                string content = contentEntry.Text;
+                string author = authorEntry.Text;
+
                 Notice newNotice = new Notice
                 {
-                    Content = noticeContent,
-                    Title = noticeTitle,
-                    Author = noticeAuthor,
-                    Date = DateTime.Now.ToString() // Dodaj bieżącą datę
+                    Content = content,
+                    Title = title,
+                    Author = author,
+                    Date = DateTime.Now.ToString() 
                 };
 
-                // Dodaj nowe ogłoszenie do listy
+                
                 notices.Add(newNotice);
 
-                // Wywołaj PrintNotices(), aby zaktualizować widok
+                
                 PrintNotices();
             }
             catch (Exception ex)
@@ -235,5 +243,16 @@ namespace aplikacja_dziekanat.pages
                 Debug.WriteLine("Error in OnSubmitButtonClicked: " + ex.Message);
             }
         }
+
+        private void OnSendButtonClicked(object sender, EventArgs e)
+        {
+            // Tutaj dodaj logikę obsługi przycisku "Wyślij", jeśli potrzebujesz
+            // Na przykład, możesz wysłać treść ogłoszenia do serwera lub innej akcji
+            // Po zakończeniu przetwarzania ukryj przycisk "Wyślij" i ewentualnie inne pola
+         submitButton.IsVisible = false;
+        } 
+
+        // Dodaj dalsze metody, takie jak OnSendButtonClicked itd., jeśli są potrzebne
     }
 }
+
