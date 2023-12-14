@@ -70,7 +70,12 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        bool result = await dbConnection.CreateUser(email.Value, false, false, select.Value);
+                        var profil = new Profile
+                        {
+                            Address = "Test"
+                        };
+
+                        bool result = await dbConnection.CreateUser(email.Value, false, false, select.Value, profil);
                         await Navigation.PopAsync();
                     }
                 }
