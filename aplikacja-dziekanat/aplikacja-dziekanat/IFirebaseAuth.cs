@@ -8,7 +8,7 @@ namespace aplikacja_dziekanat
         string Token();
 
         Task<string> LoginWithEmailAndPassword(string email, string password);
-        Task<string> RegisterWithEmailAndPassword(string email, string password);
+        Task<string> RegisterWithEmailAndPassword(string email, string password, User newUser);
 
         void Logout();
     }

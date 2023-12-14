@@ -23,10 +23,11 @@ namespace db
         {
             try
             {
-                var userItems = await firebase.Child("users")?.OnceAsync<User>();
+                var userItems = await firebase.Child("users").OnceAsync<User>();
 
                 return userItems.Select(item => new User
                 {
+                    Uid = item.Key,
                     Email = item.Object.Email,
                     IsAdmin = item.Object.IsAdmin,
                     IsTeacher = item.Object.IsTeacher,
@@ -45,16 +46,9 @@ namespace db
         {
             try
             {
-                var userItems = await firebase.Child("users").Child(uid)?.OnceAsync<User>();
-
-                return userItems.Select(item => new User
-                {
-                    Email = item.Object.Email,
-                    IsAdmin = item.Object.IsAdmin,
-                    IsTeacher = item.Object.IsTeacher,
-                    ClassId = item.Object.ClassId,
-                    Profile = item.Object.Profile
-                }).FirstOrDefault();
+                var user = await firebase.Child("users").Child(uid).OnceSingleAsync<User>();
+                user.Uid = uid;
+                return user;
             }
             catch (Exception ex)
             {
@@ -63,23 +57,18 @@ namespace db
             }
         }
 
-        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId, Profile profile)
+        public async Task<bool> CreateUser(User newUser)
         {
             try
             {
-                if (profile == null)
-                {
-                    profile = new Profile();
-                }
-
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                await firebase.Child("users").Child(auth.Uid()).PutAsync(new User
+                await firebase.Child("users").Child(auth.CurrentUser.Uid).PutAsync(new User
                 {
-                    Email = email,
-                    IsAdmin = isAdmin,
-                    IsTeacher = isTeacher,
-                    ClassId = classId,
-                    Profile = profile
+                    Email = newUser.Email,
+                    IsAdmin = newUser.IsAdmin,
+                    IsTeacher = newUser.IsTeacher,
+                    ClassId = newUser.ClassId,
+                    Profile = newUser.Profile
                 });
                 return true;
             }
@@ -160,11 +149,6 @@ namespace db
                 Debug.WriteLine("Exception: " + ex);
                 return null;
             }
-        }
-
-        public void Dispose()
-        {
-            firebase.Dispose();
         }
     }
 }

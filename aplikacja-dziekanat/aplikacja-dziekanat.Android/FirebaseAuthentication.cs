@@ -11,7 +11,8 @@ namespace aplikacja_dziekanat.Droid
 {
     public class FirebaseAuthentication : IFirebaseAuth
     {
-        private User currentUser;
+        private static readonly DbConnection db = new DbConnection();
+        private static User currentUser;
         private string token;
 
         public User CurrentUser { get { return currentUser; } }
@@ -31,41 +32,29 @@ namespace aplikacja_dziekanat.Droid
         {
             var user = await FirebaseAuth.Instance.SignInWithEmailAndPasswordAsync(email, password);
             var tokenResult = await (user.User.GetIdToken(false).AsAsync<GetTokenResult>());
-            
-            SetToken(tokenResult.Token.ToString());
-            SetCurrentUser(user.User);
+            currentUser.Uid = user.User.Uid;
+            token = tokenResult.Token.ToString();
+            currentUser = await db.GetUser(user.User.Uid);
 
-            return currentUser.Uid;
+            return token;
         }
 
-        public async Task<string> RegisterWithEmailAndPassword(string email, string password)
+        public async Task<string> RegisterWithEmailAndPassword(string email, string password, User newUser)
         {
             var user = await FirebaseAuth.Instance.CreateUserWithEmailAndPasswordAsync(email, password);
             var tokenResult = await (user.User.GetIdToken(false).AsAsync<GetTokenResult>());
 
-            SetToken(tokenResult.Token.ToString());
-            SetCurrentUser(user.User);
+            token = tokenResult.Token.ToString();
+            currentUser = newUser;
+            currentUser.Uid = user.User.Uid;
+            await db.CreateUser(newUser);
 
-            return currentUser.Uid;
-        }
-
-        private async void SetCurrentUser(FirebaseUser user)
-        {
-            DbConnection db = new DbConnection();
-            currentUser = await db.GetUser(user.Uid);
-            currentUser.Uid = user.Uid;
-            db.Dispose();
-        }
-
-        private void SetToken(string token)
-        {
-            this.token = token;
+            return token;
         }
 
         private void DestroyUser()
         { 
             currentUser = new User();
-            currentUser = null;
         }
 
         public void Logout()

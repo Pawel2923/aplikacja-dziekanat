@@ -58,8 +58,8 @@ namespace aplikacja_dziekanat.pages
                 try
                 {
                     var auth = DependencyService.Resolve<IFirebaseAuth>();
-                    string uid = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
-                    if (uid != null)
+                    string token = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
+                    if (token != null)
                     {
                         await Navigation.PushAsync(new FormsTabPage());
                     }

@@ -11,11 +11,11 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SignupPage : ContentPage
     {
+        private readonly DbConnection dbConnection = new DbConnection();
         private Input email;
         private Input password;
         private Input confirmPassword;
         private readonly Select select;
-        private readonly DbConnection dbConnection = new DbConnection();
 
         public SignupPage()
         {
@@ -67,15 +67,16 @@ namespace aplikacja_dziekanat.pages
 
                 try
                 {
-                    string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
-                    if (uid != null)
+                    string token = await auth.RegisterWithEmailAndPassword(email.Value, password.Value, new User
                     {
-                        var profil = new Profile
-                        {
-                            Address = "Test"
-                        };
-
-                        bool result = await dbConnection.CreateUser(email.Value, false, false, select.Value, profil);
+                        Email = email.Value,
+                        IsAdmin = false,
+                        IsTeacher = false,
+                        ClassId = select.Value,
+                        Profile = new Profile()
+                    });
+                    if (token != null)
+                    {
                         await Navigation.PopAsync();
                     }
                 }
@@ -89,7 +90,7 @@ namespace aplikacja_dziekanat.pages
                     else if (ex.Message.Contains("email address is already in use"))
                     {
                         email.SetMessageLabel(emailLabel, "Ten email jest już zajęty");
-                    }
+                    }   
                     else if (ex.Message.Contains("email address is badly formatted"))
                     {
                         email.SetMessageLabel(emailLabel, "Wprowadzono niepoprawny email");
@@ -101,7 +102,7 @@ namespace aplikacja_dziekanat.pages
                     }
                     else
                     {
-                        email.SetMessageLabel(classIdLabel, "Wystąpił problem z logowaniem");
+                        email.SetMessageLabel(classIdLabel, "Wystąpił problem z rejestracją");
                     }
                 }
             }

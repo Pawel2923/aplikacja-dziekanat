@@ -46,15 +46,6 @@
         private string classId;
         private Profile profile;
 
-        public User() 
-        {
-            email = "";
-            isAdmin = false;
-            isTeacher = false;
-            classId = "";
-            profile = new Profile();
-        }
-
         public User()
         {
             uid = null;
@@ -62,6 +53,7 @@
             isAdmin = false;
             isTeacher = false;
             classId = null;
+            profile = new Profile();
         }
 
         public string Uid { get { return uid; } set { uid = value; } }
