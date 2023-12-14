@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Firebase;
 
 namespace aplikacja_dziekanat.Droid
 {
@@ -12,8 +13,12 @@ namespace aplikacja_dziekanat.Droid
         {
             base.OnCreate(savedInstanceState);
 
+            // Initialize Firebase
+            FirebaseApp.InitializeApp(Application.Context);
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
             LoadApplication(new App());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

@@ -11,15 +11,15 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SignupPage : ContentPage
     {
-        private readonly DbConnection connection;
         private Input email;
         private Input password;
         private Input confirmPassword;
         private readonly Select select;
+        private readonly DbConnection dbConnection = new DbConnection();
+
         public SignupPage()
         {
             InitializeComponent();
-            connection = new DbConnection(AppInfo.DatabaseUrl);
             classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             SetSelectItems();
             select = new Select(classIdSelect);
@@ -27,7 +27,7 @@ namespace aplikacja_dziekanat.pages
 
         private async void SetSelectItems()
         {
-            classIdSelect.ItemsSource = await connection.GetClassIds();
+            classIdSelect.ItemsSource = await dbConnection.GetClassIds();
         }
 
         private bool CheckForm()
@@ -63,7 +63,7 @@ namespace aplikacja_dziekanat.pages
 
             if (CheckForm())
             {
-                IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+                IFirebaseAuth auth = DependencyService.Resolve<IFirebaseAuth>();
 
                 try
                 {
@@ -75,7 +75,7 @@ namespace aplikacja_dziekanat.pages
                             Address = "Test"
                         };
 
-                        bool result = await connection.CreateUser(email.Value, false, false, select.Value, profil);
+                        bool result = await dbConnection.CreateUser(email.Value, false, false, select.Value, profil);
                         await Navigation.PopAsync();
                     }
                 }

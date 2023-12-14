@@ -12,8 +12,7 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Ogloszenia : ContentPage
     {
-        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
-        private readonly DbConnection connection = new DbConnection(AppInfo.DatabaseUrl);
+        private readonly DbConnection dbConnection = new DbConnection();
         private List<User> users = new List<User>();
         private List<Notice> notices = new List<Notice>();
 
@@ -26,7 +25,9 @@ namespace aplikacja_dziekanat.pages
         {
             base.OnAppearing();
 
-            if (auth.Uid() != null)
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+            if (auth.CurrentUser.Uid != null)
             {
                 GetNotices();
             }
@@ -119,9 +120,8 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
-                users = await connection.GetUsers();
-                string classId = connection.FindClassId(auth.Email(), users);
-                notices = await connection.GetNotice(classId);
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
 
                 PrintNotices();
             }

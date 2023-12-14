@@ -7,26 +7,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace db
 {
     public class DbConnection
     {
-        private readonly FirebaseClient firebase;
-
-        public DbConnection(string databaseUrl)
+        private static readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+        private static readonly string databaseUrl = "https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/";
+        private static readonly FirebaseClient firebase = new FirebaseClient(databaseUrl, new FirebaseOptions
         {
-            firebase = new FirebaseClient(databaseUrl);
-        }
+            AuthTokenAsyncFactory = () => Task.FromResult(auth?.Token())
+        });
 
         public async Task<List<User>> GetUsers()
         {
             try
             {
-                var userItems = await firebase
-                    .Child("users")
-                    .OnceAsync<User>();
+                var userItems = await firebase.Child("users")?.OnceAsync<User>();
 
                 return userItems.Select(item => new User
                 {
@@ -36,6 +33,28 @@ namespace db
                     ClassId = item.Object.ClassId,
                     Profile = item.Object.Profile
                 }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
+        }
+      
+        public async Task<User> GetUser(string uid)
+        {
+            try
+            {
+                var userItems = await firebase.Child("users").Child(uid)?.OnceAsync<User>();
+
+                return userItems.Select(item => new User
+                {
+                    Email = item.Object.Email,
+                    IsAdmin = item.Object.IsAdmin,
+                    IsTeacher = item.Object.IsTeacher,
+                    ClassId = item.Object.ClassId,
+                    Profile = item.Object.Profile
+                }).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -75,6 +94,8 @@ namespace db
         {
             try
             {
+                if (classId == null || day == null)
+                    throw new Exception("Brak danych");
 
                 var scheduleItems = await firebase
                     .Child("schedule")
@@ -96,7 +117,7 @@ namespace db
             catch (Exception ex)
             {
                 Debug.WriteLine("Exception: " + ex);
-                return null;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -141,30 +162,9 @@ namespace db
             }
         }
 
-        public string FindClassId(string email, List<User> users)
+        public void Dispose()
         {
-            try
-            {
-                string userClassId = null;
-                foreach (var user in users)
-                {
-                    if (user.Email == email)
-                    {
-                        userClassId = user.ClassId;
-                        break;
-                    }
-                }
-                if (userClassId != null)
-                {
-                    return userClassId;
-                }
-
-                throw new Exception();
-            }
-            catch (Exception)
-            {
-                return "Nie znalezino roku i kierunku";
-            }
+            firebase.Dispose();
         }
     }
 }
