@@ -40,6 +40,27 @@ namespace db
             }
         }
 
+        public async Task<User> GetUser(string uid)
+        {
+            try
+            {
+                var userItems = await firebase.Child("users").Child(uid)?.OnceAsync<User>();
+
+                return userItems.Select(item => new User
+                {
+                    Email = item.Object.Email,
+                    IsAdmin = item.Object.IsAdmin,
+                    IsTeacher = item.Object.IsTeacher,
+                    ClassId = item.Object.ClassId
+                }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
+        }
+
         public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
         {
             try
@@ -58,6 +79,8 @@ namespace db
         {
             try
             {
+                if (classId == null || day == null)
+                    throw new Exception("Brak danych");
 
                 var scheduleItems = await firebase
                     .Child("schedule")
@@ -67,13 +90,13 @@ namespace db
 
                 return scheduleItems.Select(item => new Schedule
 
-                        {
-                            ClassType = item.Object.ClassType,
-                            Duration = item.Object.Duration,
-                            Name = item.Object.Name,
-                            Room = item.Object.Room,
-                            Teacher = item.Object.Teacher,
-                            TimeStart = item.Object.TimeStart
+                {
+                    ClassType = item.Object.ClassType,
+                    Duration = item.Object.Duration,
+                    Name = item.Object.Name,
+                    Room = item.Object.Room,
+                    Teacher = item.Object.Teacher,
+                    TimeStart = item.Object.TimeStart
                 }).ToList();
             }
             catch (Exception ex)
@@ -92,12 +115,12 @@ namespace db
                     .OnceAsync<Notice>();
 
                 return scheduleItems.Select(item => item.Object.To == classId ? (new Notice
-                            {
-                                Author = item.Object.Author,
-                                Date = item.Object.Date,
-                                Content = item.Object.Content,
-                                Title = item.Object.Title,
-                                To = item.Object.To,
+                {
+                    Author = item.Object.Author,
+                    Date = item.Object.Date,
+                    Content = item.Object.Content,
+                    Title = item.Object.Title,
+                    To = item.Object.To,
                 }) : throw new Exception("Brak nowych ogłoszeń")).ToList();
             }
             catch (Exception ex)
@@ -124,30 +147,9 @@ namespace db
             }
         }
 
-        public string FindClassId(string email, List<User> users)
+        public void Dispose()
         {
-            try
-            {
-                string userClassId = null;
-                foreach (var user in users)
-                {
-                    if (user.Email == email)
-                    {
-                        userClassId = user.ClassId;
-                        break;
-                    }
-                }
-                if (userClassId != null)
-                {
-                    return userClassId;
-                }
-
-                throw new Exception();
-            }
-            catch (Exception)
-            {
-                return "Nie znalezino roku i kierunku";
-            }
+            firebase.Dispose();
         }
     }
 }
