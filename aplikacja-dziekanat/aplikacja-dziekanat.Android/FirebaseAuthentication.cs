@@ -1,24 +1,19 @@
 ﻿using aplikacja_dziekanat.Droid;
-using Firebase.Auth;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Essentials;
-using Firebase;
+using Android.Gms.Extensions;
+using Firebase.Auth;
+using System.Diagnostics;
 
 [assembly: Dependency(typeof(FirebaseAuthentication))]
 namespace aplikacja_dziekanat.Droid
 {
     public class FirebaseAuthentication : IFirebaseAuth
     {
-        private FirebaseAuth auth;
         private string uid;
         private string email;
-
-        public FirebaseAuthentication()
-        {
-            var app = FirebaseApp.InitializeApp(Android.App.Application.Context);
-            auth = Firebase.Auth.FirebaseAuth.GetInstance(app);
-        }
+        private string token;
 
         public string Uid()
         {
@@ -30,10 +25,17 @@ namespace aplikacja_dziekanat.Droid
             return email;
         }
 
+        public string Token()
+        {
+            return token;
+        }
+
         public async Task<string> LoginWithEmailAndPassword(string email, string password)
         {
-            _ = await auth.SignInWithEmailAndPasswordAsync(email, password);
-            uid = auth.CurrentUser.Uid;
+            var user = await FirebaseAuth.Instance.SignInWithEmailAndPasswordAsync(email, password);
+            uid = user.User.Uid;
+            var toktenResult = await (user.User.GetIdToken(false).AsAsync<GetTokenResult>());
+            token = toktenResult.Token.ToString();
             this.email = email;
 
             return uid;
@@ -41,8 +43,10 @@ namespace aplikacja_dziekanat.Droid
 
         public async Task<string> RegisterWithEmailAndPassword(string email, string password)
         {
-            _ = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
-            uid = auth.CurrentUser.Uid;
+            var user = await FirebaseAuth.Instance.CreateUserWithEmailAndPasswordAsync(email, password);
+            uid = user.User.Uid;
+            var toktenResult = await (user.User.GetIdToken(false).AsAsync<GetTokenResult>());
+            token = toktenResult.Token.ToString();
             this.email = email;
 
             return uid;
@@ -52,7 +56,7 @@ namespace aplikacja_dziekanat.Droid
         {
             uid = null;
             email = null;
-            auth.SignOut();
+            FirebaseAuth.Instance.SignOut();
         }
     }
 }

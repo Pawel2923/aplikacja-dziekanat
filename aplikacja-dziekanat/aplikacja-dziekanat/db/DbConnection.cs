@@ -1,25 +1,29 @@
-﻿using Firebase.Database;
+﻿using aplikacja_dziekanat;
+using Firebase.Database;
 using Firebase.Database.Query;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace db
 {
     public static class DbConnection
     {
-        private static string databaseUrl = "https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/";
-        private static FirebaseClient firebase = new FirebaseClient(databaseUrl);
+        private static readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+        private static readonly string databaseUrl = "https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/";
+        private static readonly FirebaseClient firebase = new FirebaseClient(databaseUrl, new FirebaseOptions
+        {
+            AuthTokenAsyncFactory = () => Task.FromResult(auth?.Token())
+        });
 
         public static async Task<List<User>> GetUsers()
         {
             try
             {
-                var userItems = await firebase
-                    .Child("users")
-                    .OnceAsync<User>();
+                var userItems = await firebase.Child("users")?.OnceAsync<User>();
 
                 return userItems.Select(item => new User
                 {
