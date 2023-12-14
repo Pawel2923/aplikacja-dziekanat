@@ -17,6 +17,7 @@ namespace aplikacja_dziekanat.pages
         private DateTime currentDate;
         private readonly StackLayout mainStackLayout;
         private readonly StackLayout buttonsStackLayout;
+        private readonly DbConnection dbConnection = new DbConnection();
 
         public PlanZajec()
         {
@@ -114,7 +115,7 @@ namespace aplikacja_dziekanat.pages
             var auth = DependencyService.Resolve<IFirebaseAuth>();
             if (auth.Uid() != null)
             {
-                users = await DbConnection.GetUsers();
+                users = await dbConnection.GetUsers();
 
                 GetSchedule();
             }
@@ -150,8 +151,8 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 string day = currentDate.DayOfWeek.ToString();
-                string classId = DbConnection.FindClassId(auth.Email(), users);
-                var schedule = await DbConnection.GetSchedule(classId, day);
+                string classId = dbConnection.FindClassId(auth.Email(), users);
+                var schedule = await dbConnection.GetSchedule(classId, day);
 
                 Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 

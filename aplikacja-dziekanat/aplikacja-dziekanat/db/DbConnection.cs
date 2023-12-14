@@ -10,7 +10,7 @@ using Xamarin.Forms;
 
 namespace db
 {
-    public static class DbConnection
+    public class DbConnection
     {
         private static readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
         private static readonly string databaseUrl = "https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -19,7 +19,7 @@ namespace db
             AuthTokenAsyncFactory = () => Task.FromResult(auth?.Token())
         });
 
-        public static async Task<List<User>> GetUsers()
+        public async Task<List<User>> GetUsers()
         {
             try
             {
@@ -40,7 +40,7 @@ namespace db
             }
         }
 
-        public static async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
+        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace db
             }
         }
 
-        public static async Task<List<Schedule>> GetSchedule(string classId, string day)
+        public async Task<List<Schedule>> GetSchedule(string classId, string day)
         {
             try
             {
@@ -67,23 +67,23 @@ namespace db
 
                 return scheduleItems.Select(item => new Schedule
 
-                {
-                    ClassType = item.Object.ClassType,
-                    Duration = item.Object.Duration,
-                    Name = item.Object.Name,
-                    Room = item.Object.Room,
-                    Teacher = item.Object.Teacher,
-                    TimeStart = item.Object.TimeStart
+                        {
+                            ClassType = item.Object.ClassType,
+                            Duration = item.Object.Duration,
+                            Name = item.Object.Name,
+                            Room = item.Object.Room,
+                            Teacher = item.Object.Teacher,
+                            TimeStart = item.Object.TimeStart
                 }).ToList();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Exception: " + ex);
-                return null;
+                throw new Exception(ex.Message);
             }
         }
 
-        public static async Task<List<Notice>> GetNotice(string classId)
+        public async Task<List<Notice>> GetNotice(string classId)
         {
             try
             {
@@ -92,12 +92,12 @@ namespace db
                     .OnceAsync<Notice>();
 
                 return scheduleItems.Select(item => item.Object.To == classId ? (new Notice
-                {
-                    Author = item.Object.Author,
-                    Date = item.Object.Date,
-                    Content = item.Object.Content,
-                    Title = item.Object.Title,
-                    To = item.Object.To,
+                            {
+                                Author = item.Object.Author,
+                                Date = item.Object.Date,
+                                Content = item.Object.Content,
+                                Title = item.Object.Title,
+                                To = item.Object.To,
                 }) : throw new Exception("Brak nowych ogłoszeń")).ToList();
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@ namespace db
             }
         }
 
-        public static async Task<List<string>> GetClassIds()
+        public async Task<List<string>> GetClassIds()
         {
             try
             {
@@ -124,7 +124,7 @@ namespace db
             }
         }
 
-        public static string FindClassId(string email, List<User> users)
+        public string FindClassId(string email, List<User> users)
         {
             try
             {

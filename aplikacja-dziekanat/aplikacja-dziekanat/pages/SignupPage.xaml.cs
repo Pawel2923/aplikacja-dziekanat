@@ -15,6 +15,8 @@ namespace aplikacja_dziekanat.pages
         private Input password;
         private Input confirmPassword;
         private readonly Select select;
+        private readonly DbConnection dbConnection = new DbConnection();
+
         public SignupPage()
         {
             InitializeComponent();
@@ -25,7 +27,7 @@ namespace aplikacja_dziekanat.pages
 
         private async void SetSelectItems()
         {
-            classIdSelect.ItemsSource = await DbConnection.GetClassIds();
+            classIdSelect.ItemsSource = await dbConnection.GetClassIds();
         }
 
         private bool CheckForm()
@@ -68,7 +70,7 @@ namespace aplikacja_dziekanat.pages
                     string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
                     if (uid != null)
                     {
-                        bool result = await DbConnection.CreateUser(email.Value, false, false, select.Value);
+                        bool result = await dbConnection.CreateUser(email.Value, false, false, select.Value);
                         await Navigation.PopAsync();
                     }
                 }
