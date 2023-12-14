@@ -64,7 +64,7 @@ namespace aplikacja_dziekanat.pages
 
             var auth = DependencyService.Resolve<IFirebaseAuth>();
 
-            if (auth.Uid() == null)
+            if (auth.CurrentUser.Uid == null)
             {
                 NavigateToLoginPage();
             }

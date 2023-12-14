@@ -27,7 +27,7 @@ namespace aplikacja_dziekanat.pages
 
             var auth = DependencyService.Resolve<IFirebaseAuth>();
 
-            if (auth.Uid() != null)
+            if (auth.CurrentUser.Uid != null)
             {
                 GetNotices();
             }
@@ -121,9 +121,7 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                users = await dbConnection.GetUsers();
-                string classId = dbConnection.FindClassId(auth.Email(), users);
-                notices = await dbConnection.GetNotice(classId);
+                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
 
                 PrintNotices();
             }

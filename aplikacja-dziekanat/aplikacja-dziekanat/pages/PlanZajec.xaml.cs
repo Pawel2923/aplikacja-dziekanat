@@ -22,11 +22,11 @@ namespace aplikacja_dziekanat.pages
         public PlanZajec()
         {
             users = new List<User> { };
-            InitUsers();
             InitializeComponent();
             InitializeListView();
             currentDate = DateTime.Now;
             UpdateCurrentDate();
+            InitUsers();
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 UpdateCurrentDate();
@@ -113,7 +113,7 @@ namespace aplikacja_dziekanat.pages
         public async void InitUsers()
         {
             var auth = DependencyService.Resolve<IFirebaseAuth>();
-            if (auth.Uid() != null)
+            if (auth.CurrentUser.Uid != null)
             {
                 users = await dbConnection.GetUsers();
 
@@ -143,7 +143,7 @@ namespace aplikacja_dziekanat.pages
         private async void GetSchedule()
         {
             var auth = DependencyService.Resolve<IFirebaseAuth>();
-            if (auth.Uid() == null || auth.Email() == null || users.Count <= 0)
+            if (auth.CurrentUser.Uid == null || auth.CurrentUser.Email == null || users.Count <= 0)
             {
                 return;
             }
@@ -151,8 +151,7 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 string day = currentDate.DayOfWeek.ToString();
-                string classId = dbConnection.FindClassId(auth.Email(), users);
-                var schedule = await dbConnection.GetSchedule(classId, day);
+                var schedule = await dbConnection.GetSchedule(auth.CurrentUser.ClassId, day);
 
                 Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
