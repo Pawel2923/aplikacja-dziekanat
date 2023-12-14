@@ -29,8 +29,7 @@ namespace db
                 {
                     Uid = item.Key,
                     Email = item.Object.Email,
-                    IsAdmin = item.Object.IsAdmin,
-                    IsTeacher = item.Object.IsTeacher,
+                    Role = item.Object.Role,
                     ClassId = item.Object.ClassId,
                     Profile = item.Object.Profile
                 }).ToList();
@@ -65,8 +64,7 @@ namespace db
                 await firebase.Child("users").Child(auth.CurrentUser.Uid).PutAsync(new User
                 {
                     Email = newUser.Email,
-                    IsAdmin = newUser.IsAdmin,
-                    IsTeacher = newUser.IsTeacher,
+                    Role = newUser.Role,
                     ClassId = newUser.ClassId,
                     Profile = newUser.Profile
                 });

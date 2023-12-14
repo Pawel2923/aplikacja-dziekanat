@@ -70,8 +70,7 @@ namespace aplikacja_dziekanat.pages
                     string token = await auth.RegisterWithEmailAndPassword(email.Value, password.Value, new User
                     {
                         Email = email.Value,
-                        IsAdmin = false,
-                        IsTeacher = false,
+                        Role = "student",
                         ClassId = select.Value,
                         Profile = new Profile()
                     });
