@@ -131,7 +131,7 @@ namespace aplikacja_dziekanat.pages
                 users = await connection.GetUsers();
                 string classId = connection.FindClassId(auth.Email(), users);
 
-                
+
                 notices.Clear();
 
                 notices = await connection.GetNotice(classId);
@@ -141,7 +141,8 @@ namespace aplikacja_dziekanat.pages
             catch (Exception ex)
             {
                 Debug.WriteLine("Error in GetNotices: " + ex.Message);
-                .
+            
+                
             }
         }
 
@@ -175,7 +176,7 @@ namespace aplikacja_dziekanat.pages
 
                 authorEntry = new Entry
                 {
-                    Placeholder = "Twój nick...",
+                    Placeholder = "Autor...",
                     Margin = new Thickness(20, 0, 20, 0),
                     IsVisible = false 
                 };
