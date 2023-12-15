@@ -1,36 +1,37 @@
-﻿using Firebase.Database;
+﻿using aplikacja_dziekanat;
+using Firebase.Database;
 using Firebase.Database.Query;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace db
 {
     public class DbConnection
     {
-        private readonly FirebaseClient firebase;
-
-        public DbConnection(string databaseUrl)
+        private static readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+        private static readonly string databaseUrl = "https://aplikacja-dziekanat-default-rtdb.europe-west1.firebasedatabase.app/";
+        private static readonly FirebaseClient firebase = new FirebaseClient(databaseUrl, new FirebaseOptions
         {
-            firebase = new FirebaseClient(databaseUrl);
-        }
+            AuthTokenAsyncFactory = () => Task.FromResult(auth?.Token())
+        });
 
         public async Task<List<User>> GetUsers()
         {
             try
             {
-                var userItems = await firebase
-                    .Child("users")
-                    .OnceAsync<User>();
+                var userItems = await firebase.Child("users").OnceAsync<User>();
 
                 return userItems.Select(item => new User
                 {
+                    Uid = item.Key,
                     Email = item.Object.Email,
-                    IsAdmin = item.Object.IsAdmin,
-                    IsTeacher = item.Object.IsTeacher,
-                    ClassId = item.Object.ClassId
+                    Role = item.Object.Role,
+                    ClassId = item.Object.ClassId,
+                    Profile = item.Object.Profile
                 }).ToList();
             }
             catch (Exception ex)
@@ -39,12 +40,34 @@ namespace db
                 return null;
             }
         }
-
-        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId)
+      
+        public async Task<User> GetUser(string uid)
         {
             try
             {
-                await firebase.Child("users").PostAsync(new User() { Email = email, IsAdmin = isAdmin, IsTeacher = isTeacher, ClassId = classId });
+                var user = await firebase.Child("users").Child(uid).OnceSingleAsync<User>();
+                user.Uid = uid;
+                return user;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
+        }
+
+        public async Task<bool> CreateUser(User newUser)
+        {
+            try
+            {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                await firebase.Child("users").Child(auth.CurrentUser.Uid).PutAsync(new User
+                {
+                    Email = newUser.Email,
+                    Role = newUser.Role,
+                    ClassId = newUser.ClassId,
+                    Profile = newUser.Profile
+                });
                 return true;
             }
             catch (Exception ex)
@@ -58,6 +81,8 @@ namespace db
         {
             try
             {
+                if (classId == null || day == null)
+                    throw new Exception("Brak danych");
 
                 var scheduleItems = await firebase
                     .Child("schedule")
@@ -79,7 +104,7 @@ namespace db
             catch (Exception ex)
             {
                 Debug.WriteLine("Exception: " + ex);
-                return null;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -121,32 +146,6 @@ namespace db
             {
                 Debug.WriteLine("Exception: " + ex);
                 return null;
-            }
-        }
-
-        public string FindClassId(string email, List<User> users)
-        {
-            try
-            {
-                string userClassId = null;
-                foreach (var user in users)
-                {
-                    if (user.Email == email)
-                    {
-                        userClassId = user.ClassId;
-                        break;
-                    }
-                }
-                if (userClassId != null)
-                {
-                    return userClassId;
-                }
-
-                throw new Exception();
-            }
-            catch (Exception)
-            {
-                return "Nie znalezino roku i kierunku";
             }
         }
     }

@@ -11,15 +11,15 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SignupPage : ContentPage
     {
-        private readonly DbConnection connection;
+        private readonly DbConnection dbConnection = new DbConnection();
         private Input email;
         private Input password;
         private Input confirmPassword;
         private readonly Select select;
+
         public SignupPage()
         {
             InitializeComponent();
-            connection = new DbConnection(AppInfo.DatabaseUrl);
             classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             SetSelectItems();
             select = new Select(classIdSelect);
@@ -27,7 +27,7 @@ namespace aplikacja_dziekanat.pages
 
         private async void SetSelectItems()
         {
-            classIdSelect.ItemsSource = await connection.GetClassIds();
+            classIdSelect.ItemsSource = await dbConnection.GetClassIds();
         }
 
         private bool CheckForm()
@@ -63,14 +63,19 @@ namespace aplikacja_dziekanat.pages
 
             if (CheckForm())
             {
-                IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
+                IFirebaseAuth auth = DependencyService.Resolve<IFirebaseAuth>();
 
                 try
                 {
-                    string uid = await auth.RegisterWithEmailAndPassword(email.Value, password.Value);
-                    if (uid != null)
+                    string token = await auth.RegisterWithEmailAndPassword(email.Value, password.Value, new User
                     {
-                        bool result = await connection.CreateUser(email.Value, false, false, select.Value);
+                        Email = email.Value,
+                        Role = "student",
+                        ClassId = select.Value,
+                        Profile = new Profile()
+                    });
+                    if (token != null)
+                    {
                         await Navigation.PopAsync();
                     }
                 }
@@ -84,7 +89,7 @@ namespace aplikacja_dziekanat.pages
                     else if (ex.Message.Contains("email address is already in use"))
                     {
                         email.SetMessageLabel(emailLabel, "Ten email jest już zajęty");
-                    }
+                    }   
                     else if (ex.Message.Contains("email address is badly formatted"))
                     {
                         email.SetMessageLabel(emailLabel, "Wprowadzono niepoprawny email");
@@ -96,7 +101,7 @@ namespace aplikacja_dziekanat.pages
                     }
                     else
                     {
-                        email.SetMessageLabel(classIdLabel, "Wystąpił problem z logowaniem");
+                        email.SetMessageLabel(classIdLabel, "Wystąpił problem z rejestracją");
                     }
                 }
             }

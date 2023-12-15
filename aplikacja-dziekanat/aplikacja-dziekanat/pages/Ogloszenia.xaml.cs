@@ -10,8 +10,7 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Ogloszenia : ContentPage
     {
-        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
-        private readonly DbConnection connection = new DbConnection(AppInfo.DatabaseUrl);
+        private readonly DbConnection dbConnection = new DbConnection();
         private List<User> users = new List<User>();
         private List<Notice> notices = new List<Notice>();
         private Image plusImage;
@@ -31,7 +30,9 @@ namespace aplikacja_dziekanat.pages
         {
             base.OnAppearing();
 
-            if (auth.Uid() != null)
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+            if (auth.CurrentUser.Uid != null)
             {
                 GetNotices();
             }
@@ -49,6 +50,7 @@ namespace aplikacja_dziekanat.pages
                     Label pageTitle = new Label
                     {
                         Text = notice.Title,
+                        TextColor = Color.Black,
                         FontSize = 24,
                         FontAttributes = FontAttributes.Bold,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
@@ -61,6 +63,7 @@ namespace aplikacja_dziekanat.pages
                     Label ogloszenieLabel = new Label
                     {
                         Text = notice.Content,
+                        TextColor = Color.Black,
                         FontSize = 18,
                         Margin = new Thickness(10),
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
@@ -69,13 +72,15 @@ namespace aplikacja_dziekanat.pages
                     Label dataLabel = new Label
                     {
                         Text = "Data utworzenia: " + notice.Date,
+                        TextColor = Color.Black,
                         FontSize = 12,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
                     };
-                    Label authorLabel = new Label
-                    {
-                        Text = "Autor: " + notice.Author,
+        Label authorLabel = new Label
+        {
+            Text = "Autor: " + notice.Author,
+            TextColor = Color.Black,
                         FontSize = 12,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
@@ -128,6 +133,7 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
+
                 users = await connection.GetUsers();
                 string classId = connection.FindClassId(auth.Email(), users);
 
@@ -135,6 +141,7 @@ namespace aplikacja_dziekanat.pages
                 notices.Clear();
 
                 notices = await connection.GetNotice(classId);
+
 
                 PrintNotices();
             }

@@ -13,23 +13,20 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlanZajec : ContentPage
     {
-        private readonly IFirebaseAuth auth;
-        private readonly DbConnection connection;
         private List<User> users;
         private DateTime currentDate;
         private readonly StackLayout mainStackLayout;
         private readonly StackLayout buttonsStackLayout;
+        private readonly DbConnection dbConnection = new DbConnection();
 
         public PlanZajec()
         {
-            auth = DependencyService.Get<IFirebaseAuth>();
-            connection = new DbConnection(AppInfo.DatabaseUrl);
             users = new List<User> { };
-            InitUsers();
             InitializeComponent();
             InitializeListView();
             currentDate = DateTime.Now;
             UpdateCurrentDate();
+            InitUsers();
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 UpdateCurrentDate();
@@ -115,9 +112,10 @@ namespace aplikacja_dziekanat.pages
 
         public async void InitUsers()
         {
-            if (auth.Uid() != null)
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+            if (auth.CurrentUser.Uid != null)
             {
-                users = await connection.GetUsers();
+                users = await dbConnection.GetUsers();
 
                 GetSchedule();
             }
@@ -144,7 +142,8 @@ namespace aplikacja_dziekanat.pages
 
         private async void GetSchedule()
         {
-            if (auth.Uid() == null || auth.Email() == null || users.Count <= 0)
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+            if (auth.CurrentUser.Uid == null || auth.CurrentUser.Email == null || users.Count <= 0)
             {
                 return;
             }
@@ -152,8 +151,7 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 string day = currentDate.DayOfWeek.ToString();
-                string classId = connection.FindClassId(auth.Email(), users);
-                var schedule = await connection.GetSchedule(classId, day);
+                var schedule = await dbConnection.GetSchedule(auth.CurrentUser.ClassId, day);
 
                 Debug.WriteLine($"Pobrano {schedule?.Count ?? 0} rekordów z bazy danych dla dnia {day}");
 
