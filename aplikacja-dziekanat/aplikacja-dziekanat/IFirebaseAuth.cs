@@ -1,15 +1,14 @@
-﻿using System.Threading.Tasks;
-using db;
-
+﻿using db;
+using System.Threading.Tasks;
 namespace aplikacja_dziekanat
 {
     public interface IFirebaseAuth
     {
-        string Uid();
-        string Email();
+        User CurrentUser { get; }
+        string Token();
 
         Task<string> LoginWithEmailAndPassword(string email, string password);
-        Task<string> RegisterWithEmailAndPassword(string email, string password);
+        Task<string> RegisterWithEmailAndPassword(string email, string password, User newUser);
 
         void Logout();
     }

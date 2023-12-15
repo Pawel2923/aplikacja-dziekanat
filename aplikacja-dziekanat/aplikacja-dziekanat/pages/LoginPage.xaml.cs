@@ -12,7 +12,6 @@ namespace aplikacja_dziekanat.pages
     {
         private Input email;
         private Input password;
-        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
 
         public LoginPage()
         {
@@ -58,8 +57,9 @@ namespace aplikacja_dziekanat.pages
             {
                 try
                 {
-                    string uid = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
-                    if (uid != null)
+                    var auth = DependencyService.Resolve<IFirebaseAuth>();
+                    string token = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
+                    if (token != null)
                     {
                         await Navigation.PushAsync(new FormsTabPage());
                     }
@@ -89,7 +89,9 @@ namespace aplikacja_dziekanat.pages
         {
             base.OnAppearing();
 
-            if (auth.Uid() != null)
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+            if (auth.CurrentUser.Uid != null)
             {
                 await Navigation.PushAsync(new FormsTabPage());
             }

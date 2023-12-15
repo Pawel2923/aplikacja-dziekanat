@@ -7,7 +7,6 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FormsTabPage : FlyoutPage
     {
-        private readonly IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
         public FormsTabPage()
         {
             InitializeComponent();
@@ -63,7 +62,9 @@ namespace aplikacja_dziekanat.pages
         {
             base.OnAppearing();
 
-            if (auth.Uid() == null)
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+            if (auth.CurrentUser.Uid == null)
             {
                 NavigateToLoginPage();
             }
