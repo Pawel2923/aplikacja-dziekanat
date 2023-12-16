@@ -61,9 +61,14 @@ namespace aplikacja_dziekanat.pages
                 City = user.Profile.City;
                 ZipCode = user.Profile.ZipCode;
                 StudyStatus = user.Profile.StudyStatus;
-                foreach (var group in user.Profile.Groups)
+                Groups = "Brak grup";
+                if (user.Profile.Groups.Length > 0)
                 {
-                    Groups += group + ", ";
+                    foreach (var group in user.Profile.Groups)
+                    {
+                        Groups += group + ", ";
+                    }
+                    Groups = Groups.Remove(Groups.Length - 2);
                 }
                 Debug.WriteLine("Znaleziono użytkownika");
             }
