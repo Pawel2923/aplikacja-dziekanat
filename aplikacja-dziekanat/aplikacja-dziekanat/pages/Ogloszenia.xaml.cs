@@ -4,7 +4,6 @@ using db;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
-
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -32,9 +31,7 @@ namespace aplikacja_dziekanat.pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             var auth = DependencyService.Resolve<IFirebaseAuth>();
-
             if (auth.CurrentUser.Uid != null)
             {
                 GetNotices();
@@ -172,7 +169,8 @@ namespace aplikacja_dziekanat.pages
                 notices.Add(new Notice());
                 notices[0].Content = "Brak nowych ogłoszeń";
 
-                Device.BeginInvokeOnMainThread(() => {
+                Device.BeginInvokeOnMainThread(() =>
+                {
                     Label ogloszenieLabel = new Label
                     {
                         Text = notices[0].Content,
@@ -181,7 +179,6 @@ namespace aplikacja_dziekanat.pages
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
                     };
-
                     Frame frame = new Frame
                     {
                         Content = new StackLayout
@@ -193,7 +190,6 @@ namespace aplikacja_dziekanat.pages
                         Margin = new Thickness(20),
                         CornerRadius = 10
                     };
-
                     Content = new StackLayout
                     {
                         Children = { frame }
@@ -223,7 +219,6 @@ namespace aplikacja_dziekanat.pages
                         TextTransform = TextTransform.Uppercase,
                         HorizontalTextAlignment = TextAlignment.Center
                     };
-
                     Label ogloszenieLabel = new Label
                     {
                         Text = notice.Content,
@@ -249,7 +244,6 @@ namespace aplikacja_dziekanat.pages
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
                     };
-
                     Frame frame = new Frame
                     {
                         Content = new StackLayout
@@ -261,15 +255,12 @@ namespace aplikacja_dziekanat.pages
                         Margin = new Thickness(20),
                         CornerRadius = 10
                     };
-
                     frames.Add(frame);
                 }
-
                 foreach (var frame in frames)
                 {
                     noticesLayout.Children.Add(frame);
                 }
-
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     Content = new Grid
@@ -289,120 +280,7 @@ namespace aplikacja_dziekanat.pages
             }
             catch (Exception ex)
             {
-
-                Debug.WriteLine("Error in PrintNotices: " + ex.Message);
-            }
-        }
-
-        private async void GetNotices()
-        {
-            try
-            {
-
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
-                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
-
-                PrintNotices();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                notices.Add(new Notice());
-                notices[0].Content = "Brak nowych ogłoszeń";
-
-                Device.BeginInvokeOnMainThread(() => {
-                    Label ogloszenieLabel = new Label
-                    {
-                        Text = notices[0].Content,
-                        FontSize = 18,
-                        Margin = new Thickness(10),
-                        HorizontalOptions = LayoutOptions.CenterAndExpand,
-                        VerticalOptions = LayoutOptions.CenterAndExpand
-                    };
-
-                    Frame frame = new Frame
-                    {
-                        Content = new StackLayout
-                        {
-                            Children = { ogloszenieLabel }
-                        },
-                        HasShadow = true,
-                        Padding = new Thickness(15),
-                        Margin = new Thickness(20),
-                        CornerRadius = 10
-                    };
-
-                    Content = new StackLayout
-                    {
-                        Children = { frame }
-                    };
-                });
-            }
-        }
-
-        private void DodajObrazPlusa()
-        {
-            try
-            {
-                plusImage = new Image
-                {
-                    Source = "plus.png",
-                    WidthRequest = 40,
-                    HeightRequest = 40,
-                    Margin = new Thickness(0, 0, 20, 20),
-                    HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.End
-                };
-
-                titleEntry = new Entry
-                {
-                    Placeholder = "Tytuł ogłoszenia...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false 
-                };
-
-                contentEntry = new Entry
-                {
-                    Placeholder = "Treść ogłoszenia...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false 
-                };
-
-                authorEntry = new Entry
-                {
-                    Placeholder = "Autor...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false 
-                };
-
-                submitButton = new Button
-                {
-                    Text = "Dodaj ogłoszenie",
-                    HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.End,
-                    IsVisible = false 
-                };
-
-                submitButton.Clicked += OnSubmitButtonClicked;
-
-                
-
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += (s, e) =>
-                {
-                    
-                    titleEntry.IsVisible = !titleEntry.IsVisible;
-                    contentEntry.IsVisible = !contentEntry.IsVisible;
-                    authorEntry.IsVisible = !authorEntry.IsVisible;
-                    submitButton.IsVisible = !submitButton.IsVisible;
-                    
-                };
-                plusImage.GestureRecognizers.Add(tapGestureRecognizer);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Error in DodajObrazPlusa: " + ex.Message);
-
+                Debug.WriteLine("Błąd w PrintNotices: " + ex.Message);
             }
         }
     }
