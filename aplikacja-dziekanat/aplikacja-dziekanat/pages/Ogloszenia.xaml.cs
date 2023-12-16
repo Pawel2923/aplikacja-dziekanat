@@ -4,6 +4,7 @@ using db;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -101,17 +102,27 @@ namespace aplikacja_dziekanat.pages
 
                 if (title != null && content != null && author != null)
                 {
-                    Notice newNotice = new Notice
+                    
+                    string[] classOptions = { "it-s-2-1", "mt-s-1-1", "it-n-2-2", "til-s-1-1" };
+                    string selectedClass = await DisplayActionSheet("Wybierz Rok", "Anuluj", null, classOptions);
+
+                    if (selectedClass != "Anuluj")
                     {
-                        Content = content,
-                        Title = title,
-                        Author = author,
-                        Date = DateTime.Now.Date.ToString("dd.MM.yyyy")
-                    };
+                        Notice newNotice = new Notice
+                        {
+                            Content = content,
+                            Title = title,
+                            Author = author,
+                            Date = DateTime.Now.Date.ToString("dd.MM.yyyy"),
+                            To = selectedClass
+                        };
 
-                    notices.Add(newNotice);
+                        
+                        await dbConnection.SendNotice(newNotice);
 
-                    PrintNotices();
+                        
+                        await GetNotices();
+                    }
                 }
             }
             catch (Exception ex)
@@ -119,7 +130,6 @@ namespace aplikacja_dziekanat.pages
                 Debug.WriteLine("Błąd w OnPlusImageTapped: " + ex.Message);
             }
         }
-
 
 
 
@@ -154,7 +164,7 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        private async void GetNotices()
+        public async Task GetNotices()
         {
             try
             {
@@ -197,6 +207,7 @@ namespace aplikacja_dziekanat.pages
                 });
             }
         }
+
 
         private void PrintNotices()
         {

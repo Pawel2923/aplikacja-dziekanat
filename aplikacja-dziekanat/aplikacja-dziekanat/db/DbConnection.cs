@@ -131,6 +131,31 @@ namespace db
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<bool> SendNotice(Notice newNotice)
+        {
+            try
+            {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                await firebase.Child("notice").PostAsync(new
+                {
+                    Author = newNotice.Author,
+                    Date = newNotice.Date,
+                    Content = newNotice.Content,
+                    Title = newNotice.Title,
+                    To = newNotice.To
+                });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
+
+
 
         public async Task<List<string>> GetClassIds()
         {
