@@ -106,7 +106,6 @@ namespace aplikacja_dziekanat.pages
 
             Content = mainStackLayout;
         }
-
         private void UpdateCurrentDate()
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");

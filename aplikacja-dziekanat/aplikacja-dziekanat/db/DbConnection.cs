@@ -1,4 +1,4 @@
-﻿using aplikacja_dziekanat;
+using aplikacja_dziekanat;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System;
@@ -55,7 +55,7 @@ namespace db
                 return null;
             }
         }
-
+      
         public async Task<bool> CreateUser(User newUser)
         {
             try
@@ -67,6 +67,39 @@ namespace db
                     Role = newUser.Role,
                     ClassId = newUser.ClassId,
                     Profile = newUser.Profile
+                });
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateProfile(Profile newProfile)
+        {
+            if (newProfile == null)
+                throw new Exception("Brak danych");
+
+            newProfile.AlbumNumber = auth.CurrentUser.Profile.AlbumNumber;
+            newProfile.StudyStatus = auth.CurrentUser.Profile.StudyStatus;
+            newProfile.Groups = auth.CurrentUser.Profile.Groups;
+
+            try
+            {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                await firebase.Child("users").Child(auth.CurrentUser.Uid).Child("Profile").PutAsync(new Profile
+                {
+                    FirstName = newProfile.FirstName,
+                    LastName = newProfile.LastName,
+                    AlbumNumber = newProfile.AlbumNumber,
+                    PhoneNumber = newProfile.PhoneNumber,
+                    Address = newProfile.Address,
+                    City = newProfile.City,
+                    ZipCode = newProfile.ZipCode,
+                    StudyStatus = newProfile.StudyStatus,
+                    Groups = newProfile.Groups
                 });
                 return true;
             }
@@ -153,9 +186,6 @@ namespace db
                 return false;
             }
         }
-
-
-
 
         public async Task<List<string>> GetClassIds()
         {

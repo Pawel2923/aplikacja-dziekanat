@@ -14,16 +14,15 @@
 
         public Profile()
         {
-            string[] noGroup = { "Brak grup" };
-            firstName = "Brak";
-            lastName = "Brak";
-            phoneNumber = "Brak";
-            address = "Brak";
-            city = "Brak";
-            zipCode = "00-000";
-            albumNumber = "Brak";
-            studyStatus = "Nieznany";
-            groups = noGroup;
+            firstName = "";
+            lastName = "";
+            phoneNumber = "";
+            address = "";
+            city = "";
+            zipCode = "";
+            albumNumber = "";
+            studyStatus = "";
+            groups = new string[0];
         }
 
         public string FirstName { get { return firstName; } set { firstName = value; } }

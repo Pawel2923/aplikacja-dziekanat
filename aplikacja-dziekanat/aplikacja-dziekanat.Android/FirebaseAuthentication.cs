@@ -43,7 +43,7 @@ namespace aplikacja_dziekanat.Droid
         {
             var user = await FirebaseAuth.Instance.CreateUserWithEmailAndPasswordAsync(email, password);
             var tokenResult = await (user.User.GetIdToken(false).AsAsync<GetTokenResult>());
-
+            
             token = tokenResult.Token.ToString();
             currentUser = newUser;
             currentUser.Uid = user.User.Uid;

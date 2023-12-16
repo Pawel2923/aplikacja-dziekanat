@@ -1,4 +1,4 @@
-﻿using Xamarin.Forms;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using db;
 using System.Diagnostics;
@@ -33,13 +33,14 @@ namespace aplikacja_dziekanat.pages
         {
             base.OnAppearing();
             var auth = DependencyService.Resolve<IFirebaseAuth>();
+
             if (auth.CurrentUser.Uid != null)
             {
-                GetNotices();
+                _ = GetNotices();
             }
         }
 
-        private async void DodajObrazPlusa()
+        private void DodajObrazPlusa()
         {
             try
             {
@@ -133,7 +134,7 @@ namespace aplikacja_dziekanat.pages
 
 
 
-        private async void OnSubmitButtonClicked(object sender, EventArgs e)
+        private void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             try
             {
