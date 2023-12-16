@@ -4,6 +4,7 @@ using db;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -95,9 +96,11 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
+                
                 string title = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź tytuł ogłoszenia");
                 string content = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź treść ogłoszenia");
                 string author = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź autora ogłoszenia");
+                
 
                 if (title != null && content != null && author != null)
                 {
@@ -106,12 +109,16 @@ namespace aplikacja_dziekanat.pages
                         Content = content,
                         Title = title,
                         Author = author,
-                        Date = DateTime.Now.Date.ToString("dd.MM.yyyy")
+                        Date = DateTime.Now.Date.ToString("dd.MM.yyyy"),
+                        To = "it-s-2-1"
+
                     };
 
-                    notices.Add(newNotice);
+                    
+                    await dbConnection.SendNotice(newNotice);
 
-                    PrintNotices();
+                    
+                    await GetNotices();
                 }
             }
             catch (Exception ex)
@@ -154,7 +161,7 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        private async void GetNotices()
+        public async Task GetNotices()
         {
             try
             {
@@ -197,6 +204,7 @@ namespace aplikacja_dziekanat.pages
                 });
             }
         }
+
 
         private void PrintNotices()
         {
