@@ -96,29 +96,33 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
-                
                 string title = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź tytuł ogłoszenia");
                 string content = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź treść ogłoszenia");
                 string author = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź autora ogłoszenia");
-                
 
                 if (title != null && content != null && author != null)
                 {
-                    Notice newNotice = new Notice
+                    
+                    string[] classOptions = { "it-s-2-1", "mt-s-1-1", "it-n-2-2", "til-s-1-1" };
+                    string selectedClass = await DisplayActionSheet("Wybierz Rok", "Anuluj", null, classOptions);
+
+                    if (selectedClass != "Anuluj")
                     {
-                        Content = content,
-                        Title = title,
-                        Author = author,
-                        Date = DateTime.Now.Date.ToString("dd.MM.yyyy"),
-                        To = "it-s-2-1"
+                        Notice newNotice = new Notice
+                        {
+                            Content = content,
+                            Title = title,
+                            Author = author,
+                            Date = DateTime.Now.Date.ToString("dd.MM.yyyy"),
+                            To = selectedClass
+                        };
 
-                    };
+                        
+                        await dbConnection.SendNotice(newNotice);
 
-                    
-                    await dbConnection.SendNotice(newNotice);
-
-                    
-                    await GetNotices();
+                        
+                        await GetNotices();
+                    }
                 }
             }
             catch (Exception ex)
@@ -126,7 +130,6 @@ namespace aplikacja_dziekanat.pages
                 Debug.WriteLine("Błąd w OnPlusImageTapped: " + ex.Message);
             }
         }
-
 
 
 
