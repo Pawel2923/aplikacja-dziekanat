@@ -47,10 +47,10 @@ namespace aplikacja_dziekanat.pages
             UpdateProfile();
         }
 
-        public void OnEditProfileButtonClicked(object sender, EventArgs e)
+        public async void OnEditProfileButtonClicked(object sender, EventArgs e)
         {
-            Debug.WriteLine("Wciśnięto editProfileButton. Dalszego działania nie zaimplementowano");
-            //Navigation.PushAsync(new edytujProfil());
+            Debug.WriteLine("Przechodzenie do edycji profilu");
+            await Navigation.PushAsync(new EdytujProfil());
         }
 
         private async void UpdateProfile()
