@@ -24,6 +24,7 @@ namespace aplikacja_dziekanat.pages
             InitializeListView();
             currentDate = DateTime.Now;
             UpdateCurrentDate();
+            InitUsers();
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 UpdateCurrentDate();
@@ -106,7 +107,6 @@ namespace aplikacja_dziekanat.pages
 
             Content = mainStackLayout;
         }
-
         private void UpdateCurrentDate()
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");

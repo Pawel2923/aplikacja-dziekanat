@@ -55,7 +55,7 @@ namespace db
                 return null;
             }
         }
-
+      
         public async Task<bool> CreateUser(User newUser)
         {
             try
@@ -153,9 +153,6 @@ namespace db
                 return false;
             }
         }
-
-
-
 
         public async Task<List<string>> GetClassIds()
         {

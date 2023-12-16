@@ -33,6 +33,7 @@ namespace aplikacja_dziekanat.pages
         {
             base.OnAppearing();
             var auth = DependencyService.Resolve<IFirebaseAuth>();
+
             if (auth.CurrentUser.Uid != null)
             {
                 GetNotices();

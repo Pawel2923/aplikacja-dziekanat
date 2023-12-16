@@ -33,7 +33,6 @@ namespace aplikacja_dziekanat.pages
         public string Groups { get { return _Groups; } set { _Groups = value; RaisePropertyChanged(nameof(Groups)); } }
 
         private readonly DbConnection dbConnection = new DbConnection();
-
         public profilUz()
         {
             InitializeComponent();
