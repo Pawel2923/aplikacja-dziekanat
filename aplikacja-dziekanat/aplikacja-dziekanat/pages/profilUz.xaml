@@ -8,13 +8,22 @@
         <StackLayout Margin="20" VerticalOptions="FillAndExpand">
             <Frame BackgroundColor="#55595D" CornerRadius="25">
                 <StackLayout VerticalOptions="FillAndExpand">
-                    <StackLayout x:Name="nameContainer" Orientation="Horizontal" Margin="0,0,0,15">
-                        <Label Text="Witaj" TextColor="White" FontAttributes="Bold" FontSize="Title" />
-                        <Label Text="{x:Binding FirstName}" FontAttributes="Bold" TextColor="White" FontSize="Title" />
-                        <Label Text="{x:Binding LastName}" FontAttributes="Bold" TextColor="White" FontSize="Title" />
+                    <StackLayout x:Name="titleContainer" Orientation="Horizontal" Margin="0,0,0,15">
+                        <Label Text="{x:Binding FirstName, StringFormat='Witaj {0}!'}" FontAttributes="Bold" TextColor="White" FontSize="Title" />
                     </StackLayout>
                     <StackLayout>
                         <Label Text="Twoje dane: " FontAttributes="Bold" FontSize="Medium" TextColor="White" />
+                        <FlexLayout x:Name="nameContainer">
+                            <Label Text="Imię i nazwisko: " TextColor="White" FontAttributes="Bold" FontSize="Body" />
+                            <Label TextColor="White" FontSize="Body">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="FirstName" />
+                                        <Binding Path="LastName" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </FlexLayout>
                         <FlexLayout x:Name="emailContainer">
                             <Label Text="Email: " TextColor="White" FontAttributes="Bold" FontSize="Body" />
                             <Label Text="{x:Binding Email}" TextColor="White" FontSize="Body" />

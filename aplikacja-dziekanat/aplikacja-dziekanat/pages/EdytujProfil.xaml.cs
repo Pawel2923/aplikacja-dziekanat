@@ -24,37 +24,32 @@ namespace aplikacja_dziekanat.pages
         public EdytujProfil()
         {
             InitializeComponent();
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
             ResetForm();
         }
 
         private void ResetForm()
         {
-            firstNameInput.Value = "";
+            firstName.Value = "";
             firstNameLabel.Text = "";
             firstNameLabel.IsVisible = false;
 
-            lastNameInput.Value = "";
+            lastName.Value = "";
             lastNameLabel.Text = "";
             lastNameLabel.IsVisible = false;
 
-            phoneNumberInput.Value = "";
+            phoneNumber.Value = "";
             phoneNumberLabel.Text = "";
             phoneNumberLabel.IsVisible = false;
 
-            addressInput.Value = "";
+            address.Value = "";
             addressLabel.Text = "";
             addressLabel.IsVisible = false;
 
-            cityInput.Value = "";
+            city.Value = "";
             cityLabel.Text = "";
             cityLabel.IsVisible = false;
 
-            zipCodeInput.Value = "";
+            zipCode.Value = "";
             zipCodeLabel.Text = "";
             zipCodeLabel.IsVisible = false;
         }

@@ -64,7 +64,7 @@ namespace aplikacja_dziekanat.pages
 
                 // Ustaw wartości pól
                 FirstName = user.Profile.FirstName == "" ? "" : user.Profile.FirstName;
-                LastName = user.Profile.LastName == "" || user.Profile.LastName.ToLower() == "brak" ? "" : user.Profile.LastName + "!";
+                LastName = user.Profile.LastName == "" ? "" : user.Profile.LastName;
                 Course = user.ClassId;
                 AlbumNumber = user.Profile.AlbumNumber == "" ? "Nie ustawiono" : user.Profile.AlbumNumber;
                 Email = user.Email;
