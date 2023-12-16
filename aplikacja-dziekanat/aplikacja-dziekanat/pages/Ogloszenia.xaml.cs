@@ -19,10 +19,13 @@ namespace aplikacja_dziekanat.pages
         private Entry authorEntry;
         private Button submitButton;
         private StackLayout noticesLayout;
+        private readonly TapGestureRecognizer plusImageTapGestureRecognizer;
 
         public Ogloszenia()
         {
             InitializeComponent();
+            plusImageTapGestureRecognizer = new TapGestureRecognizer();
+            plusImageTapGestureRecognizer.Tapped += OnPlusImageTapped;
             DodajObrazPlusa();
         }
 
@@ -35,6 +38,167 @@ namespace aplikacja_dziekanat.pages
             if (auth.CurrentUser.Uid != null)
             {
                 GetNotices();
+            }
+        }
+
+        private async void DodajObrazPlusa()
+        {
+            try
+            {
+                plusImage = new Image
+                {
+                    Source = "plus.png",
+                    WidthRequest = 40,
+                    HeightRequest = 40,
+                    Margin = new Thickness(0, 0, 20, 20),
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.End
+                };
+
+                titleEntry = new Entry
+                {
+                    Placeholder = "Tytuł ogłoszenia...",
+                    Margin = new Thickness(20, 0, 20, 0),
+                    IsVisible = false
+                };
+
+                contentEntry = new Entry
+                {
+                    Placeholder = "Treść ogłoszenia...",
+                    Margin = new Thickness(20, 0, 20, 0),
+                    IsVisible = false
+                };
+
+                authorEntry = new Entry
+                {
+                    Placeholder = "Autor...",
+                    Margin = new Thickness(20, 0, 20, 0),
+                    IsVisible = false
+                };
+
+                submitButton = new Button
+                {
+                    Text = "Dodaj ogłoszenie",
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.End,
+                    IsVisible = false
+                };
+
+                submitButton.Clicked += OnSubmitButtonClicked;
+
+                plusImage.GestureRecognizers.Add(plusImageTapGestureRecognizer);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Błąd w DodajObrazPlusa: " + ex.Message);
+            }
+        }
+
+        private async void OnPlusImageTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                string title = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź tytuł ogłoszenia");
+                string content = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź treść ogłoszenia");
+                string author = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź autora ogłoszenia");
+
+                if (title != null && content != null && author != null)
+                {
+                    Notice newNotice = new Notice
+                    {
+                        Content = content,
+                        Title = title,
+                        Author = author,
+                        Date = DateTime.Now.Date.ToString("dd.MM.yyyy")
+                    };
+
+                    notices.Add(newNotice);
+
+                    PrintNotices();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Błąd w OnPlusImageTapped: " + ex.Message);
+            }
+        }
+
+
+
+
+        private async void OnSubmitButtonClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                titleEntry.IsVisible = false;
+                contentEntry.IsVisible = false;
+                authorEntry.IsVisible = false;
+                submitButton.IsVisible = false;
+
+                string title = titleEntry.Text;
+                string content = contentEntry.Text;
+                string author = authorEntry.Text;
+
+                Notice newNotice = new Notice
+                {
+                    Content = content,
+                    Title = title,
+                    Author = author,
+                    Date = DateTime.Now.ToString("dd.MM.yyyy")
+                };
+
+                notices.Add(newNotice);
+
+                PrintNotices();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Błąd w OnSubmitButtonClicked: " + ex.Message);
+            }
+        }
+
+        private async void GetNotices()
+        {
+            try
+            {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
+
+                PrintNotices();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                notices.Add(new Notice());
+                notices[0].Content = "Brak nowych ogłoszeń";
+
+                Device.BeginInvokeOnMainThread(() => {
+                    Label ogloszenieLabel = new Label
+                    {
+                        Text = notices[0].Content,
+                        FontSize = 18,
+                        Margin = new Thickness(10),
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand
+                    };
+
+                    Frame frame = new Frame
+                    {
+                        Content = new StackLayout
+                        {
+                            Children = { ogloszenieLabel }
+                        },
+                        HasShadow = true,
+                        Padding = new Thickness(15),
+                        Margin = new Thickness(20),
+                        CornerRadius = 10
+                    };
+
+                    Content = new StackLayout
+                    {
+                        Children = { frame }
+                    };
+                });
             }
         }
 
@@ -77,10 +241,10 @@ namespace aplikacja_dziekanat.pages
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
                     };
-        Label authorLabel = new Label
-        {
-            Text = "Autor: " + notice.Author,
-            TextColor = Color.Black,
+                    Label authorLabel = new Label
+                    {
+                        Text = "Autor: " + notice.Author,
+                        TextColor = Color.Black,
                         FontSize = 12,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand
@@ -125,164 +289,8 @@ namespace aplikacja_dziekanat.pages
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error in PrintNotices: " + ex.Message);
+                Debug.WriteLine("Błąd w PrintNotices: " + ex.Message);
             }
         }
-
-        private async void GetNotices()
-        {
-            try
-            {
-
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
-                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
-
-                PrintNotices();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                notices.Add(new Notice());
-                notices[0].Content = "Brak nowych ogłoszeń";
-
-                Device.BeginInvokeOnMainThread(() => {
-                    Label ogloszenieLabel = new Label
-                    {
-                        Text = notices[0].Content,
-                        FontSize = 18,
-                        Margin = new Thickness(10),
-                        HorizontalOptions = LayoutOptions.CenterAndExpand,
-                        VerticalOptions = LayoutOptions.CenterAndExpand
-                    };
-
-                    Frame frame = new Frame
-                    {
-                        Content = new StackLayout
-                        {
-                            Children = { ogloszenieLabel }
-                        },
-                        HasShadow = true,
-                        Padding = new Thickness(15),
-                        Margin = new Thickness(20),
-                        CornerRadius = 10
-                    };
-
-                    Content = new StackLayout
-                    {
-                        Children = { frame }
-                    };
-                });
-            }
-        }
-
-        private void DodajObrazPlusa()
-        {
-            try
-            {
-                plusImage = new Image
-                {
-                    Source = "plus.png",
-                    WidthRequest = 40,
-                    HeightRequest = 40,
-                    Margin = new Thickness(0, 0, 20, 20),
-                    HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.End
-                };
-
-                titleEntry = new Entry
-                {
-                    Placeholder = "Tytuł ogłoszenia...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false 
-                };
-
-                contentEntry = new Entry
-                {
-                    Placeholder = "Treść ogłoszenia...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false 
-                };
-
-                authorEntry = new Entry
-                {
-                    Placeholder = "Autor...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false 
-                };
-
-                submitButton = new Button
-                {
-                    Text = "Dodaj ogłoszenie",
-                    HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.End,
-                    IsVisible = false 
-                };
-
-                submitButton.Clicked += OnSubmitButtonClicked;
-
-                
-
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += (s, e) =>
-                {
-                    
-                    titleEntry.IsVisible = !titleEntry.IsVisible;
-                    contentEntry.IsVisible = !contentEntry.IsVisible;
-                    authorEntry.IsVisible = !authorEntry.IsVisible;
-                    submitButton.IsVisible = !submitButton.IsVisible;
-                    
-                };
-                plusImage.GestureRecognizers.Add(tapGestureRecognizer);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Error in DodajObrazPlusa: " + ex.Message);
-            }
-        }
-
-        private void OnSubmitButtonClicked(object sender, EventArgs e)
-        {
-            try
-            {
-                titleEntry.IsVisible = false;
-                contentEntry.IsVisible = false;
-                authorEntry.IsVisible = false;
-                submitButton.IsVisible = false;
-                
-
-                string title = titleEntry.Text;
-                string content = contentEntry.Text;
-                string author = authorEntry.Text;
-
-                Notice newNotice = new Notice
-                {
-                    Content = content,
-                    Title = title,
-                    Author = author,
-                    Date = DateTime.Now.ToString() 
-                };
-
-                
-                notices.Add(newNotice);
-
-                
-                PrintNotices();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Error in OnSubmitButtonClicked: " + ex.Message);
-            }
-        }
-
-        private void OnSendButtonClicked(object sender, EventArgs e)
-        {
-            // Tutaj dodaj logikę obsługi przycisku "Wyślij", jeśli potrzebujesz
-            // Na przykład, możesz wysłać treść ogłoszenia do serwera lub innej akcji
-            // Po zakończeniu przetwarzania ukryj przycisk "Wyślij" i ewentualnie inne pola
-         submitButton.IsVisible = false;
-        } 
-
-        // Dodaj dalsze metody, takie jak OnSendButtonClicked itd., jeśli są potrzebne
     }
 }
-
