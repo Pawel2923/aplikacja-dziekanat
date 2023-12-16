@@ -8,47 +8,47 @@
         <StackLayout Margin="20" VerticalOptions="FillAndExpand">
             <Frame BackgroundColor="#55595D" CornerRadius="25" VerticalOptions="FillAndExpand">
                 <StackLayout VerticalOptions="FillAndExpand">
-                    <FlexLayout>
+                    <FlexLayout x:Name="firstNameContainer">
                         <Label Text="Imię: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding FirstName}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="lastNameContainer">
                         <Label Text="Nazwisko: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding LastName}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="emailContainer">
                         <Label Text="Email: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding Email}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="courseContainer">
                         <Label Text="Tok studiów: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
-                        <Label Text="{x:Binding ClassId}" TextColor="White" FontSize="Medium" />
+                        <Label Text="{x:Binding Course}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="phoneNumberContainer">
                         <Label Text="Numer telefonu: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding PhoneNumber}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="albumNumberContainer">
                         <Label Text="Numer albumu: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding AlbumNumber}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="addressContainer">
                         <Label Text="Adres: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding Address}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="cityContainer">
                         <Label Text="Miasto: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding City}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="zipCodeContainer">
                         <Label Text="Kod pocztowy: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding ZipCode}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="studyStatusContainer">
                         <Label Text="Status studenta: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding StudyStatus}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>
-                    <FlexLayout>
+                    <FlexLayout x:Name="groupsContainer">
                         <Label Text="Grupy: " TextColor="White" FontAttributes="Bold" FontSize="Medium" />
                         <Label Text="{x:Binding Groups}" TextColor="White" FontSize="Medium" />
                     </FlexLayout>

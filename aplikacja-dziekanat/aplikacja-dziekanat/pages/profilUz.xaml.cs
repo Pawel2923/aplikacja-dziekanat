@@ -12,6 +12,7 @@ namespace aplikacja_dziekanat.pages
     {
         private string _FirstName;
         private string _LastName;
+        private string _Course;
         private string _AlbumNumber;
         private string _Email;
         private string _PhoneNumber;
@@ -23,6 +24,7 @@ namespace aplikacja_dziekanat.pages
 
         public string FirstName { get { return _FirstName; } set { _FirstName = value; RaisePropertyChanged(nameof(FirstName)); } }
         public string LastName { get { return _LastName; } set { _LastName = value; RaisePropertyChanged(nameof(LastName)); } }
+        public string Course { get { return _Course; } set { _Course = value; RaisePropertyChanged(nameof(Course)); } }
         public string AlbumNumber { get { return _AlbumNumber; } set { _AlbumNumber = value; RaisePropertyChanged(nameof(AlbumNumber)); } }
         public string Email { get { return _Email; } set { _Email = value; RaisePropertyChanged(nameof(Email)); } }
         public string PhoneNumber { get { return _PhoneNumber; } set { _PhoneNumber = value; RaisePropertyChanged(nameof(PhoneNumber)); } }
@@ -52,29 +54,52 @@ namespace aplikacja_dziekanat.pages
 
             if (user != null)
             {
-                FirstName = user.Profile.FirstName;
-                LastName = user.Profile.LastName;
-                AlbumNumber = user.Profile.AlbumNumber;
+                Debug.WriteLine("Aktualizowanie profilu użytkownika (uid: {0}), z rolą \"{1}\": ", user.Uid, user.Role);
+
+                // Ustaw wartości pól
+                FirstName = user.Profile.FirstName == "" ? "Nie ustawiono" : user.Profile.FirstName;
+                LastName = user.Profile.LastName == "" ? "Nie ustawiono" : user.Profile.LastName;
+                Course = user.ClassId;
+                AlbumNumber = user.Profile.AlbumNumber == "" ? "Nie ustawiono" : user.Profile.AlbumNumber;
                 Email = user.Email;
-                PhoneNumber = user.Profile.PhoneNumber;
-                Address = user.Profile.Address;
-                City = user.Profile.City;
-                ZipCode = user.Profile.ZipCode;
-                StudyStatus = user.Profile.StudyStatus;
-                Groups = "Brak grup";
-                if (user.Profile.Groups.Length > 0)
+                PhoneNumber = user.Profile.PhoneNumber == "" ? "Nie ustawiono" : user.Profile.PhoneNumber;
+                Address = user.Profile.Address == "" ? "Nie ustawiono" : user.Profile.Address;
+                City = user.Profile.City == "" ? "Nie ustawiono" : user.Profile.City;
+                ZipCode = user.Profile.ZipCode == "" ? "Nie ustawiono" : user.Profile.ZipCode;
+                StudyStatus = user.Profile.StudyStatus == "" ? "Nie ustawiono" : user.Profile.StudyStatus;
+                Groups = "";
+
+                // Ustaw widoczność kontenerów w zależności od roli użytkownika
+                courseContainer.IsVisible = user.Role == "student";
+                albumNumberContainer.IsVisible = user.Role == "student";
+                studyStatusContainer.IsVisible = user.Role == "student";
+                groupsContainer.IsVisible = user.Role == "student";
+
+                // Jeśli użytkownik jest studentem to aktualizuj grupy
+                if (user.Role == "student")
                 {
-                    foreach (var group in user.Profile.Groups)
+                    Debug.WriteLine("Długość tablicy grup: {0}", user.Profile.Groups.Length);
+
+                    if (user.Profile.Groups.Length > 0 && user.Profile.Groups[0] != "")
                     {
-                        Groups += group + ", ";
+                        foreach (var group in user.Profile.Groups)
+                        {
+                            Groups += group.ToUpper() + ", ";
+                        }
+                        Groups = Groups.Remove(Groups.Length - 2);
                     }
-                    Groups = Groups.Remove(Groups.Length - 2);
+                    else
+                    {
+                        Groups = "Nie jesteś członkiem żadnej grupy";
+                    }
                 }
-                Debug.WriteLine("Znaleziono użytkownika");
+
+                Debug.WriteLine("Profil został zaktualizowany");
             }
 
             else
             {
+                Debug.WriteLine("Wystąpił błąd podczas aktualizowania profilu użytkownika");
                 await DisplayAlert("Błąd", "Nie znaleziono użytkownika", "OK");
             }
         }
