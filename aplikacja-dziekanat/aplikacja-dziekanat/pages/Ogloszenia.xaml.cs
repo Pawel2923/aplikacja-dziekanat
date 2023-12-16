@@ -134,22 +134,44 @@ namespace aplikacja_dziekanat.pages
             try
             {
 
-                users = await connection.GetUsers();
-                string classId = connection.FindClassId(auth.Email(), users);
-
-
-                notices.Clear();
-
-                notices = await connection.GetNotice(classId);
-
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
 
                 PrintNotices();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error in GetNotices: " + ex.Message);
-            
-                
+                Debug.WriteLine(ex.Message);
+                notices.Add(new Notice());
+                notices[0].Content = "Brak nowych ogłoszeń";
+
+                Device.BeginInvokeOnMainThread(() => {
+                    Label ogloszenieLabel = new Label
+                    {
+                        Text = notices[0].Content,
+                        FontSize = 18,
+                        Margin = new Thickness(10),
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand
+                    };
+
+                    Frame frame = new Frame
+                    {
+                        Content = new StackLayout
+                        {
+                            Children = { ogloszenieLabel }
+                        },
+                        HasShadow = true,
+                        Padding = new Thickness(15),
+                        Margin = new Thickness(20),
+                        CornerRadius = 10
+                    };
+
+                    Content = new StackLayout
+                    {
+                        Children = { frame }
+                    };
+                });
             }
         }
 

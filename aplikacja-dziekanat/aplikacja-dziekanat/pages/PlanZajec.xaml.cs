@@ -13,7 +13,6 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlanZajec : ContentPage
     {
-        private List<User> users;
         private DateTime currentDate;
         private readonly StackLayout mainStackLayout;
         private readonly StackLayout buttonsStackLayout;
@@ -21,12 +20,10 @@ namespace aplikacja_dziekanat.pages
 
         public PlanZajec()
         {
-            users = new List<User> { };
             InitializeComponent();
             InitializeListView();
             currentDate = DateTime.Now;
             UpdateCurrentDate();
-            InitUsers();
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 UpdateCurrentDate();
@@ -110,17 +107,6 @@ namespace aplikacja_dziekanat.pages
             Content = mainStackLayout;
         }
 
-        public async void InitUsers()
-        {
-            var auth = DependencyService.Resolve<IFirebaseAuth>();
-            if (auth.CurrentUser.Uid != null)
-            {
-                users = await dbConnection.GetUsers();
-
-                GetSchedule();
-            }
-        }
-
         private void UpdateCurrentDate()
         {
             aktualnaData.Text = currentDate.ToString("dddd, dd.MM.yyyy");
@@ -143,7 +129,7 @@ namespace aplikacja_dziekanat.pages
         private async void GetSchedule()
         {
             var auth = DependencyService.Resolve<IFirebaseAuth>();
-            if (auth.CurrentUser.Uid == null || auth.CurrentUser.Email == null || users.Count <= 0)
+            if (auth.CurrentUser.Uid == null || auth.CurrentUser.Email == null)
             {
                 return;
             }
