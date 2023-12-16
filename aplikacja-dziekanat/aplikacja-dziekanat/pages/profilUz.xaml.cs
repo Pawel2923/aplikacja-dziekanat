@@ -31,6 +31,8 @@ namespace aplikacja_dziekanat.pages
         public string ZipCode { get { return _ZipCode; } set { _ZipCode = value; RaisePropertyChanged(nameof(ZipCode)); } }
         public string StudyStatus { get { return _StudyStatus; } set { _StudyStatus = value; RaisePropertyChanged(nameof(StudyStatus)); } }
         public string Groups { get { return _Groups; } set { _Groups = value; RaisePropertyChanged(nameof(Groups)); } }
+
+        private readonly DbConnection dbConnection = new DbConnection();
         public profilUz()
         {
             InitializeComponent();
@@ -45,34 +47,28 @@ namespace aplikacja_dziekanat.pages
 
         private async void UpdateProfile()
         {
-            var auth = DependencyService.Get<IFirebaseAuth>();
-            var connection = new DbConnection(AppInfo.DatabaseUrl);
-            var users = await connection.GetUsers();
-            bool isFound = false;
-            foreach (var user in users)
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+            var user = await dbConnection.GetUser(auth.CurrentUser.Uid);
+
+            if (user != null)
             {
-                if (user.Email == auth.Email())
+                FirstName = user.Profile.FirstName;
+                LastName = user.Profile.LastName;
+                AlbumNumber = user.Profile.AlbumNumber;
+                Email = user.Email;
+                PhoneNumber = user.Profile.PhoneNumber;
+                Address = user.Profile.Address;
+                City = user.Profile.City;
+                ZipCode = user.Profile.ZipCode;
+                StudyStatus = user.Profile.StudyStatus;
+                foreach (var group in user.Profile.Groups)
                 {
-                    FirstName = user.Profile.FirstName;
-                    LastName = user.Profile.LastName;
-                    AlbumNumber = user.Profile.AlbumNumber;
-                    Email = user.Email;
-                    PhoneNumber = user.Profile.PhoneNumber;
-                    Address = user.Profile.Address;
-                    City = user.Profile.City;
-                    ZipCode = user.Profile.ZipCode;
-                    StudyStatus = user.Profile.StudyStatus;
-                    foreach (var group in user.Profile.Groups)
-                    {
-                        Groups += group + ", ";
-                    }
-                    isFound = true;
-                    Debug.WriteLine("Znaleziono użytkownika");
-                    break;
+                    Groups += group + ", ";
                 }
+                Debug.WriteLine("Znaleziono użytkownika");
             }
 
-            if (!isFound)
+            else
             {
                 await DisplayAlert("Błąd", "Nie znaleziono użytkownika", "OK");
             }

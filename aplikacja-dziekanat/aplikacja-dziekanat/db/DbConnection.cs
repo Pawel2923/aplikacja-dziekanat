@@ -23,13 +23,13 @@ namespace db
         {
             try
             {
-                var userItems = await firebase.Child("users")?.OnceAsync<User>();
+                var userItems = await firebase.Child("users").OnceAsync<User>();
 
                 return userItems.Select(item => new User
                 {
+                    Uid = item.Key,
                     Email = item.Object.Email,
-                    IsAdmin = item.Object.IsAdmin,
-                    IsTeacher = item.Object.IsTeacher,
+                    Role = item.Object.Role,
                     ClassId = item.Object.ClassId,
                     Profile = item.Object.Profile
                 }).ToList();
@@ -45,16 +45,9 @@ namespace db
         {
             try
             {
-                var userItems = await firebase.Child("users").Child(uid)?.OnceAsync<User>();
-
-                return userItems.Select(item => new User
-                {
-                    Email = item.Object.Email,
-                    IsAdmin = item.Object.IsAdmin,
-                    IsTeacher = item.Object.IsTeacher,
-                    ClassId = item.Object.ClassId,
-                    Profile = item.Object.Profile
-                }).FirstOrDefault();
+                var user = await firebase.Child("users").Child(uid).OnceSingleAsync<User>();
+                user.Uid = uid;
+                return user;
             }
             catch (Exception ex)
             {
@@ -62,24 +55,18 @@ namespace db
                 return null;
             }
         }
-
-        public async Task<bool> CreateUser(string email, bool isAdmin, bool isTeacher, string classId, Profile profile)
+      
+        public async Task<bool> CreateUser(User newUser)
         {
             try
             {
-                if (profile == null)
-                {
-                    profile = new Profile();
-                }
-
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                await firebase.Child("users").Child(auth.Uid()).PutAsync(new User
+                await firebase.Child("users").Child(auth.CurrentUser.Uid).PutAsync(new User
                 {
-                    Email = email,
-                    IsAdmin = isAdmin,
-                    IsTeacher = isTeacher,
-                    ClassId = classId,
-                    Profile = profile
+                    Email = newUser.Email,
+                    Role = newUser.Role,
+                    ClassId = newUser.ClassId,
+                    Profile = newUser.Profile
                 });
                 return true;
             }
@@ -144,6 +131,28 @@ namespace db
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<bool> SendNotice(Notice newNotice)
+        {
+            try
+            {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+                await firebase.Child("notice").PostAsync(new
+                {
+                    Author = newNotice.Author,
+                    Date = newNotice.Date,
+                    Content = newNotice.Content,
+                    Title = newNotice.Title,
+                    To = newNotice.To
+                });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
 
         public async Task<List<string>> GetClassIds()
         {
@@ -160,11 +169,6 @@ namespace db
                 Debug.WriteLine("Exception: " + ex);
                 return null;
             }
-        }
-
-        public void Dispose()
-        {
-            firebase.Dispose();
         }
     }
 }

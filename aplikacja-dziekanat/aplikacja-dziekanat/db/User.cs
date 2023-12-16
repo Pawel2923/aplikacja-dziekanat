@@ -41,33 +41,22 @@
     {
         private string uid;
         private string email;
-        private bool isAdmin;
-        private bool isTeacher;
+        private string role;
         private string classId;
         private Profile profile;
-
-        public User() 
-        {
-            email = "";
-            isAdmin = false;
-            isTeacher = false;
-            classId = "";
-            profile = new Profile();
-        }
 
         public User()
         {
             uid = null;
             email = null;
-            isAdmin = false;
-            isTeacher = false;
+            role = null;
             classId = null;
+            profile = new Profile();
         }
 
         public string Uid { get { return uid; } set { uid = value; } }
         public string Email { get { return email; } set { email = value; } }
-        public bool IsAdmin { get { return isAdmin; } set { isAdmin = value; } }
-        public bool IsTeacher { get { return isTeacher; } set { isTeacher = value; } }
+        public string Role { get { return role; } set { role = value; } }
         public string ClassId { get { return classId; } set { classId = value; } }
         public Profile Profile { get { return profile; } set { profile = value; } }
     }
