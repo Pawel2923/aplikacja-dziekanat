@@ -9,11 +9,11 @@
         <StackLayout Padding="20">
             <Label Text="Edytuj profil" TextColor="White" FontSize="Title" />
             <Frame Padding="10, 0" Margin="0, 10, 0, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Imię" Style="{StaticResource inputPrimaryStyle}" x:Name="firstName" />
+                <local:Input Placeholder="Imię" Style="{StaticResource inputPrimaryStyle}" Keyboard="Chat" x:Name="firstName" />
             </Frame>
             <Label Text="" x:Name="firstNameLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false" />
             <Frame Padding="10, 0" Margin="0, 10, 0, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Nazwisko" Style="{StaticResource inputPrimaryStyle}" x:Name="lastName" />
+                <local:Input Placeholder="Nazwisko" Style="{StaticResource inputPrimaryStyle}" Keyboard="Chat" x:Name="lastName" />
             </Frame>
             <Label Text="" x:Name="lastNameLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false" />
             <Frame Padding="10, 0" Margin="0, 10, 0, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
@@ -29,7 +29,7 @@
             </Frame>
             <Label Text="" x:Name="cityLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false" />
             <Frame Padding="10, 0" Margin="0, 10, 0, 10" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Kod pocztowy" Style="{StaticResource inputPrimaryStyle}" x:Name="zipCode" />
+                <local:Input Placeholder="Kod pocztowy" Style="{StaticResource inputPrimaryStyle}" Keyboard="Chat" x:Name="zipCode" />
             </Frame>
             <Label Text="" x:Name="zipCodeLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false" />
             <Button Text="Zapisz" Style="{StaticResource btnPrimaryStyle}" Clicked="SaveClickHandler" HorizontalOptions="End" />

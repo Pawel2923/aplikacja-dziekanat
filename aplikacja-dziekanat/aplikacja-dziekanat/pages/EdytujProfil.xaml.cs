@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using CustomRenderer;
 using System.Diagnostics;
+using db;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -29,38 +30,40 @@ namespace aplikacja_dziekanat.pages
 
         private void ResetForm()
         {
-            firstName.Value = "";
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+            firstName.Text = auth.CurrentUser.Profile.FirstName;
             firstNameLabel.Text = "";
             firstNameLabel.IsVisible = false;
 
-            lastName.Value = "";
+            lastName.Text = auth.CurrentUser.Profile.LastName;
             lastNameLabel.Text = "";
             lastNameLabel.IsVisible = false;
 
-            phoneNumber.Value = "";
+            phoneNumber.Text = auth.CurrentUser.Profile.PhoneNumber;
             phoneNumberLabel.Text = "";
             phoneNumberLabel.IsVisible = false;
 
-            address.Value = "";
+            address.Text = auth.CurrentUser.Profile.Address;
             addressLabel.Text = "";
             addressLabel.IsVisible = false;
 
-            city.Value = "";
+            city.Text = auth.CurrentUser.Profile.City;
             cityLabel.Text = "";
             cityLabel.IsVisible = false;
 
-            zipCode.Value = "";
+            zipCode.Text = auth.CurrentUser.Profile.ZipCode;
             zipCodeLabel.Text = "";
             zipCodeLabel.IsVisible = false;
         }
 
         private bool CheckForm()
         {
-            Input.Result firstNameResult = firstNameInput.CheckValidity(true);
+            Input.Result firstNameResult = firstNameInput.CheckValidity();
             firstNameLabel.Text = firstNameResult.Message;
             firstNameLabel.IsVisible = firstNameResult.Message.Length > 0;
 
-            Input.Result lastNameResult = lastNameInput.CheckValidity(true);
+            Input.Result lastNameResult = lastNameInput.CheckValidity();
             lastNameLabel.Text = lastNameResult.Message;
             lastNameLabel.IsVisible = lastNameResult.Message.Length > 0;
 
@@ -103,14 +106,34 @@ namespace aplikacja_dziekanat.pages
             {
                 try
                 {
-                    throw new NotImplementedException("Zapisywanie do bazy nie zostało zaimplementowane");
+                    var dbConnection = new DbConnection();
 
-                    //ResetForm();
-                    //await Navigation.PopAsync();
+                    bool isSuccess = await dbConnection.UpdateProfile(new Profile
+                    {
+                        FirstName = firstNameInput.Value,
+                        LastName = lastNameInput.Value,
+                        PhoneNumber = phoneNumberInput.Value,
+                        Address = addressInput.Value,
+                        City = cityInput.Value,
+                        ZipCode = zipCodeInput.Value
+                    });
+
+                    if (isSuccess)
+                    {
+                        await DisplayAlert("Sukces", "Zapisano zmiany", "OK");
+                    }
+                    else
+                    {
+                        throw new Exception("Nie udało się zapisać zmian");
+                    }
+
+                    ResetForm();
+                    await Navigation.PopAsync();
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
+                    await DisplayAlert("Błąd", ex.Message, "OK");
                 }
             }
         }
