@@ -47,6 +47,12 @@ namespace aplikacja_dziekanat.pages
             UpdateProfile();
         }
 
+        public void OnEditProfileButtonClicked(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Wciśnięto editProfileButton. Dalszego działania nie zaimplementowano");
+            //Navigation.PushAsync(new edytujProfil());
+        }
+
         private async void UpdateProfile()
         {
             var auth = DependencyService.Resolve<IFirebaseAuth>();
@@ -57,8 +63,8 @@ namespace aplikacja_dziekanat.pages
                 Debug.WriteLine("Aktualizowanie profilu użytkownika (uid: {0}), z rolą \"{1}\": ", user.Uid, user.Role);
 
                 // Ustaw wartości pól
-                FirstName = user.Profile.FirstName == "" ? "Nie ustawiono" : user.Profile.FirstName;
-                LastName = user.Profile.LastName == "" ? "Nie ustawiono" : user.Profile.LastName;
+                FirstName = user.Profile.FirstName == "" ? "" : user.Profile.FirstName;
+                LastName = user.Profile.LastName == "" || user.Profile.LastName.ToLower() == "brak" ? "" : user.Profile.LastName + "!";
                 Course = user.ClassId;
                 AlbumNumber = user.Profile.AlbumNumber == "" ? "Nie ustawiono" : user.Profile.AlbumNumber;
                 Email = user.Email;
