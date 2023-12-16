@@ -1,4 +1,4 @@
-﻿using aplikacja_dziekanat;
+using aplikacja_dziekanat;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System;
