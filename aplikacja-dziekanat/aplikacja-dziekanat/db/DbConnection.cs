@@ -169,7 +169,7 @@ namespace db
             try
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                await firebase.Child("notice").PostAsync(new
+                await firebase.Child("notice").PostAsync(new Notice
                 {
                     Author = newNotice.Author,
                     Date = newNotice.Date,
