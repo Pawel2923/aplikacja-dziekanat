@@ -24,6 +24,7 @@ namespace aplikacja_dziekanat.pages
             InitializeListView();
             currentDate = DateTime.Now;
             UpdateCurrentDate();
+            GetSchedule();
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 UpdateCurrentDate();
