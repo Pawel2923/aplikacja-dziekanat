@@ -85,6 +85,7 @@ namespace db
             newProfile.AlbumNumber = auth.CurrentUser.Profile.AlbumNumber;
             newProfile.StudyStatus = auth.CurrentUser.Profile.StudyStatus;
             newProfile.Groups = auth.CurrentUser.Profile.Groups;
+            newProfile.Degree = auth.CurrentUser.Profile.Degree;
 
             try
             {
@@ -99,7 +100,8 @@ namespace db
                     City = newProfile.City,
                     ZipCode = newProfile.ZipCode,
                     StudyStatus = newProfile.StudyStatus,
-                    Groups = newProfile.Groups
+                    Groups = newProfile.Groups,
+                    Degree = newProfile.Degree
                 });
 
                 auth.CurrentUser.Profile = newProfile;

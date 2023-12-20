@@ -148,17 +148,18 @@ namespace aplikacja_dziekanat.pages
             {
                 if (CheckForm())
                 {
+                    // Sprawdź czy formularz został zmieniony
+                    if (!IsFormChanged())
+                    {
+                        await DisplayAlert("Komunikat", "Nie wprowadzono żadnych zmian", "OK");
+                        return;
+                    }
+
                     // Zapytaj użytkownika czy jest pewien zapisania zmian
                     bool isUserSure = await DisplayAlert("Zapisz zmiany", "Czy jesteś pewien, że chcesz zapisać zmiany?", "Tak", "Nie");
 
                     if (!isUserSure)
                     {
-                        return;
-                    }
-
-                    if (!IsFormChanged())
-                    {
-                        await DisplayAlert("Sukces", "Nie wprowadzono żadnych zmian", "OK");
                         return;
                     }
 
