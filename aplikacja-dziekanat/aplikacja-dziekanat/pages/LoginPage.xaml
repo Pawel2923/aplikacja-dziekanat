@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:CustomRenderer"
-             x:DataType="Page"
+             xmlns:local="clr-namespace:CustomRenderer" xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
+             x:DataType="pages:LoginPage"
              x:Class="aplikacja_dziekanat.pages.LoginPage"
              NavigationPage.HasNavigationBar="false" >
     
@@ -14,11 +14,11 @@
             <Label Text="Aplikacja Dziekanat" TextColor="#fff" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" Margin="0, 0, 0, 7" />
             <StackLayout>
                 <Frame Padding="10, 0" Margin="0, 10, 0, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                    <local:Input Placeholder="Email" Style="{StaticResource inputPrimaryStyle}" Keyboard="Email" x:Name="emailInput" />
+                    <local:Input Placeholder="Email" Style="{StaticResource inputPrimaryStyle}" Keyboard="Email" x:Name="email" Text="{Binding Email, Mode=TwoWay}" />
                 </Frame>
                 <Label Text="" x:Name="emailLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false"/>
                 <Frame Padding="10, 0" Margin="0, 10, 0, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                    <local:Input Placeholder="Hasło" Style="{StaticResource inputPrimaryStyle}" IsPassword="True" x:Name="passwordInput" />
+                    <local:Input Placeholder="Hasło" Style="{StaticResource inputPrimaryStyle}" IsPassword="True" x:Name="password" Text="{Binding Password, Mode=TwoWay}" />
                 </Frame>
                 <Label Text="" x:Name="passwordLabel" Style="{StaticResource labelWarningStyle}" IsVisible="false"/>
             </StackLayout>

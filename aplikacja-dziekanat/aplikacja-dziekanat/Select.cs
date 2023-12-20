@@ -6,9 +6,7 @@ namespace CustomRenderer
 {
     public class Select : Picker
     {
-        private string value;
         private bool isValid;
-        private readonly Select select;
 
         public class Result
         {
@@ -22,20 +20,17 @@ namespace CustomRenderer
             public string Message { get { return message; } set { message = value; } }
         }
 
-        public Select() { isValid = false; select = this; }
-        public Select(Select select) { isValid = false; this.select = select; }
+        public Select() { isValid = false; }
 
-        public string Value { get { return value; } set { this.value = value; } }
-
-        public Result CheckValidity()
+        public Result CheckValidity(string value)
         {
             Result result = new Result();
 
             try
             {
-                if (String.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
-                    throw new Exception("Pole " + select.Title + " jest puste");
+                    throw new Exception("Pole " + Title + " jest puste");
                 }
 
                 else

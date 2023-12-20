@@ -2,6 +2,7 @@
 using db;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,24 +10,29 @@ using Xamarin.Forms.Xaml;
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SignupPage : ContentPage
+    public partial class SignupPage : ContentPage, INotifyPropertyChanged
     {
-        private readonly DbConnection dbConnection = new DbConnection();
-        private Input email;
-        private Input password;
-        private Input confirmPassword;
-        private readonly Select select;
+        private string _email;
+        private string _password;
+        private string _confirmPassword;
+        private string _selectedClassId;
+
+        public string Email { get { return _email; } set { _email = value; RaisePropertyChanged(nameof(Email)); } }
+        public string Password { get { return _password; } set { _password = value; RaisePropertyChanged(nameof(Password)); } }
+        public string ConfirmPassword { get { return _confirmPassword; } set { _confirmPassword = value; RaisePropertyChanged(nameof(ConfirmPassword)); } }
+        public string SelectedClassId { get { return _selectedClassId; } set { _selectedClassId = value; RaisePropertyChanged(nameof(ClassId)); } }
 
         public SignupPage()
         {
             InitializeComponent();
+            BindingContext = this;
             classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             SetSelectItems();
-            select = new Select(classIdSelect);
         }
 
         private async void SetSelectItems()
         {
+            DbConnection dbConnection = new DbConnection();
             classIdSelect.ItemsSource = await dbConnection.GetClassIds();
         }
 
@@ -35,13 +41,16 @@ namespace aplikacja_dziekanat.pages
             Input.Result emailResult = email.CheckValidity(true);
             emailLabel.Text = emailResult.Message;
             emailLabel.IsVisible = emailResult.Message.Length > 0;
-            Input.Result passwordResult = password.CheckValidity(false, passwordInput.Text == confirmPasswordInput.Text);
+
+            Input.Result passwordResult = password.CheckValidity(false, Password == ConfirmPassword);
             passwordLabel.Text = passwordResult.Message;
             passwordLabel.IsVisible = passwordResult.Message.Length > 0;
-            Input.Result confirmPasswordResult = confirmPassword.CheckValidity(false, passwordInput.Text == confirmPasswordInput.Text);
+
+            Input.Result confirmPasswordResult = confirmPassword.CheckValidity(false, Password == ConfirmPassword);
             confirmPasswordLabel.Text = confirmPasswordResult.Message;
             confirmPasswordLabel.IsVisible = confirmPasswordResult.Message.Length > 0;
-            Select.Result classIdResult = select.CheckValidity();
+
+            Select.Result classIdResult = classIdSelect.CheckValidity(SelectedClassId);
             classIdLabel.Text = classIdResult.Message;
             classIdLabel.IsVisible = classIdResult.Message.Length > 0;
 
@@ -57,21 +66,16 @@ namespace aplikacja_dziekanat.pages
 
         public async void SignupClickHandler(object sender, EventArgs e)
         {
-            email = new Input(emailInput);
-            password = new Input(passwordInput);
-            confirmPassword = new Input(confirmPasswordInput);
-
             if (CheckForm())
             {
-                IFirebaseAuth auth = DependencyService.Resolve<IFirebaseAuth>();
-
                 try
                 {
-                    string token = await auth.RegisterWithEmailAndPassword(email.Value, password.Value, new User
+                    IFirebaseAuth auth = DependencyService.Resolve<IFirebaseAuth>();
+                    string token = await auth.RegisterWithEmailAndPassword(Email, Password, new User
                     {
-                        Email = email.Value,
+                        Email = Email,
                         Role = "student",
-                        ClassId = select.Value,
+                        ClassId = SelectedClassId,
                         Profile = new Profile()
                     });
                     if (token != null)
@@ -89,7 +93,7 @@ namespace aplikacja_dziekanat.pages
                     else if (ex.Message.Contains("email address is already in use"))
                     {
                         email.SetMessageLabel(emailLabel, "Ten email jest już zajęty");
-                    }   
+                    }
                     else if (ex.Message.Contains("email address is badly formatted"))
                     {
                         email.SetMessageLabel(emailLabel, "Wprowadzono niepoprawny email");
@@ -116,15 +120,22 @@ namespace aplikacja_dziekanat.pages
         {
             if (classIdSelect.SelectedIndex > -1)
             {
-                select.TitleColor = Color.Black;
-                select.Value = classIdSelect.Items[classIdSelect.SelectedIndex];
+                classIdSelect.TitleColor = Color.Black;
+                SelectedClassId = classIdSelect.Items[classIdSelect.SelectedIndex];
                 selectAngleDown.Source = "angleDownSolidAlt.png";
             }
             else
             {
-                select.TitleColor = Color.FromHex("#575757");
+                classIdSelect.TitleColor = Color.FromHex("#575757");
                 selectAngleDown.Source = "angleDownSolid.png";
             }
+        }
+
+        new public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
