@@ -7,9 +7,7 @@ namespace CustomRenderer
 {
     public class Input : Entry
     {
-        private string value;
-        private bool isValid;
-        private readonly Input input;
+        private bool isValid = false;
 
         public class Result
         {
@@ -22,11 +20,6 @@ namespace CustomRenderer
             public bool IsValid { get { return isValid; } set { isValid = value; } }
             public string Message { get { return message; } set { message = value; } }
         }
-
-        public Input() { value = Text; isValid = false; input = this; }
-        public Input(Input input) { value = input.Text; isValid = false; this.input = input; }
-
-        public string Value { get { return value; } set { this.value = value; } }
 
         public void SetMessageLabel(Label label, string message)
         {
@@ -49,9 +42,9 @@ namespace CustomRenderer
 
             try
             {
-                if (String.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(Text))
                 {
-                    throw new Exception("Pole " + input.Placeholder + " jest puste");
+                    throw new Exception("Pole " + Placeholder + " jest puste");
                 }
 
                 if (!passwordsMatch)
@@ -63,8 +56,8 @@ namespace CustomRenderer
                 {
                     try
                     {
-                        MailAddress address = new MailAddress(value);
-                        isValid = address.Address == value.Trim();
+                        MailAddress address = new MailAddress(Text);
+                        isValid = address.Address == Text.Trim();
                     }
                     catch (Exception)
                     {

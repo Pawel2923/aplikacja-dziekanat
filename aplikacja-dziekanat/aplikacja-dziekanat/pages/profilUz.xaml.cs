@@ -1,9 +1,9 @@
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using db;
 using System;
-using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -43,7 +43,7 @@ namespace aplikacja_dziekanat.pages
 
         protected override void OnAppearing()
         {
-            base.OnAppearing(); 
+            base.OnAppearing();
             UpdateProfile();
         }
 

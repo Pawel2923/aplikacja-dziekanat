@@ -1,5 +1,6 @@
 ﻿using CustomRenderer;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -8,23 +9,28 @@ namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
 
-    public partial class LoginPage : ContentPage
+    public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        private Input email;
-        private Input password;
+        private string _email;
+        private string _password;
+
+        public string Email { get { return _email; } set { _email = value; RaisePropertyChanged(nameof(Email)); } }
+        public string Password { get { return _password; } set { _password = value; RaisePropertyChanged(nameof(Password)); } }
 
         public LoginPage()
         {
             InitializeComponent();
+            BindingContext = this;
+            ResetForm();
         }
 
         private void ResetForm()
         {
-            emailInput.Text = "";
+            Email = "";
             emailLabel.Text = "";
             emailLabel.IsVisible = false;
 
-            passwordInput.Text = "";
+            Password = "";
             passwordLabel.Text = "";
             passwordLabel.IsVisible = false;
         }
@@ -34,6 +40,7 @@ namespace aplikacja_dziekanat.pages
             Input.Result emailResult = email.CheckValidity(true);
             emailLabel.Text = emailResult.Message;
             emailLabel.IsVisible = emailResult.Message.Length > 0;
+
             Input.Result passwordResult = password.CheckValidity();
             passwordLabel.Text = passwordResult.Message;
             passwordLabel.IsVisible = passwordResult.Message.Length > 0;
@@ -50,17 +57,15 @@ namespace aplikacja_dziekanat.pages
 
         public async void LoginClickHandler(object sender, EventArgs e)
         {
-            email = new Input(emailInput);
-            password = new Input(passwordInput);
-
             if (CheckForm())
             {
                 try
                 {
                     var auth = DependencyService.Resolve<IFirebaseAuth>();
-                    string token = await auth.LoginWithEmailAndPassword(email.Value, password.Value);
+                    string token = await auth.LoginWithEmailAndPassword(Email, Password);
                     if (token != null)
                     {
+                        ResetForm();
                         await Navigation.PushAsync(new FormsTabPage());
                     }
                 }
@@ -95,6 +100,13 @@ namespace aplikacja_dziekanat.pages
             {
                 await Navigation.PushAsync(new FormsTabPage());
             }
+        }
+
+        new public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

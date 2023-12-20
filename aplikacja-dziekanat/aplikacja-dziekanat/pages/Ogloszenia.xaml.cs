@@ -1,10 +1,10 @@
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using db;
-using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 namespace aplikacja_dziekanat.pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -103,7 +103,7 @@ namespace aplikacja_dziekanat.pages
 
                 if (title != null && content != null && author != null)
                 {
-                    
+
                     string[] classOptions = { "it-s-2-1", "mt-s-1-1", "it-n-2-2", "til-s-1-1" };
                     string selectedClass = await DisplayActionSheet("Wybierz Rok", "Anuluj", null, classOptions);
 
@@ -118,10 +118,10 @@ namespace aplikacja_dziekanat.pages
                             To = selectedClass
                         };
 
-                        
+
                         await dbConnection.SendNotice(newNotice);
 
-                        
+
                         await GetNotices();
                     }
                 }

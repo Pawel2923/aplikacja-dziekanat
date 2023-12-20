@@ -40,7 +40,7 @@ namespace db
                 return null;
             }
         }
-      
+
         public async Task<User> GetUser(string uid)
         {
             try
@@ -55,7 +55,7 @@ namespace db
                 return null;
             }
         }
-      
+
         public async Task<bool> CreateUser(User newUser)
         {
             try
@@ -101,6 +101,9 @@ namespace db
                     StudyStatus = newProfile.StudyStatus,
                     Groups = newProfile.Groups
                 });
+
+                auth.CurrentUser.Profile = newProfile;
+
                 return true;
             }
             catch (Exception ex)
