@@ -89,6 +89,13 @@ namespace aplikacja_dziekanat.pages
 
             if (firstNameResult.IsValid || lastNameResult.IsValid || phoneNumberResult.IsValid || addressResult.IsValid || cityResult.IsValid || zipCodeResult.IsValid)
             {
+                firstNameLabel.IsVisible = false;
+                lastNameLabel.IsVisible = false;
+                phoneNumberLabel.IsVisible = false;
+                addressLabel.IsVisible = false;
+                cityLabel.IsVisible = false;
+                zipCodeLabel.IsVisible = false;
+
                 return true;
             }
             else
@@ -97,12 +104,64 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
+        // Metoda sprawdza czy dane formularza zostały zmienione i zwraca true jeśli tak
+        private bool IsFormChanged()
+        {
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+            if (FirstName != auth.CurrentUser.Profile.FirstName)
+            {
+                return true;
+            }
+
+            if (LastName != auth.CurrentUser.Profile.LastName)
+            {
+                return true;
+            }
+
+            if (PhoneNumber != auth.CurrentUser.Profile.PhoneNumber)
+            {
+                return true;
+            }
+
+            if (Address != auth.CurrentUser.Profile.Address)
+            {
+                return true;
+            }
+
+            if (City != auth.CurrentUser.Profile.City)
+            {
+                return true;
+            }
+
+            if (ZipCode != auth.CurrentUser.Profile.ZipCode)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public async void SaveClickHandler(object sender, EventArgs e)
         {
-            if (CheckForm())
+            try
             {
-                try
+                if (CheckForm())
                 {
+                    // Zapytaj użytkownika czy jest pewien zapisania zmian
+                    bool isUserSure = await DisplayAlert("Zapisz zmiany", "Czy jesteś pewien, że chcesz zapisać zmiany?", "Tak", "Nie");
+
+                    if (!isUserSure)
+                    {
+                        return;
+                    }
+
+                    if (!IsFormChanged())
+                    {
+                        await DisplayAlert("Sukces", "Nie wprowadzono żadnych zmian", "OK");
+                        return;
+                    }
+
                     var dbConnection = new DbConnection();
 
                     bool isSuccess = await dbConnection.UpdateProfile(new Profile
@@ -127,11 +186,11 @@ namespace aplikacja_dziekanat.pages
                     ResetForm();
                     await Navigation.PopAsync();
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    await DisplayAlert("Błąd", ex.Message, "OK");
-                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await DisplayAlert("Błąd", ex.Message, "OK");
             }
         }
 

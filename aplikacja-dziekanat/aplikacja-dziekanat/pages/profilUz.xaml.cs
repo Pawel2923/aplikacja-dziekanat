@@ -41,13 +41,20 @@ namespace aplikacja_dziekanat.pages
             BindingContext = this;
         }
 
+        new public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
             UpdateProfile();
         }
 
-        public async void OnEditProfileButtonClicked(object sender, EventArgs e)
+        private async void OnEditProfileButtonClicked(object sender, EventArgs e)
         {
             Debug.WriteLine("Przechodzenie do edycji profilu");
             await Navigation.PushAsync(new EdytujProfil());
@@ -110,11 +117,18 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        new public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged(string propertyName)
+        private void OnEmailChangeBtnClicked(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            try
+            {
+                Debug.WriteLine("Zmiana adresu email");
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Wystąpił błąd podczas zmiany adresu email: {0}", ex.Message);
+                DisplayAlert("Błąd", "Wystąpił błąd podczas zmiany adresu email", "OK");
+            }
         }
     }
 }
