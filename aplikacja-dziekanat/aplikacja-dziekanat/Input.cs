@@ -7,8 +7,6 @@ namespace CustomRenderer
 {
     public class Input : Entry
     {
-        private bool isValid = false;
-
         public class Result
         {
             private bool isValid;
@@ -57,26 +55,22 @@ namespace CustomRenderer
                     try
                     {
                         MailAddress address = new MailAddress(Text);
-                        isValid = address.Address == Text.Trim();
+                        result.IsValid = address.Address == Text.Trim();
                     }
                     catch (Exception)
                     {
                         throw new Exception("Podany adres email jest niepoprawny");
                     }
                 }
-                else
-                {
-                    isValid = true;
-                }
+
+                result.IsValid = true;
             }
             catch (Exception ex)
             {
-                isValid = false;
+                result.IsValid = false;
                 result.Message = ex.Message;
                 Debug.WriteLine(ex);
             }
-
-            result.IsValid = isValid;
 
             return result;
         }

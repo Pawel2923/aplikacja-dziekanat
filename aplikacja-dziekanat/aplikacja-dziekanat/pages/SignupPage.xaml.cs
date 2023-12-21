@@ -25,9 +25,9 @@ namespace aplikacja_dziekanat.pages
         public SignupPage()
         {
             InitializeComponent();
-            BindingContext = this;
             classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             SetSelectItems();
+            BindingContext = this;
         }
 
         private async void SetSelectItems()

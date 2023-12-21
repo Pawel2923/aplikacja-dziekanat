@@ -28,8 +28,8 @@ namespace aplikacja_dziekanat.pages
         public EdytujProfil()
         {
             InitializeComponent();
-            BindingContext = this;
             ResetForm();
+            BindingContext = this;
         }
 
         private void ResetForm()

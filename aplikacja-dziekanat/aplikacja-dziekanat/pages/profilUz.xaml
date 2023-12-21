@@ -76,20 +76,18 @@
                         <Button Text="Przejdź do panelu" Clicked="OnPanelBtnClicked" Style="{StaticResource btnPrimaryStyle}" HorizontalOptions="End" />
                     </StackLayout>
                 </Frame>
-                <Frame BackgroundColor="#55595D" CornerRadius="25">
+                <Frame BackgroundColor="#55595D" CornerRadius="25" Margin="0,0,0,20">
                     <StackLayout VerticalOptions="FillAndExpand">
                         <StackLayout x:Name="titleContainer3" Orientation="Horizontal" Margin="0,0,0,15">
                             <Label Text="Dane logowania" FontAttributes="Bold" TextColor="White" FontSize="Title" />
                         </StackLayout>
                         <StackLayout>
-                            <FlexLayout x:Name="emailContainer">
-                                <Label Text="Email: " TextColor="White" FontAttributes="Bold" FontSize="Body" />
-                                <Label Text="{x:Binding Email}" TextColor="White" FontSize="Body" />
-                            </FlexLayout>
+                            <Label Text="Zmień hasło i aktualizuj email" TextColor="White" FontSize="Body" FontAttributes="Bold" />
+                            <Label Text="Aktualny email:" TextColor="White" FontSize="Body" FontAttributes="Bold" />
+                            <Label Text="{x:Binding Email}" TextColor="White" FontSize="Body" />
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" HorizontalOptions="End" Margin="0,10,0,0" Spacing="10">
-                            <Button Text="Zmień email" Clicked="OnEmailChangeBtnClicked" Style="{StaticResource btnPrimaryStyle}" />
-                            <Button Text="Zmień hasło" Clicked="OnPasswordChangeBtnClicked" Style="{StaticResource btnPrimaryStyle}" />
+                            <Button Text="Zmień" Clicked="OnEditLoginBtnClicked" Style="{StaticResource btnPrimaryStyle}" />
                         </StackLayout>
                     </StackLayout>
                 </Frame>

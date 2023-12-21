@@ -1,4 +1,3 @@
-using db;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -22,7 +21,6 @@ namespace aplikacja_dziekanat.pages
         private string _StudyStatus;
         private string _Groups;
         private string _Degree;
-        private string _Role;
         private string _panelTitle;
         private string _panelDescription;
 
@@ -54,16 +52,37 @@ namespace aplikacja_dziekanat.pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+
             UpdateProfile();
-        }
+    }
 
         private async void OnEditProfileButtonClicked(object sender, EventArgs e)
         {
             Debug.WriteLine("Przechodzenie do edycji profilu");
             await Navigation.PushAsync(new EdytujProfil());
+        }
+
+        private async void OnEditLoginBtnClicked(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Przechodzenie do edycji profilu");
+            await Navigation.PushAsync(new EdytujLogin());
+        }
+
+        private void OnPanelBtnClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine("Przechodzenie do panelu");
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Wystąpił błąd podczas przechodzenia do panelu: {0}", ex.Message);
+                DisplayAlert("Błąd", "Wystąpił błąd podczas przechodzenia do panelu", "OK");
+            }
         }
 
         private async void UpdateProfile()
@@ -137,48 +156,6 @@ namespace aplikacja_dziekanat.pages
             {
                 Debug.WriteLine("Wystąpił błąd podczas aktualizowania profilu użytkownika");
                 await DisplayAlert("Błąd", "Nie znaleziono użytkownika", "OK");
-            }
-        }
-
-        private void OnEmailChangeBtnClicked(object sender, EventArgs e)
-        {
-            try
-            {
-                Debug.WriteLine("Zmiana adresu email");
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Wystąpił błąd podczas zmiany adresu email: {0}", ex.Message);
-                DisplayAlert("Błąd", "Wystąpił błąd podczas zmiany adresu email", "OK");
-            }
-        }
-
-        private void OnPasswordChangeBtnClicked(object sender, EventArgs e)
-        {
-            try
-            {
-                Debug.WriteLine("Zmiana hasła");
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Wystąpił błąd podczas zmiany hasła: {0}", ex.Message);
-                DisplayAlert("Błąd", "Wystąpił błąd podczas zmiany hasła", "OK");
-            }
-        }
-
-        private void OnPanelBtnClicked(object sender, EventArgs e)
-        {
-            try
-            {
-                Debug.WriteLine("Przechodzenie do panelu");
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Wystąpił błąd podczas przechodzenia do panelu: {0}", ex.Message);
-                DisplayAlert("Błąd", "Wystąpił błąd podczas przechodzenia do panelu", "OK");
             }
         }
     }
