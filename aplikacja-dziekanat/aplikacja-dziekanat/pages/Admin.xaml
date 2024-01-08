@@ -10,23 +10,23 @@
             <Label Text="Wybierz co edytować" FontSize="Large" FontAttributes="Bold" TextColor="White" />
             <Label Text="Plan Zajęć" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,0,0,5"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Grupa" Style="{StaticResource inputPrimaryStyle}" />
+                <local:Input Placeholder="Grupa" Style="{StaticResource inputPrimaryStyle}" x:Name="group" Text="{Binding Group, Mode=TwoWay}" />
             </Frame>
             <Frame Padding="10, 0" Margin="0,0,0,5" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Dzień" Style="{StaticResource inputPrimaryStyle}" />
+                <local:Input Placeholder="Dzień" Style="{StaticResource inputPrimaryStyle}" x:Name="day" Text="{Binding Day, Mode=TwoWay}" />
             </Frame>
             <Frame Padding="10, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Id zajęć" Style="{StaticResource inputPrimaryStyle}" />
+                <local:Input Placeholder="Id zajęć" Style="{StaticResource inputPrimaryStyle}" x:Name="scheduleId" Text="{Binding ScheduleId, Mode=TwoWay}" />
             </Frame>
             <Button Text="Edytuj" Style="{StaticResource btnPrimaryStyle}" Margin="0,10,0,0" />
             <Label Text="Ogłoszenia" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Id ogłoszenia" Style="{StaticResource inputPrimaryStyle}" />
+                <local:Input Placeholder="Id ogłoszenia" Style="{StaticResource inputPrimaryStyle}" x:Name="noticeId" Text="{Binding NoticeId, Mode=TwoWay}" />
             </Frame>
             <Button Text="Edytuj" Style="{StaticResource btnPrimaryStyle}" Margin="0,10,0,0" />
             <Label Text="Użytkownicy" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Id użytkownika" Style="{StaticResource inputPrimaryStyle}" />
+                <local:Input Placeholder="Id użytkownika" Style="{StaticResource inputPrimaryStyle}" x:Name="userId" Text="{Binding UserId, Mode=TwoWay}" />
             </Frame>
             <Button Text="Edytuj" Style="{StaticResource btnPrimaryStyle}" Margin="0,10,0,0" />
         </StackLayout>
