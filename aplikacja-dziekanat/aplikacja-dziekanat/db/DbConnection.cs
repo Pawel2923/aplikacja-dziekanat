@@ -1,4 +1,3 @@
-using aplikacja_dziekanat;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System;
@@ -7,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using aplikacja_dziekanat;
 
 namespace db
 {
@@ -77,6 +77,29 @@ namespace db
             }
         }
 
+        public async Task<bool> ChangeEmail(string email)
+        {
+            try
+            {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+                await auth.ChangeUserEmail(email);
+
+                auth.CurrentUser.Email = email;
+                await firebase.Child("users").Child(auth.CurrentUser.Uid).PutAsync(auth.CurrentUser);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Please verify the new email before changing email"))
+                {
+                    throw new Exception(ex.Message);
+                }
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
         public async Task<bool> UpdateProfile(Profile newProfile)
         {
             if (newProfile == null)
@@ -85,6 +108,7 @@ namespace db
             newProfile.AlbumNumber = auth.CurrentUser.Profile.AlbumNumber;
             newProfile.StudyStatus = auth.CurrentUser.Profile.StudyStatus;
             newProfile.Groups = auth.CurrentUser.Profile.Groups;
+            newProfile.Degree = auth.CurrentUser.Profile.Degree;
 
             try
             {
@@ -99,7 +123,8 @@ namespace db
                     City = newProfile.City,
                     ZipCode = newProfile.ZipCode,
                     StudyStatus = newProfile.StudyStatus,
-                    Groups = newProfile.Groups
+                    Groups = newProfile.Groups,
+                    Degree = newProfile.Degree
                 });
 
                 auth.CurrentUser.Profile = newProfile;

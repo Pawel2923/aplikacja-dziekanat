@@ -34,11 +34,6 @@ namespace aplikacja_dziekanat.pages
             IsPresented = false;
         }
 
-        async public void NavigateToLoginPage()
-        {
-            await Navigation.PushAsync(new LoginPage());
-        }
-
         async public void LogoutClickHandler(object sender, EventArgs e)
         {
             IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
@@ -58,7 +53,7 @@ namespace aplikacja_dziekanat.pages
             MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
@@ -66,7 +61,7 @@ namespace aplikacja_dziekanat.pages
 
             if (auth.CurrentUser.Uid == null)
             {
-                NavigateToLoginPage();
+                await Navigation.PushAsync(new LoginPage());
             }
         }
     }

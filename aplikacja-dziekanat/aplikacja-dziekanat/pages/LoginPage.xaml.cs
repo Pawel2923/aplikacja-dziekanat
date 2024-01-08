@@ -21,7 +21,6 @@ namespace aplikacja_dziekanat.pages
         {
             InitializeComponent();
             BindingContext = this;
-            ResetForm();
         }
 
         private void ResetForm()

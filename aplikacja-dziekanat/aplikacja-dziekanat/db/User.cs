@@ -11,6 +11,7 @@
         private string albumNumber;
         private string studyStatus;
         private string[] groups;
+        private string degree;
 
         public Profile()
         {
@@ -23,6 +24,7 @@
             albumNumber = "";
             studyStatus = "";
             groups = new string[0];
+            degree = "";
         }
 
         public string FirstName { get { return firstName; } set { firstName = value; } }
@@ -34,6 +36,7 @@
         public string AlbumNumber { get { return albumNumber; } set { albumNumber = value; } }
         public string StudyStatus { get { return studyStatus; } set { studyStatus = value; } }
         public string[] Groups { get { return groups; } set { groups = value; } }
+        public string Degree { get { return degree; } set { degree = value; } }
     }
 
     public class User

@@ -1,4 +1,3 @@
-using db;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -21,6 +20,9 @@ namespace aplikacja_dziekanat.pages
         private string _ZipCode;
         private string _StudyStatus;
         private string _Groups;
+        private string _Degree;
+        private string _panelTitle;
+        private string _panelDescription;
 
         public string FirstName { get { return _FirstName; } set { _FirstName = value; RaisePropertyChanged(nameof(FirstName)); } }
         public string LastName { get { return _LastName; } set { _LastName = value; RaisePropertyChanged(nameof(LastName)); } }
@@ -33,62 +35,91 @@ namespace aplikacja_dziekanat.pages
         public string ZipCode { get { return _ZipCode; } set { _ZipCode = value; RaisePropertyChanged(nameof(ZipCode)); } }
         public string StudyStatus { get { return _StudyStatus; } set { _StudyStatus = value; RaisePropertyChanged(nameof(StudyStatus)); } }
         public string Groups { get { return _Groups; } set { _Groups = value; RaisePropertyChanged(nameof(Groups)); } }
-
-        private readonly DbConnection dbConnection = new DbConnection();
+        public string Degree { get { return _Degree; } set { _Degree = value; RaisePropertyChanged(nameof(Degree)); } }
+        public string PanelTitle { get { return _panelTitle; } set { _panelTitle = value; RaisePropertyChanged(nameof(PanelTitle)); } }
+        public string PanelDescription { get { return _panelDescription; } set { _panelDescription = value; RaisePropertyChanged(nameof(PanelDescription)); } }
+        
         public profilUz()
         {
             InitializeComponent();
             BindingContext = this;
         }
 
-        protected override void OnAppearing()
+        new public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName)
         {
-            base.OnAppearing();
-            UpdateProfile();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public async void OnEditProfileButtonClicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            UpdateProfile();
+    }
+
+        private async void OnEditProfileButtonClicked(object sender, EventArgs e)
         {
             Debug.WriteLine("Przechodzenie do edycji profilu");
             await Navigation.PushAsync(new EdytujProfil());
         }
 
+        private async void OnEditLoginBtnClicked(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Przechodzenie do edycji profilu");
+            await Navigation.PushAsync(new EdytujLogin());
+        }
+
+        private void OnPanelBtnClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine("Przechodzenie do panelu");
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Wystąpił błąd podczas przechodzenia do panelu: {0}", ex.Message);
+                DisplayAlert("Błąd", "Wystąpił błąd podczas przechodzenia do panelu", "OK");
+            }
+        }
+
         private async void UpdateProfile()
         {
             var auth = DependencyService.Resolve<IFirebaseAuth>();
-            var user = await dbConnection.GetUser(auth.CurrentUser.Uid);
 
-            if (user != null)
+            if (auth.CurrentUser != null)
             {
-                Debug.WriteLine("Aktualizowanie profilu użytkownika (uid: {0}), z rolą \"{1}\": ", user.Uid, user.Role);
+                Debug.WriteLine("Aktualizowanie profilu użytkownika (uid: {0}), z rolą \"{1}\": ", auth.CurrentUser.Uid, auth.CurrentUser.Role);
 
                 // Ustaw wartości pól
-                FirstName = user.Profile.FirstName == "" ? "" : user.Profile.FirstName;
-                LastName = user.Profile.LastName == "" ? "" : user.Profile.LastName;
-                Course = user.ClassId;
-                AlbumNumber = user.Profile.AlbumNumber == "" ? "Nie ustawiono" : user.Profile.AlbumNumber;
-                Email = user.Email;
-                PhoneNumber = user.Profile.PhoneNumber == "" ? "Nie ustawiono" : user.Profile.PhoneNumber;
-                Address = user.Profile.Address == "" ? "Nie ustawiono" : user.Profile.Address;
-                City = user.Profile.City == "" ? "Nie ustawiono" : user.Profile.City;
-                ZipCode = user.Profile.ZipCode == "" ? "Nie ustawiono" : user.Profile.ZipCode;
-                StudyStatus = user.Profile.StudyStatus == "" ? "Nie ustawiono" : user.Profile.StudyStatus;
+                FirstName = auth.CurrentUser.Profile.FirstName == "" ? "" : auth.CurrentUser.Profile.FirstName;
+                LastName = auth.CurrentUser.Profile.LastName == "" ? "" : auth.CurrentUser.Profile.LastName;
+                Course = auth.CurrentUser.ClassId;
+                AlbumNumber = auth.CurrentUser.Profile.AlbumNumber == "" ? "Nie ustawiono" : auth.CurrentUser.Profile.AlbumNumber;
+                Email = auth.CurrentUser.Email;
+                PhoneNumber = auth.CurrentUser.Profile.PhoneNumber == "" ? "Nie ustawiono" : auth.CurrentUser.Profile.PhoneNumber;
+                Address = auth.CurrentUser.Profile.Address == "" ? "Nie ustawiono" : auth.CurrentUser.Profile.Address;
+                City = auth.CurrentUser.Profile.City == "" ? "Nie ustawiono" : auth.CurrentUser.Profile.City;
+                ZipCode = auth.CurrentUser.Profile.ZipCode == "" ? "Nie ustawiono" : auth.CurrentUser.Profile.ZipCode;
+                StudyStatus = auth.CurrentUser.Profile.StudyStatus == "" ? "Nie ustawiono" : auth.CurrentUser.Profile.StudyStatus;
                 Groups = "";
 
                 // Ustaw widoczność kontenerów w zależności od roli użytkownika
-                courseContainer.IsVisible = user.Role == "student";
-                albumNumberContainer.IsVisible = user.Role == "student";
-                studyStatusContainer.IsVisible = user.Role == "student";
-                groupsContainer.IsVisible = user.Role == "student";
+                courseContainer.IsVisible = auth.CurrentUser.Role == "student";
+                albumNumberContainer.IsVisible = auth.CurrentUser.Role == "student";
+                studyStatusContainer.IsVisible = auth.CurrentUser.Role == "student";
+                groupsContainer.IsVisible = auth.CurrentUser.Role == "student";
 
                 // Jeśli użytkownik jest studentem to aktualizuj grupy
-                if (user.Role == "student")
+                if (auth.CurrentUser.Role == "student")
                 {
-                    Debug.WriteLine("Długość tablicy grup: {0}", user.Profile.Groups.Length);
+                    Debug.WriteLine("Długość tablicy grup: {0}", auth.CurrentUser.Profile.Groups.Length);
 
-                    if (user.Profile.Groups.Length > 0 && user.Profile.Groups[0] != "")
+                    if (auth.CurrentUser.Profile.Groups.Length > 0 && auth.CurrentUser.Profile.Groups[0] != "")
                     {
-                        foreach (var group in user.Profile.Groups)
+                        foreach (var group in auth.CurrentUser.Profile.Groups)
                         {
                             Groups += group.ToUpper() + ", ";
                         }
@@ -100,6 +131,24 @@ namespace aplikacja_dziekanat.pages
                     }
                 }
 
+                if (auth.CurrentUser.Role == "teacher")
+                {
+                    Degree = auth.CurrentUser.Profile.Degree;
+                    PanelTitle = "Panel zarządzania dla nauczycieli";
+                    PanelDescription = "W tym panelu możesz zarządzać swoimi grupami, dodawać ogłoszenia i je usuwać";
+                }
+                else if (auth.CurrentUser.Role == "admin")
+                {
+                    Degree = auth.CurrentUser.Profile.Degree;
+                    PanelTitle = "Panel administracyjny";
+                    PanelDescription = "W tym panelu możesz zarządzać użytkownikami, grupami, ogłoszeniami oraz harmonogramem";
+                }
+                else
+                {
+                    degreeContainer.IsVisible = false;
+                    adminTeacherPanel.IsVisible = false;
+                }
+
                 Debug.WriteLine("Profil został zaktualizowany");
             }
 
@@ -108,13 +157,6 @@ namespace aplikacja_dziekanat.pages
                 Debug.WriteLine("Wystąpił błąd podczas aktualizowania profilu użytkownika");
                 await DisplayAlert("Błąd", "Nie znaleziono użytkownika", "OK");
             }
-        }
-
-        new public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

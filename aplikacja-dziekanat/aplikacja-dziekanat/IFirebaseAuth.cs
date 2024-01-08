@@ -9,7 +9,9 @@ namespace aplikacja_dziekanat
 
         Task<string> LoginWithEmailAndPassword(string email, string password);
         Task<string> RegisterWithEmailAndPassword(string email, string password, User newUser);
-
+        Task VerifyBeforeUpdateEmail(string newEmail);
+        Task ChangeUserEmail(string newEmail);
+        void ChangeUserPassword(string newPassword);
         void Logout();
     }
 }

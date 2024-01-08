@@ -10,5 +10,12 @@ namespace aplikacja_dziekanat.pages
         {
             InitializeComponent();
         }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+        }
     }
 }
