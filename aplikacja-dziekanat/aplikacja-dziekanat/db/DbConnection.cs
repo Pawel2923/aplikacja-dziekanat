@@ -56,6 +56,21 @@ namespace db
             }
         }
 
+        public async Task<List<string>> GetAllUserEmails()
+        {
+            try
+            {
+                var userItems = await firebase.Child("users").OnceAsync<User>();
+
+                return userItems.Select(item => item.Object.Email).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
+        }
+
         public async Task<bool> CreateUser(User newUser)
         {
             try
@@ -218,6 +233,28 @@ namespace db
             }
         }
 
+        public async Task<List<string>> GetScheduleIds(string classId, string day)
+        {
+            try
+            {
+                if (classId == null || day == null)
+                    throw new Exception("Brak danych");
+
+                var scheduleItems = await firebase
+                    .Child("schedule")
+                    .Child(classId)
+                    .Child(day)
+                    .OnceAsync<Schedule>();
+
+                return scheduleItems.Select(item => item.Key).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<Notice>> GetNotice(string classId)
         {
             try
@@ -241,6 +278,24 @@ namespace db
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<string>> GetNoticeIds()
+        {
+            try
+            {
+                var scheduleItems = await firebase
+                    .Child("notice")
+                    .OnceAsync<Notice>();
+
+                return scheduleItems.Select(item => item.Key).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> SendNotice(Notice newNotice)
         {
             try
