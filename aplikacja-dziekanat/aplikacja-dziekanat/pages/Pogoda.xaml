@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<!-- Pogoda.xaml -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
              x:Class="aplikacja_dziekanat.pages.Pogoda">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Tu bedzie pogoda " TextColor="Wheat"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-            
-            
-        </StackLayout>
-    </ContentPage.Content>
+
+    <StackLayout>
+        <!-- Dodaj etykietę do wyświetlania danych pogodowych -->
+        <Label x:Name="weatherLabel" Text="Poczekaj, pobieram dane..." VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+    </StackLayout>
+
 </ContentPage>
