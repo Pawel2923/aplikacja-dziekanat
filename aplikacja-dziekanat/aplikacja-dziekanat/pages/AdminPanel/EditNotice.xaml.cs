@@ -13,7 +13,7 @@ using Xamarin.Forms.Xaml;
 namespace aplikacja_dziekanat.pages
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EditNotice : ContentPage
+    public partial class EditNotice : ContentPage, INotifyPropertyChanged
     {
         private string _NoticeId;
         private Notice newNotice;
