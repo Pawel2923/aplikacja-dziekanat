@@ -12,6 +12,7 @@ namespace aplikacja_dziekanat
         Task VerifyBeforeUpdateEmail(string newEmail);
         Task ChangeUserEmail(string newEmail);
         void ChangeUserPassword(string newPassword);
+        void DeleteCurrentUser();
         void Logout();
     }
 }

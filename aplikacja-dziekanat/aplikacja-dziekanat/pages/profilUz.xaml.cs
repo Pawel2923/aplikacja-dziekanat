@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using db;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -52,7 +53,7 @@ namespace aplikacja_dziekanat.pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
@@ -71,17 +72,67 @@ namespace aplikacja_dziekanat.pages
             await Navigation.PushAsync(new EdytujLogin());
         }
 
-        private void OnPanelBtnClicked(object sender, EventArgs e)
+        private async void OnPanelBtnClicked(object sender, EventArgs e)
         {
             try
             {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
                 Debug.WriteLine("Przechodzenie do panelu");
-                throw new NotImplementedException();
+                if (auth.CurrentUser.Role == "admin")
+                {
+                    await Navigation.PushAsync(new Admin());
+                }
+                else if (auth.CurrentUser.Role == "teacher")
+                {
+                    throw new NotImplementedException();
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Wystąpił błąd podczas przechodzenia do panelu: {0}", ex.Message);
-                DisplayAlert("Błąd", "Wystąpił błąd podczas przechodzenia do panelu", "OK");
+                await DisplayAlert("Błąd", "Wystąpił błąd podczas przechodzenia do panelu", "OK");
+            }
+        }
+
+        private async void OnDeleteAccountBtnClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+                if (auth.CurrentUser.Uid == null)
+                {
+                    throw new Exception("Nie udało się usunąć użytkownika");
+                }
+
+                string confirmEmail = await DisplayPromptAsync("Potwierdź", $"Wpisz {auth.CurrentUser.Email} aby potwierdzić", "OK", "Anuluj", "Wpisz swój email", 50, Keyboard.Email, "");
+
+                if (confirmEmail == auth.CurrentUser.Email)
+                {
+                    DbConnection dbConnection = new DbConnection();
+                    var result = await dbConnection.DeleteUser(auth.CurrentUser.Uid);
+
+                    if (result)
+                    {
+                        auth.DeleteCurrentUser();
+                        await DisplayAlert("Sukces", "Usunięto użytkownika", "OK");
+                        auth.Logout();
+                        await Navigation.PopAsync();
+                    }
+                    else
+                    {
+                        throw new Exception("Nie udało się usunąć użytkownika");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Nie wpisano poprawnego adresu");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Wystąpił błąd podczas usuwania konta użytkownika: {ex.Message}");
+                await DisplayAlert("Błąd", ex.Message, "OK");
             }
         }
 
@@ -139,7 +190,7 @@ namespace aplikacja_dziekanat.pages
                 }
                 else if (auth.CurrentUser.Role == "admin")
                 {
-                    Degree = auth.CurrentUser.Profile.Degree;
+                    degreeContainer.IsVisible = false;
                     PanelTitle = "Panel administracyjny";
                     PanelDescription = "W tym panelu możesz zarządzać użytkownikami, grupami, ogłoszeniami oraz harmonogramem";
                 }

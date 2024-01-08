@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FirebaseAuthentication.cs" />
+    <Compile Include="TextboxRenderer.cs" />
     <Compile Include="InputRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />

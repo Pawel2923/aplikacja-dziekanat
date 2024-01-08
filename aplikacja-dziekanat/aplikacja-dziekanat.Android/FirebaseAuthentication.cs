@@ -85,6 +85,13 @@ namespace aplikacja_dziekanat.Droid
             await user.UpdatePasswordAsync(newPassword);
         }
 
+        public async void DeleteCurrentUser()
+        {
+            await FirebaseAuth.Instance.CurrentUser.ReloadAsync();
+            var user = FirebaseAuth.Instance.CurrentUser;
+            await user.DeleteAsync();
+        }
+
         private void DestroyUser()
         { 
             currentUser = new User();

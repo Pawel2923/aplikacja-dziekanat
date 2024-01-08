@@ -27,6 +27,15 @@
                 <Setter Property="BorderColor" Value="#006E9F" />
                 <Setter Property="TextColor" Value="#fff" />
             </Style>
+            <Style x:Key="btnDangerStyle" TargetType="Button">
+                <Setter Property="CornerRadius" Value="25" />
+                <Setter Property="Padding" Value="10, 5" />
+                <Setter Property="HeightRequest" Value="35" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BackgroundColor" Value="#D1524D" />
+                <Setter Property="BorderColor" Value="#D1524D" />
+                <Setter Property="TextColor" Value="#000" />
+            </Style>
             <Style x:Key="inputPrimaryStyle" TargetType="Entry">
                 <Setter Property="PlaceholderColor" Value="#575757" />
                 <Setter Property="TextColor" Value="#000" />
