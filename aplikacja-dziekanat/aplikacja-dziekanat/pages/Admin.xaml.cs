@@ -14,34 +14,34 @@ namespace aplikacja_dziekanat.pages
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Admin : ContentPage, INotifyPropertyChanged
     {
-        private string _Group;
+        private string _ClassId;
         private string _Day;
         private string _ScheduleId;
         private string _NoticeId;
-        private User _User = new User();
+        private string _Email;
         private readonly List<string> daysList = new List<string> { "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
 
-        public string Group { get { return _Group; } set { _Group = value; RaisePropertyChanged(nameof(Group)); } }
+        public string ClassId { get { return _ClassId; } set { _ClassId = value; RaisePropertyChanged(nameof(ClassId)); } }
         public string Day { get { return _Day; } set { _Day = value; RaisePropertyChanged(nameof(Day)); } }
         public string ScheduleId { get { return _ScheduleId; } set { _ScheduleId = value; RaisePropertyChanged(nameof(ScheduleId)); } }
         public string NoticeId { get { return _NoticeId; } set { _NoticeId = value; RaisePropertyChanged(nameof(NoticeId)); } }
-        public User User { get { return _User; } set { _User = value; RaisePropertyChanged(nameof(User)); } }
+        public string Email { get { return _Email; } set { _Email = value; RaisePropertyChanged(nameof(User)); } }
 
         public Admin()
         {
             InitializeComponent();
-            groupSelect.ItemsSource = new List<string> { "Ładowanie..." };
+            classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             daySelect.ItemsSource = daysList;
             scheduleIdSelect.ItemsSource = new List<string> { "Wybierz rok i dzień" };
             noticeIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
-            userSelect.ItemsSource = new List<string> { "Ładowanie..." };
+            emailSelect.ItemsSource = new List<string> { "Ładowanie..." };
             SetSelectItems();
             BindingContext = this;
         }
 
         private async void OnEditSchedule(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new EditSchedule(Group, Day, ScheduleId));
+            await Navigation.PushAsync(new EditSchedule(ClassId, Day, ScheduleId));
         }
 
         private async void OnEditNotice(object sender, EventArgs e)
@@ -49,14 +49,19 @@ namespace aplikacja_dziekanat.pages
             await Navigation.PushAsync(new EditNotice(NoticeId));
         }
 
+        private async void OnEditUser(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditUser(Email));
+        }
+
         private async void SetSelectItems()
         {
             try
             {
                 DbConnection dbConnection = new DbConnection();
-                groupSelect.ItemsSource = await dbConnection.GetClassIds();
+                classIdSelect.ItemsSource = await dbConnection.GetClassIds();
                 noticeIdSelect.ItemsSource = await dbConnection.GetNoticeIds();
-                userSelect.ItemsSource = await dbConnection.GetAllUserEmails();
+                emailSelect.ItemsSource = await dbConnection.GetAllUserEmails();
             }
             catch (Exception ex)
             {
@@ -65,17 +70,17 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
-        public void GroupSelectChangeHandler(object sender, EventArgs e)
+        public void ClassIdSelectChangeHandler(object sender, EventArgs e)
         {
-            if (groupSelect.SelectedIndex > -1)
+            if (classIdSelect.SelectedIndex > -1)
             {
-                groupSelect.TitleColor = Color.Black;
-                Group = groupSelect.Items[groupSelect.SelectedIndex];
+                classIdSelect.TitleColor = Color.Black;
+                ClassId = classIdSelect.Items[classIdSelect.SelectedIndex];
                 selectAngleDown.Source = "angleDownSolidAlt.png";
             }
             else
             {
-                groupSelect.TitleColor = Color.FromHex("#575757");
+                classIdSelect.TitleColor = Color.FromHex("#575757");
                 selectAngleDown.Source = "angleDownSolid.png";
             }
         }
@@ -110,12 +115,12 @@ namespace aplikacja_dziekanat.pages
                         Day = "Sunday";
                         break;
                 }
-                selectAngleDown.Source = "angleDownSolidAlt.png";
+                selectAngleDown2.Source = "angleDownSolidAlt.png";
             }
             else
             {
                 daySelect.TitleColor = Color.FromHex("#575757");
-                selectAngleDown.Source = "angleDownSolid.png";
+                selectAngleDown2.Source = "angleDownSolid.png";
             }
         }
 
@@ -125,12 +130,12 @@ namespace aplikacja_dziekanat.pages
             {
                 scheduleIdSelect.TitleColor = Color.Black;
                 ScheduleId = scheduleIdSelect.Items[scheduleIdSelect.SelectedIndex];
-                selectAngleDown.Source = "angleDownSolidAlt.png";
+                selectAngleDown3.Source = "angleDownSolidAlt.png";
             }
             else
             {
                 scheduleIdSelect.TitleColor = Color.FromHex("#575757");
-                selectAngleDown.Source = "angleDownSolid.png";
+                selectAngleDown3.Source = "angleDownSolid.png";
             }
         }
 
@@ -140,26 +145,26 @@ namespace aplikacja_dziekanat.pages
             {
                 noticeIdSelect.TitleColor = Color.Black;
                 NoticeId = noticeIdSelect.Items[noticeIdSelect.SelectedIndex];
-                selectAngleDown.Source = "angleDownSolidAlt.png";
+                selectAngleDown4.Source = "angleDownSolidAlt.png";
             }
             else
             {
                 noticeIdSelect.TitleColor = Color.FromHex("#575757");
-                selectAngleDown.Source = "angleDownSolid.png";
+                selectAngleDown4.Source = "angleDownSolid.png";
             }
         }
-        public void UserSelectChangeHandler(object sender, EventArgs e)
+        public void EmailSelectChangeHandler(object sender, EventArgs e)
         {
-            if (userSelect.SelectedIndex > -1)
+            if (emailSelect.SelectedIndex > -1)
             {
-                userSelect.TitleColor = Color.Black;
-                User.Email = userSelect.Items[userSelect.SelectedIndex];
-                selectAngleDown.Source = "angleDownSolidAlt.png";
+                emailSelect.TitleColor = Color.Black;
+                Email = emailSelect.Items[emailSelect.SelectedIndex];
+                selectAngleDown5.Source = "angleDownSolidAlt.png";
             }
             else
             {
-                userSelect.TitleColor = Color.FromHex("#575757");
-                selectAngleDown.Source = "angleDownSolid.png";
+                emailSelect.TitleColor = Color.FromHex("#575757");
+                selectAngleDown5.Source = "angleDownSolid.png";
             }
         }
 
@@ -167,22 +172,22 @@ namespace aplikacja_dziekanat.pages
 
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (propertyName == nameof(Group) || propertyName == nameof(Day))
+            if (propertyName == nameof(ClassId) || propertyName == nameof(Day))
             {
-                OnGroupAndDayChanged(this, new EventArgs());
+                OnClassIdAndDayChanged(this, new EventArgs());
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private async void OnGroupAndDayChanged(object sender, EventArgs e)
+        private async void OnClassIdAndDayChanged(object sender, EventArgs e)
         {
-            if (Group != null && Day != null)
+            if (ClassId != null && Day != null)
             {
                 try
                 {
                     DbConnection dbConnection = new DbConnection();
-                    var items = await dbConnection.GetScheduleIds(Group, Day);
+                    var items = await dbConnection.GetScheduleIds(ClassId, Day);
                     if (items.Count > 0)
                     {
                         scheduleIdSelect.ItemsSource = items;

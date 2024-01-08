@@ -37,19 +37,19 @@ namespace aplikacja_dziekanat.pages
         {
             base.OnAppearing();
 
-            groupSelect.ItemsSource = new List<string> { "Ładowanie..." };
+            classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
 
             if (_NoticeId != null)
             {
                 DbConnection dbConnection = new DbConnection();
-                groupSelect.ItemsSource = await dbConnection.GetClassIds();
+                classIdSelect.ItemsSource = await dbConnection.GetClassIds();
                 var currentNotice = await dbConnection.GetNoticeById(_NoticeId);
 
                 if (currentNotice != null)
                 {
                     NewNotice = currentNotice;
 
-                    groupSelect.SelectedIndex = groupSelect.Items.IndexOf(currentNotice.To);
+                    classIdSelect.SelectedIndex = classIdSelect.Items.IndexOf(currentNotice.To);
                 }
             }
         }
@@ -84,17 +84,17 @@ namespace aplikacja_dziekanat.pages
             await Navigation.PopAsync();
         }
 
-        private void GroupSelectChangeHandler(object sender, EventArgs e)
+        private void ClassIdSelectChangeHandler(object sender, EventArgs e)
         {
-            if (groupSelect.SelectedIndex > -1)
+            if (classIdSelect.SelectedIndex > -1)
             {
-                groupSelect.TitleColor = Color.Black;
-                NewNotice.To = groupSelect.Items[groupSelect.SelectedIndex];
+                classIdSelect.TitleColor = Color.Black;
+                NewNotice.To = classIdSelect.Items[classIdSelect.SelectedIndex];
                 selectAngleDown.Source = "angleDownSolidAlt.png";
             }
             else
             {
-                groupSelect.TitleColor = Color.FromHex("#575757");
+                classIdSelect.TitleColor = Color.FromHex("#575757");
                 selectAngleDown.Source = "angleDownSolid.png";
             }
         }

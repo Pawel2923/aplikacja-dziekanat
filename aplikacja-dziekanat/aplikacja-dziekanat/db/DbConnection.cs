@@ -56,6 +56,28 @@ namespace db
             }
         }
 
+        public async Task<User> GetUserByEmail(string email)
+        {
+            try
+            {
+                var userItems = await firebase.Child("users").OnceAsync<User>();
+
+                return userItems.Select(item => new User
+                {
+                    Uid = item.Key,
+                    Email = item.Object.Email,
+                    Role = item.Object.Role,
+                    ClassId = item.Object.ClassId,
+                    Profile = item.Object.Profile
+                }).FirstOrDefault(item => item.Email == email);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return null;
+            }
+        }
+
         public async Task<List<string>> GetAllUserEmails()
         {
             try
@@ -143,6 +165,30 @@ namespace db
                 });
 
                 auth.CurrentUser.Profile = newProfile;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateUser(User newUser)
+        {
+            try
+            {
+                if (newUser == null)
+                    throw new Exception("Brak danych");
+
+                await firebase.Child("users").Child(newUser.Uid).PutAsync(new User
+                {
+                    Email = newUser.Email,
+                    Role = newUser.Role,
+                    ClassId = newUser.ClassId,
+                    Profile = newUser.Profile
+                });
 
                 return true;
             }

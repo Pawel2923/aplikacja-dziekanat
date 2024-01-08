@@ -11,7 +11,7 @@
             <Label Text="Plan Zajęć" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0, 5, 0, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <Grid>
-                    <local:Select x:Name="groupSelect" Title="Wybierz rok" SelectedIndexChanged="GroupSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
+                    <local:Select x:Name="classIdSelect" Title="Wybierz rok" SelectedIndexChanged="ClassIdSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
                     <Image Source="angleDownSolid.png" WidthRequest="15" HeightRequest="15" HorizontalOptions="End" x:Name="selectAngleDown" Margin="5" />
                 </Grid>
             </Frame>
@@ -39,11 +39,11 @@
             <Label Text="Użytkownicy" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <Grid>
-                    <local:Select x:Name="userSelect" Title="Wybierz użytkownika" SelectedIndexChanged="UserSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
+                    <local:Select x:Name="emailSelect" Title="Wybierz użytkownika" SelectedIndexChanged="EmailSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
                     <Image Source="angleDownSolid.png" WidthRequest="15" HeightRequest="15" HorizontalOptions="End" x:Name="selectAngleDown5" Margin="5" />
                 </Grid>
             </Frame>
-            <Button Text="Edytuj" Style="{StaticResource btnPrimaryStyle}" Margin="0,10,0,0" />
+            <Button Text="Edytuj" Style="{StaticResource btnPrimaryStyle}" Clicked="OnEditUser" Margin="0,10,0,0" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

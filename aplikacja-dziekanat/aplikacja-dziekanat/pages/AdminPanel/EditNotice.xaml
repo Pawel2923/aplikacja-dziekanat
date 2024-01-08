@@ -17,7 +17,7 @@
             </Frame>
             <Frame Padding="10, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <Grid>
-                    <local:Select x:Name="groupSelect" Title="Odbiorcy" SelectedIndexChanged="GroupSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
+                    <local:Select x:Name="classIdSelect" Title="Odbiorcy" SelectedIndexChanged="ClassIdSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
                     <Image Source="angleDownSolid.png" WidthRequest="15" HeightRequest="15" HorizontalOptions="End" x:Name="selectAngleDown" Margin="5" />
                 </Grid>
             </Frame>
