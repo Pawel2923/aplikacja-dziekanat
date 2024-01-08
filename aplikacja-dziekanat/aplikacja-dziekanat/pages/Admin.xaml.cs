@@ -31,6 +31,11 @@ namespace aplikacja_dziekanat.pages
             BindingContext = this;
         }
 
+        private async void OnEditSchedule(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditSchedule(Group, Day, ScheduleId));
+        }
+
         new public event PropertyChangedEventHandler PropertyChanged;
 
         protected void RaisePropertyChanged(string propertyName)

@@ -169,6 +169,55 @@ namespace db
             }
         }
 
+        public async Task<Schedule> GetScheduleById(string classId, string day, string scheduleId)
+        {
+            try
+            {
+                if (classId == null || day == null || scheduleId == null)
+                    throw new Exception("Brak danych");
+
+                var schedule = await firebase
+                    .Child("schedule")
+                    .Child(classId)
+                    .Child(day)
+                    .Child(scheduleId)
+                    .OnceSingleAsync<Schedule>();
+
+                return schedule;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdateSchedule(string classId, string day, string scheduleId, Schedule newSchedule)
+        {
+            try
+            {
+                if (classId == null || day == null || scheduleId == null || newSchedule == null)
+                    throw new Exception("Brak danych");
+
+                await firebase.Child("schedule").Child(classId).Child(day).Child(scheduleId).PutAsync(new Schedule
+                {
+                    ClassType = newSchedule.ClassType,
+                    Duration = newSchedule.Duration,
+                    Name = newSchedule.Name,
+                    Room = newSchedule.Room,
+                    Teacher = newSchedule.Teacher,
+                    TimeStart = newSchedule.TimeStart
+                });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
         public async Task<List<Notice>> GetNotice(string classId)
         {
             try
