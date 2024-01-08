@@ -38,6 +38,8 @@
                     <Button Text="Ogłoszenia"  Clicked="Handle_Clicked1" Style="{StaticResource btnPrimaryStyle}"></Button>
                     <Button Text="Pogoda"  Clicked="Handle_Clicked2"  Style="{StaticResource btnPrimaryStyle}"></Button>
                     <Button Text="Profil Użytkownika" Clicked="Handle_Clicked3" Style="{StaticResource btnPrimaryStyle}"></Button>
+                    <Button Text="Panel administracyjny" Clicked="Handle_Clicked4" x:Name="adminPanelBtn" Style="{StaticResource btnPrimaryStyle}"></Button>
+                    <Button Text="Panel nauczyciela" Clicked="Handle_Clicked5" x:Name="teacherPanelBtn" Style="{StaticResource btnPrimaryStyle}"></Button>
                     <Button Text="WYLOGUJ" Style="{StaticResource btnPrimaryStyle}"
                        VerticalOptions="EndAndExpand"
                        HorizontalOptions="Center" Clicked="LogoutClickHandler"></Button>

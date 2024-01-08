@@ -34,6 +34,18 @@ namespace aplikacja_dziekanat.pages
             IsPresented = false;
         }
 
+        private async void Handle_Clicked4(object sender, System.EventArgs e)
+        {
+            IsPresented = false;
+            await Navigation.PushAsync(new Admin());
+        }
+
+        private async void Handle_Clicked5(object sender, System.EventArgs e)
+        {
+            IsPresented = false;
+            await Navigation.PushAsync(new Teacher());
+        }
+
         async public void LogoutClickHandler(object sender, EventArgs e)
         {
             IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
@@ -62,6 +74,16 @@ namespace aplikacja_dziekanat.pages
             if (auth.CurrentUser.Uid == null)
             {
                 await Navigation.PushAsync(new LoginPage());
+            }
+
+            if (auth.CurrentUser.Role != "admin")
+            {
+                adminPanelBtn.IsVisible = false;
+            }
+
+            if (auth.CurrentUser.Role != "teacher")
+            {
+                teacherPanelBtn.IsVisible = false;
             }
         }
     }
