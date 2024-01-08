@@ -43,6 +43,12 @@ namespace aplikacja_dziekanat.pages
         {
             await Navigation.PushAsync(new EditSchedule(Group, Day, ScheduleId));
         }
+
+        private async void OnEditNotice(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditNotice(NoticeId));
+        }
+
         private async void SetSelectItems()
         {
             try

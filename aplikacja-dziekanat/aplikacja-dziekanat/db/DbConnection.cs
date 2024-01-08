@@ -279,6 +279,24 @@ namespace db
             }
         }
 
+        public async Task<Notice> GetNoticeById(string noticeId)
+        {
+            try
+            {
+                var notice = await firebase
+                    .Child("notice")
+                    .Child(noticeId)
+                    .OnceSingleAsync<Notice>();
+
+                return notice;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<string>> GetNoticeIds()
         {
             try
@@ -302,6 +320,31 @@ namespace db
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
                 await firebase.Child("notice").PostAsync(new Notice
+                {
+                    Author = newNotice.Author,
+                    Date = newNotice.Date,
+                    Content = newNotice.Content,
+                    Title = newNotice.Title,
+                    To = newNotice.To
+                });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateNotice(string noticeId, Notice newNotice)
+        {
+            try
+            {
+                if (noticeId == null || newNotice == null)
+                    throw new Exception("Brak danych");
+
+                await firebase.Child("notice").Child(noticeId).PutAsync(new Notice
                 {
                     Author = newNotice.Author,
                     Date = newNotice.Date,

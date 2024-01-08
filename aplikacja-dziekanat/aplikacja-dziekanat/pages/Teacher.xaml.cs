@@ -10,11 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace aplikacja_dziekanat.pages
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class Teacher : ContentPage
-{
-    public Teacher()
+    public partial class Teacher : ContentPage
     {
-        InitializeComponent();
+        public Teacher()
+        {
+            InitializeComponent();
+        }
     }
-}
 }
