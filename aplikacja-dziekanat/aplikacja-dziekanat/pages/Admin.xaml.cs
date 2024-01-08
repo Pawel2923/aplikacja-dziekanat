@@ -35,7 +35,6 @@ namespace aplikacja_dziekanat.pages
             scheduleIdSelect.ItemsSource = new List<string> { "Wybierz rok i dzień" };
             noticeIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             emailSelect.ItemsSource = new List<string> { "Ładowanie..." };
-            SetSelectItems();
             BindingContext = this;
         }
 
@@ -52,6 +51,13 @@ namespace aplikacja_dziekanat.pages
         private async void OnEditUser(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new EditUser(Email));
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            SetSelectItems();
         }
 
         private async void SetSelectItems()

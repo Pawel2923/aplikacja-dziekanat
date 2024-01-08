@@ -114,6 +114,20 @@ namespace db
             }
         }
 
+        public async Task<bool> DeleteUser(string uid)
+        {
+            try
+            {
+                await firebase.Child("users").Child(uid).DeleteAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
         public async Task<bool> ChangeEmail(string email)
         {
             try

@@ -91,6 +91,19 @@
                         </StackLayout>
                     </StackLayout>
                 </Frame>
+                <Frame BackgroundColor="#55595D" CornerRadius="25" Margin="0,0,0,20">
+                    <StackLayout VerticalOptions="FillAndExpand">
+                        <StackLayout x:Name="titleContainer4" Orientation="Horizontal" Margin="0,0,0,15">
+                            <Label Text="Usuń konto" FontAttributes="Bold" TextColor="White" FontSize="Title" />
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Usuń swoje konto i związane z nim informacje" TextColor="White" FontSize="Body" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Margin="0,10,0,0" Spacing="10">
+                            <Button Text="Usuń konto" HorizontalOptions="Start" Clicked="OnDeleteAccountBtnClicked" Style="{StaticResource btnDangerStyle}" />
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

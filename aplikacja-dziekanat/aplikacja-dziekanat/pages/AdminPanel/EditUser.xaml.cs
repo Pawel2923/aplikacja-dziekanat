@@ -72,6 +72,37 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
+        private async void DeleteUser(object sender, EventArgs e)
+        {
+            if (NewUser.Uid == null)
+            {
+                await DisplayAlert("Błąd", "Nie udało się usunąć użytkownika", "OK");
+                return;
+            }
+
+            var confirmEmail = await DisplayPromptAsync("Potwierdź", $"Wpisz {NewUser.Email} aby potwierdzić", "OK", "Anuluj", "Wpisz email", 50, Keyboard.Email, "");
+            
+            if (confirmEmail.Equals(NewUser.Email))
+            {
+                DbConnection dbConnection = new DbConnection();
+                var result = await dbConnection.DeleteUser(NewUser.Uid);
+
+                if (result)
+                {
+                    await DisplayAlert("Sukces", "Usunięto użytkownika", "OK");
+                    await Navigation.PopAsync();
+                }
+                else
+                {
+                    await DisplayAlert("Błąd", "Nie udało się usunąć użytkownika", "OK");
+                }
+            }
+            else
+            {
+                await DisplayAlert("Błąd", "Nie wpisano poprawnego adresu", "OK");
+            }
+        }
+
         private async void OnCancel(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
