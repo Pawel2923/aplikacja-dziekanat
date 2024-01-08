@@ -77,14 +77,15 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                Debug.WriteLine("Przechodzenie do panelu");
                 if (auth.CurrentUser.Role == "admin")
                 {
+                    Debug.WriteLine("Przechodzenie do panelu administracyjnego");
                     await Navigation.PushAsync(new Admin());
                 }
                 else if (auth.CurrentUser.Role == "teacher")
                 {
-                    throw new NotImplementedException();
+                    Debug.WriteLine("Przechodzenie do panelu nauczyciela");
+                    await Navigation.PushAsync(new Teacher());
                 }
             }
             catch (Exception ex)

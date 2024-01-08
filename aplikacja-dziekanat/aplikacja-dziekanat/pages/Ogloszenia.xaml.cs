@@ -16,7 +16,6 @@ namespace aplikacja_dziekanat.pages
         private Image plusImage;
         private Entry titleEntry;
         private Entry contentEntry;
-        private Entry authorEntry;
         private Button submitButton;
         private StackLayout noticesLayout;
         private readonly TapGestureRecognizer plusImageTapGestureRecognizer;
@@ -67,13 +66,6 @@ namespace aplikacja_dziekanat.pages
                 contentEntry = new Entry
                 {
                     Placeholder = "Treść ogłoszenia...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false
-                };
-
-                authorEntry = new Entry
-                {
-                    Placeholder = "Autor...",
                     Margin = new Thickness(20, 0, 20, 0),
                     IsVisible = false
                 };
@@ -143,12 +135,14 @@ namespace aplikacja_dziekanat.pages
             {
                 titleEntry.IsVisible = false;
                 contentEntry.IsVisible = false;
-                authorEntry.IsVisible = false;
                 submitButton.IsVisible = false;
 
                 string title = titleEntry.Text;
                 string content = contentEntry.Text;
-                string author = authorEntry.Text;
+
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+                string author = $"{auth.CurrentUser.Profile.FirstName} {auth.CurrentUser.Profile.LastName}";
 
                 Notice newNotice = new Notice
                 {
@@ -173,7 +167,7 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
+                notices = await dbConnection.GetNotices(auth.CurrentUser.ClassId);
 
                 PrintNotices();
             }
@@ -287,7 +281,7 @@ namespace aplikacja_dziekanat.pages
                             {
                                 Content = new StackLayout
                                 {
-                                    Children = { noticesLayout, titleEntry, contentEntry, authorEntry, submitButton }
+                                    Children = { noticesLayout, titleEntry, contentEntry, submitButton }
                                 }
                             },
                             plusImage

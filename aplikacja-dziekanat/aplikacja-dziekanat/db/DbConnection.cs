@@ -315,7 +315,31 @@ namespace db
             }
         }
 
-        public async Task<List<Notice>> GetNotice(string classId)
+        public async Task<List<Notice>> GetNotices()
+        {
+            try
+            {
+                var scheduleItems = await firebase
+                    .Child("notice")
+                    .OnceAsync<Notice>();
+
+                return scheduleItems.Select(item => new Notice
+                {
+                    Author = item.Object.Author,
+                    Date = item.Object.Date,
+                    Content = item.Object.Content,
+                    Title = item.Object.Title,
+                    To = item.Object.To,
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Notice>> GetNotices(string classId)
         {
             try
             {

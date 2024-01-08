@@ -1,12 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CustomRenderer" 
+             xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
+             x:DataType="pages:Teacher"
+             Title="Panel nauczyciela"
              x:Class="aplikacja_dziekanat.pages.Teacher">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout Margin="20">
+            <Label Text="Zarządzaj danymi" FontSize="Large" FontAttributes="Bold" TextColor="White" />
+            <Label Text="Twoje ogłoszenia" TextColor="White" FontSize="Medium" />
+            <ListView ItemsSource="{Binding UserNotices}" SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="tytul" TextColor="White" FontSize="Medium" />
+                                <Label Text="tresc" TextColor="White" FontSize="Small" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Label Text="Twoje zajęcia" TextColor="White" FontSize="Medium" />
+            <Label Text="Twoje grupy" TextColor="White" FontSize="Medium" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
