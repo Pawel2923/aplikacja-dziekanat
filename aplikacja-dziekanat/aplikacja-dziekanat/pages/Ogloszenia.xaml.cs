@@ -26,7 +26,6 @@ namespace aplikacja_dziekanat.pages
             InitializeComponent();
             plusImageTapGestureRecognizer = new TapGestureRecognizer();
             plusImageTapGestureRecognizer.Tapped += OnPlusImageTapped;
-            DodajObrazPlusa();
         }
 
         protected override void OnAppearing()
@@ -36,6 +35,10 @@ namespace aplikacja_dziekanat.pages
 
             if (auth.CurrentUser.Uid != null)
             {
+                if (auth.CurrentUser.Role == "admin" || auth.CurrentUser.Role == "teacher")
+                {
+                    DodajObrazPlusa();
+                }
                 _ = GetNotices();
             }
         }
@@ -275,9 +278,11 @@ namespace aplikacja_dziekanat.pages
                 }
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    Content = new Grid
+                    if (plusImage != null)
                     {
-                        Children = {
+                        Content = new Grid
+                        {
+                            Children = {
                             new ScrollView
                             {
                                 Content = new StackLayout
@@ -287,7 +292,23 @@ namespace aplikacja_dziekanat.pages
                             },
                             plusImage
                         }
-                    };
+                        };
+                    }
+                    else
+                    {
+                        Content = new Grid
+                        {
+                            Children = {
+                            new ScrollView
+                            {
+                                Content = new StackLayout
+                                {
+                                    Children = { noticesLayout }
+                                }
+                            }
+                        }
+                        };
+                    }
                 });
             }
             catch (Exception ex)

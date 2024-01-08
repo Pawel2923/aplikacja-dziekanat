@@ -40,20 +40,38 @@ namespace aplikacja_dziekanat.pages
 
         private async void OnEditSchedule(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(ClassId) || string.IsNullOrEmpty(Day) || string.IsNullOrEmpty(ScheduleId))
+            {
+                await DisplayAlert("Błąd", "Wypełnij wszystkie pola.", "OK");
+                return;
+            }
+
             await Navigation.PushAsync(new EditSchedule(ClassId, Day, ScheduleId));
         }
 
         private async void OnEditNotice(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(NoticeId))
+            {
+                await DisplayAlert("Błąd", "Wypełnij wymagane pole.", "OK");
+                return;
+            }
+
             await Navigation.PushAsync(new EditNotice(NoticeId));
         }
 
         private async void OnEditUser(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(Email))
+            {
+                await DisplayAlert("Błąd", "Wypełnij wymagane pole.", "OK");
+                return;
+            }
+
             await Navigation.PushAsync(new EditUser(Email));
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 

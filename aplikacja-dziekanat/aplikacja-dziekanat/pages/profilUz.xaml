@@ -76,7 +76,7 @@
                         <Button Text="Przejdź do panelu" Clicked="OnPanelBtnClicked" Style="{StaticResource btnPrimaryStyle}" HorizontalOptions="End" />
                     </StackLayout>
                 </Frame>
-                <Frame BackgroundColor="#55595D" CornerRadius="25" Margin="0,0,0,20">
+                <Frame BackgroundColor="#55595D" CornerRadius="25">
                     <StackLayout VerticalOptions="FillAndExpand">
                         <StackLayout x:Name="titleContainer3" Orientation="Horizontal" Margin="0,0,0,15">
                             <Label Text="Dane logowania" FontAttributes="Bold" TextColor="White" FontSize="Title" />

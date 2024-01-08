@@ -4,26 +4,32 @@
              xmlns:local="clr-namespace:CustomRenderer" 
              xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
              x:DataType="pages:EditSchedule"
+             Title="Edytuj plan"
              x:Class="aplikacja_dziekanat.pages.EditSchedule">
     <ContentPage.Content>
         <StackLayout Margin="20">
             <Label Text="Wypełnij odpowiednio pola" FontSize="Large" FontAttributes="Bold" TextColor="White" />
-            <Label Text="Plan Zajęć" TextColor="White" FontSize="Medium" />
+            <Label Text="Typ zajęć:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,0,0,5"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
-                <local:Input Placeholder="Grupa" Style="{StaticResource inputPrimaryStyle}" x:Name="classType" Text="{Binding NewSchedule.ClassType, Mode=TwoWay}" />
+                <local:Input Placeholder="Typ zajęć" Style="{StaticResource inputPrimaryStyle}" x:Name="classType" Text="{Binding NewSchedule.ClassType, Mode=TwoWay}" />
             </Frame>
+            <Label Text="Czas trwania:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,0,0,5"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <local:Input Placeholder="Czas trwania" Style="{StaticResource inputPrimaryStyle}" x:Name="duration" Text="{Binding NewSchedule.Duration, Mode=TwoWay}" />
             </Frame>
+            <Label Text="Nazwa zajęć:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,0,0,5"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <local:Input Placeholder="Nazwa zajęć" Style="{StaticResource inputPrimaryStyle}" x:Name="name" Text="{Binding NewSchedule.Name, Mode=TwoWay}" />
             </Frame>
+            <Label Text="Sala:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,0,0,5"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <local:Input Placeholder="Sala" Style="{StaticResource inputPrimaryStyle}" x:Name="room" Text="{Binding NewSchedule.Room, Mode=TwoWay}" />
             </Frame>
+            <Label Text="Wykładowca:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,0,0,5"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <local:Input Placeholder="Wykładowca" Style="{StaticResource inputPrimaryStyle}" x:Name="teacher" Text="{Binding NewSchedule.Teacher, Mode=TwoWay}" />
             </Frame>
+            <Label Text="Czas rozpoczęcia:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,0,0,5"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <local:Input Placeholder="Czas rozpoczęcia" Style="{StaticResource inputPrimaryStyle}" x:Name="timeStart" Text="{Binding NewSchedule.TimeStart, Mode=TwoWay}" />
             </Frame>

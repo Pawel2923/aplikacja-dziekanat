@@ -43,6 +43,7 @@ namespace aplikacja_dziekanat.pages
             {
                 DbConnection dbConnection = new DbConnection();
                 NewUser = await dbConnection.GetUserByEmail(NewUser.Email);
+                degreeLabel.IsVisible = NewUser.Role == "teacher";
                 degreeFrame.IsVisible = NewUser.Role == "teacher";
 
                 var classIds = await dbConnection.GetClassIds();
@@ -82,7 +83,7 @@ namespace aplikacja_dziekanat.pages
 
             var confirmEmail = await DisplayPromptAsync("Potwierdź", $"Wpisz {NewUser.Email} aby potwierdzić", "OK", "Anuluj", "Wpisz email", 50, Keyboard.Email, "");
             
-            if (confirmEmail.Equals(NewUser.Email))
+            if (confirmEmail == NewUser.Email)
             {
                 DbConnection dbConnection = new DbConnection();
                 var result = await dbConnection.DeleteUser(NewUser.Uid);

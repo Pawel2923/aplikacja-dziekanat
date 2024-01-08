@@ -105,9 +105,9 @@ namespace aplikacja_dziekanat.pages
                     throw new Exception("Nie udało się usunąć użytkownika");
                 }
 
-                var confirmEmail = await DisplayPromptAsync("Potwierdź", $"Wpisz {auth.CurrentUser.Email} aby potwierdzić", "OK", "Anuluj", "Wpisz swój email", 50, Keyboard.Email, "");
+                string confirmEmail = await DisplayPromptAsync("Potwierdź", $"Wpisz {auth.CurrentUser.Email} aby potwierdzić", "OK", "Anuluj", "Wpisz swój email", 50, Keyboard.Email, "");
 
-                if (confirmEmail.Equals(auth.CurrentUser.Email))
+                if (confirmEmail == auth.CurrentUser.Email)
                 {
                     DbConnection dbConnection = new DbConnection();
                     var result = await dbConnection.DeleteUser(auth.CurrentUser.Uid);
@@ -131,7 +131,7 @@ namespace aplikacja_dziekanat.pages
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Wystąpił błąd podczas usuwania konta użytkownika: {0}", ex.Message);
+                Debug.WriteLine($"Wystąpił błąd podczas usuwania konta użytkownika: {ex.Message}");
                 await DisplayAlert("Błąd", ex.Message, "OK");
             }
         }
@@ -190,7 +190,7 @@ namespace aplikacja_dziekanat.pages
                 }
                 else if (auth.CurrentUser.Role == "admin")
                 {
-                    Degree = auth.CurrentUser.Profile.Degree;
+                    degreeContainer.IsVisible = false;
                     PanelTitle = "Panel administracyjny";
                     PanelDescription = "W tym panelu możesz zarządzać użytkownikami, grupami, ogłoszeniami oraz harmonogramem";
                 }

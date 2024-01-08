@@ -4,21 +4,25 @@
              xmlns:local="clr-namespace:CustomRenderer" 
              xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
              x:DataType="pages:EditUser"
+             Title="Edytuj użytkownika"
              x:Class="aplikacja_dziekanat.pages.EditUser">
     <ContentPage.Content>
         <StackLayout Margin="20">
             <Label Text="Wypełnij odpowiednio pola" FontSize="Large" FontAttributes="Bold" TextColor="White" />
             <Label Text="Dane użytkownika" TextColor="White" FontSize="Medium" />
             <Label Text="{Binding NewUser.Email}" TextColor="White" FontSize="Medium" />
+            <Label x:Name="degreeLabel" Text="Stopień naukowy:" TextColor="White" FontSize="Medium" />
             <Frame x:Name="degreeFrame" Padding="10, 0" Margin="0,5,0,0"  HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <local:Input Placeholder="Stopień naukowy" Style="{StaticResource inputPrimaryStyle}" x:Name="degreeInput" Text="{Binding NewUser.Profile.Degree, Mode=TwoWay}" />
             </Frame>
+            <Label Text="Rola:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,5,0,0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <Grid>
                     <local:Select x:Name="roleSelect" Title="Rola" SelectedIndexChanged="RoleSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
                     <Image Source="angleDownSolid.png" WidthRequest="15" HeightRequest="15" HorizontalOptions="End" x:Name="selectAngleDown" Margin="5" />
                 </Grid>
             </Frame>
+            <Label Text="Grupa:" TextColor="White" FontSize="Medium" />
             <Frame Padding="10, 0" Margin="0,5,0,0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
                 <Grid>
                     <local:Select x:Name="classIdSelect" Title="Grupa" SelectedIndexChanged="ClassIdSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />

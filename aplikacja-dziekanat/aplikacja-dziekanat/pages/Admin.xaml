@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:CustomRenderer" 
              xmlns:pages="clr-namespace:aplikacja_dziekanat.pages"
              x:DataType="pages:Admin"
+             Title="Panel administracyjny"
              x:Class="aplikacja_dziekanat.pages.Admin">
     <ContentPage.Content>
         <StackLayout Margin="20">
