@@ -3,7 +3,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using aplikacja_dziekanat.pages.models;  // Popraw ścieżkę do przestrzeni nazw Models
+using aplikacja_dziekanat.pages.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using aplikacja_dziekanat.pages.models;
@@ -13,11 +13,13 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Pogoda : ContentPage
     {
+        private PogodaViewModel _viewModel;
+
         public Pogoda()
         {
             InitializeComponent();
-
-            // Wywołaj metodę do pobrania danych z API
+            _viewModel = new PogodaViewModel();
+            BindingContext = _viewModel;
             GetWeatherData();
         }
 
@@ -39,25 +41,60 @@ namespace aplikacja_dziekanat.pages
                         string content = await response.Content.ReadAsStringAsync();
                         WeatherData weatherData = JsonConvert.DeserializeObject<WeatherData>(content);
 
-                        // Przekształć temperaturę z kelwinów na stopnie Celsiusza
-                        float temperaturaWKelwinach = weatherData.Main.Temp;
-                        float temperaturaWCelsjuszach = temperaturaWKelwinach - 273.15f;
+                        if (weatherData != null)
+                        {
+                            _viewModel.City = $"{city}";
 
-                        // Aktualizuj etykietę z danymi pogodowymi
-                        weatherLabel.Text = $"Temperatura: {temperaturaWCelsjuszach}°C\nOpis: {weatherData.Weather[0].Description}";
+                            float temperaturaWKelwinach = weatherData.Main?.Temp ?? 0;
+                            float temperaturaWCelsjuszach = temperaturaWKelwinach - 273.15f;
+
+                            _viewModel.Temperature = $"{temperaturaWCelsjuszach}°C";
+                            _viewModel.FeelsLike = $"{weatherData.Main?.FeelsLike}°C";
+                            _viewModel.Humidity = $" {weatherData.Main?.Humidity}%";
+                            _viewModel.Pressure = $" {weatherData.Main?.Pressure} hPa";
+
+                            _viewModel.WindSpeed = $" {weatherData.Wind?.Speed} m/s";
+                            _viewModel.WindDirection = $" {GetWindDirectionName(weatherData.Wind?.Direction)}";
+
+                            _viewModel.Cloudiness = $"{weatherData.Clouds?.Value}%";
+                            _viewModel.Visibility = $" {weatherData.Visibility} m";
+                            
+                            _viewModel.WeatherCondition = $" {weatherData.Weather?[0]?.Description}";
+
+                            _viewModel.LastUpdate = $" {DateTime.Now}";
+                        }
+                        else
+                        {
+                            _viewModel.ErrorMessage = "Błąd podczas przetwarzania danych pogodowych.";
+                        }
                     }
                     else
                     {
-                        // Obsłuż błędy odpowiedzi
-                        weatherLabel.Text = "Błąd podczas pobierania danych pogodowych.";
+                        _viewModel.ErrorMessage = "Błąd podczas pobierania danych pogodowych.";
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Obsłuż wyjątki
-                weatherLabel.Text = $"Wystąpił błąd: {ex.Message}";
+                _viewModel.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
             }
+        }
+
+        private string GetWindDirectionName(int? direction)
+        {
+            if (direction.HasValue)
+            {
+                if ((direction >= 0 && direction < 45) || (direction >= 315 && direction <= 360))
+                    return "Północny";
+                else if (direction >= 45 && direction < 135)
+                    return "Wschodni";
+                else if (direction >= 135 && direction < 225)
+                    return "Południowy";
+                else if (direction >= 225 && direction < 315)
+                    return "Zachodni";
+            }
+
+            return "Nieznany";
         }
     }
 }

@@ -1,14 +1,53 @@
 ﻿<!-- Pogoda.xaml -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
              x:Class="aplikacja_dziekanat.pages.Pogoda">
 
-    <StackLayout>
-        <!-- Dodaj etykietę do wyświetlania danych pogodowych -->
-        <Label x:Name="weatherLabel" Text="Poczekaj, pobieram dane..." VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
-    </StackLayout>
+    <ContentPage.Content>
+        <StackLayout>
+            <!-- Informacje o Mieście -->
+            <Label Text="Miejsce:" FontAttributes="Bold"/>
+            <Label Text="{Binding City}" />
 
+            <!-- Informacje o Temperaturze -->
+            <Label Text="Temperatura:" FontAttributes="Bold"/>
+            <Label Text="{Binding Temperature}" />
+
+            <!-- Informacje o Odczuciu temperatury -->
+            <Label Text="Odczucie temperatury:" FontAttributes="Bold"/>
+            <Label Text="{Binding FeelsLike}" />
+
+            <!-- Informacje o Wilgotności -->
+            <Label Text="Wilgotność:" FontAttributes="Bold"/>
+            <Label Text="{Binding Humidity}" />
+
+            <!-- Informacje o Ciśnieniu -->
+            <Label Text="Ciśnienie:" FontAttributes="Bold"/>
+            <Label Text="{Binding Pressure}" />
+
+            <!-- Informacje o Prędkości wiatru -->
+            <Label Text="Wiatr:" FontAttributes="Bold"/>
+            <Label Text="{Binding WindSpeed}" />
+
+            <!-- Informacje o Kierunku wiatru -->
+            <Label Text="Kierunek wiatru:" FontAttributes="Bold"/>
+            <Label Text="{Binding WindDirection}" />
+
+            <!-- Informacje o Zachmurzeniu -->
+            <Label Text="Zachmurzenie:" FontAttributes="Bold"/>
+            <Label Text="{Binding Cloudiness}" />
+
+            <!-- Informacje o Widoczności -->
+            <Label Text="Widoczność:" FontAttributes="Bold"/>
+            <Label Text="{Binding Visibility}" />
+
+            <!-- Informacje o Pogodzie -->
+            <Label Text="Pogoda:" FontAttributes="Bold"/>
+            <Label Text="{Binding WeatherCondition}" />
+
+            <!-- Aktualizacja danych -->
+            <Label Text="Ostatnia aktualizacja:" FontAttributes="Bold"/>
+            <Label Text="{Binding LastUpdate}" />
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>
