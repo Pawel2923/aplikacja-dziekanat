@@ -71,17 +71,25 @@ namespace aplikacja_dziekanat.pages
             await Navigation.PushAsync(new EdytujLogin());
         }
 
-        private void OnPanelBtnClicked(object sender, EventArgs e)
+        private async void OnPanelBtnClicked(object sender, EventArgs e)
         {
             try
             {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
                 Debug.WriteLine("Przechodzenie do panelu");
-                throw new NotImplementedException();
+                if (auth.CurrentUser.Role == "admin")
+                {
+                    await Navigation.PushAsync(new Admin());
+                }
+                else if (auth.CurrentUser.Role == "teacher")
+                {
+                    throw new NotImplementedException();
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Wystąpił błąd podczas przechodzenia do panelu: {0}", ex.Message);
-                DisplayAlert("Błąd", "Wystąpił błąd podczas przechodzenia do panelu", "OK");
+                await DisplayAlert("Błąd", "Wystąpił błąd podczas przechodzenia do panelu", "OK");
             }
         }
 
