@@ -6,48 +6,48 @@
     <ContentPage.Content>
         <StackLayout>
             <!-- Informacje o Mieście -->
-            <Label Text="Miejsce:" FontAttributes="Bold"/>
-            <Label Text="{Binding City}" />
+            <Label Text="Miejsce:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding City}" TextColor="White"/>
 
             <!-- Informacje o Temperaturze -->
-            <Label Text="Temperatura:" FontAttributes="Bold"/>
-            <Label Text="{Binding Temperature}" />
+            <Label Text="Temperatura:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding Temperature}" TextColor="White"/>
 
             <!-- Informacje o Odczuciu temperatury -->
-            <Label Text="Odczucie temperatury:" FontAttributes="Bold"/>
-            <Label Text="{Binding FeelsLike}" />
+            <Label Text="Odczucie temperatury:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding FeelsLike}" TextColor="White"/>
 
             <!-- Informacje o Wilgotności -->
-            <Label Text="Wilgotność:" FontAttributes="Bold"/>
-            <Label Text="{Binding Humidity}" />
+            <Label Text="Wilgotność:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding Humidity}" TextColor="White"/>
 
             <!-- Informacje o Ciśnieniu -->
-            <Label Text="Ciśnienie:" FontAttributes="Bold"/>
-            <Label Text="{Binding Pressure}" />
+            <Label Text="Ciśnienie:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding Pressure}" TextColor="White"/>
 
             <!-- Informacje o Prędkości wiatru -->
-            <Label Text="Wiatr:" FontAttributes="Bold"/>
-            <Label Text="{Binding WindSpeed}" />
+            <Label Text="Wiatr:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding WindSpeed}" TextColor="White"/>
 
             <!-- Informacje o Kierunku wiatru -->
-            <Label Text="Kierunek wiatru:" FontAttributes="Bold"/>
-            <Label Text="{Binding WindDirection}" />
+            <Label Text="Kierunek wiatru:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding WindDirection}" TextColor="White"/>
 
             <!-- Informacje o Zachmurzeniu -->
-            <Label Text="Zachmurzenie:" FontAttributes="Bold"/>
-            <Label Text="{Binding Cloudiness}" />
+            <Label Text="Zachmurzenie:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding Cloudiness}" TextColor="White"/>
 
             <!-- Informacje o Widoczności -->
-            <Label Text="Widoczność:" FontAttributes="Bold"/>
-            <Label Text="{Binding Visibility}" />
+            <Label Text="Widoczność:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding Visibility}" TextColor="White"/>
 
             <!-- Informacje o Pogodzie -->
-            <Label Text="Pogoda:" FontAttributes="Bold"/>
-            <Label Text="{Binding WeatherCondition}" />
+            <Label Text="Pogoda:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding WeatherCondition}" TextColor="White"/>
 
             <!-- Aktualizacja danych -->
-            <Label Text="Ostatnia aktualizacja:" FontAttributes="Bold"/>
-            <Label Text="{Binding LastUpdate}" />
+            <Label Text="Ostatnia aktualizacja:" FontAttributes="Bold" TextColor="White"/>
+            <Label Text="{Binding LastUpdate}" TextColor="White"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
