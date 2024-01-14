@@ -11,10 +11,13 @@
             <StackLayout Margin="20" >
                 <Label Text="Ogłoszenia" FontSize="Large" FontAttributes="Bold" TextColor="White" />
                 <StackLayout>
-                    <StackLayout x:Name="noticesContainer">
-
-                    </StackLayout>
-                    <Button Text="Edytuj ogłoszenie" Clicked="EditNoticeClickHandler" />
+                    <Frame Padding="10, 0" HorizontalOptions="Fill" VerticalOptions="Center" CornerRadius="25" BackgroundColor="#D9D9D9">
+                        <Grid>
+                            <local:Select x:Name="noticeIdSelect" Title="Wybierz id ogłoszenia" SelectedIndexChanged="NoticeIdSelectChangeHandler" Style="{StaticResource selectPrimaryStyle}" />
+                            <Image Source="angleDownSolid.png" WidthRequest="15" HeightRequest="15" HorizontalOptions="End" x:Name="selectAngleDown4" Margin="5" />
+                        </Grid>
+                    </Frame>
+                    <Button Text="Edytuj ogłoszenie" x:Name="editNoticeButton" Clicked="OnEditNotice" Style="{StaticResource btnPrimaryStyle}" HorizontalOptions="End" Margin="0,5,0,0" />
                 </StackLayout>
             </StackLayout>
         </ScrollView>

@@ -75,6 +75,23 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
+        private async void DeleteNotice(object sender, EventArgs e)
+        {
+            DbConnection dbConnection = new DbConnection();
+
+            var result = await dbConnection.DeleteNotice(_NoticeId);
+
+            if (result)
+            {
+                await DisplayAlert("Sukces", "Usunięto ogłoszenie", "OK");
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Błąd", "Wystąpił błąd podczas usuwania ogłoszenia. Spróbuj ponownie później.", "OK");
+            }
+        }
+
         private async void OnCancel(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
