@@ -1,9 +1,9 @@
+using db;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using db;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -39,7 +39,7 @@ namespace aplikacja_dziekanat.pages
         public string Degree { get { return _Degree; } set { _Degree = value; RaisePropertyChanged(nameof(Degree)); } }
         public string PanelTitle { get { return _panelTitle; } set { _panelTitle = value; RaisePropertyChanged(nameof(PanelTitle)); } }
         public string PanelDescription { get { return _panelDescription; } set { _panelDescription = value; RaisePropertyChanged(nameof(PanelDescription)); } }
-        
+
         public profilUz()
         {
             InitializeComponent();
@@ -58,7 +58,7 @@ namespace aplikacja_dziekanat.pages
             base.OnAppearing();
 
             UpdateProfile();
-    }
+        }
 
         private async void OnEditProfileButtonClicked(object sender, EventArgs e)
         {
@@ -77,14 +77,15 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                Debug.WriteLine("Przechodzenie do panelu");
                 if (auth.CurrentUser.Role == "admin")
                 {
+                    Debug.WriteLine("Przechodzenie do panelu administracyjnego");
                     await Navigation.PushAsync(new Admin());
                 }
                 else if (auth.CurrentUser.Role == "teacher")
                 {
-                    throw new NotImplementedException();
+                    Debug.WriteLine("Przechodzenie do panelu nauczyciela");
+                    await Navigation.PushAsync(new Teacher());
                 }
             }
             catch (Exception ex)
@@ -106,6 +107,9 @@ namespace aplikacja_dziekanat.pages
                 }
 
                 string confirmEmail = await DisplayPromptAsync("Potwierdź", $"Wpisz {auth.CurrentUser.Email} aby potwierdzić", "OK", "Anuluj", "Wpisz swój email", 50, Keyboard.Email, "");
+
+                if (confirmEmail == null)
+                    return;
 
                 if (confirmEmail == auth.CurrentUser.Email)
                 {

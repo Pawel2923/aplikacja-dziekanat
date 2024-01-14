@@ -16,7 +16,6 @@ namespace aplikacja_dziekanat.pages
         private Image plusImage;
         private Entry titleEntry;
         private Entry contentEntry;
-        private Entry authorEntry;
         private Button submitButton;
         private StackLayout noticesLayout;
         private readonly TapGestureRecognizer plusImageTapGestureRecognizer;
@@ -71,13 +70,6 @@ namespace aplikacja_dziekanat.pages
                     IsVisible = false
                 };
 
-                authorEntry = new Entry
-                {
-                    Placeholder = "Autor...",
-                    Margin = new Thickness(20, 0, 20, 0),
-                    IsVisible = false
-                };
-
                 submitButton = new Button
                 {
                     Text = "Dodaj ogłoszenie",
@@ -100,9 +92,19 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
                 string title = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź tytuł ogłoszenia");
                 string content = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź treść ogłoszenia");
-                string author = await DisplayPromptAsync("Nowe ogłoszenie", "Wprowadź autora ogłoszenia");
+                string author = null;
+
+                if (!string.IsNullOrEmpty(auth.CurrentUser.Profile.FirstName) && !string.IsNullOrEmpty(auth.CurrentUser.Profile.LastName))
+                {
+                    author = $"{auth.CurrentUser.Profile.FirstName} {auth.CurrentUser.Profile.LastName}";
+                }
+                else
+                {
+                    author = auth.CurrentUser.Email.Split('@')[0];
+                }
 
                 if (title != null && content != null && author != null)
                 {
@@ -143,12 +145,14 @@ namespace aplikacja_dziekanat.pages
             {
                 titleEntry.IsVisible = false;
                 contentEntry.IsVisible = false;
-                authorEntry.IsVisible = false;
                 submitButton.IsVisible = false;
 
                 string title = titleEntry.Text;
                 string content = contentEntry.Text;
-                string author = authorEntry.Text;
+
+                var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+                string author = $"{auth.CurrentUser.Profile.FirstName} {auth.CurrentUser.Profile.LastName}";
 
                 Notice newNotice = new Notice
                 {
@@ -173,7 +177,8 @@ namespace aplikacja_dziekanat.pages
             try
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
-                notices = await dbConnection.GetNotice(auth.CurrentUser.ClassId);
+                notices = await dbConnection.GetNotices(auth.CurrentUser.ClassId);
+                notices.Sort((x, y) => DateTime.Compare(DateTime.Parse(y.Date), DateTime.Parse(x.Date)));
 
                 PrintNotices();
             }
@@ -287,7 +292,7 @@ namespace aplikacja_dziekanat.pages
                             {
                                 Content = new StackLayout
                                 {
-                                    Children = { noticesLayout, titleEntry, contentEntry, authorEntry, submitButton }
+                                    Children = { noticesLayout, titleEntry, contentEntry, submitButton }
                                 }
                             },
                             plusImage

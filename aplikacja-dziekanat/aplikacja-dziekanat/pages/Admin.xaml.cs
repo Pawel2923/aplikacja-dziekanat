@@ -1,17 +1,14 @@
-﻿using System;
+using db;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using db;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Admin : ContentPage, INotifyPropertyChanged
     {
         private string _ClassId;
@@ -21,7 +18,7 @@ namespace aplikacja_dziekanat.pages
         private string _Email;
         private readonly List<string> daysList = new List<string> { "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
 
-        public string ClassId { get { return _ClassId; } set { _ClassId = value; RaisePropertyChanged(nameof(ClassId)); } }
+        public new string ClassId { get { return _ClassId; } set { _ClassId = value; RaisePropertyChanged(nameof(ClassId)); } }
         public string Day { get { return _Day; } set { _Day = value; RaisePropertyChanged(nameof(Day)); } }
         public string ScheduleId { get { return _ScheduleId; } set { _ScheduleId = value; RaisePropertyChanged(nameof(ScheduleId)); } }
         public string NoticeId { get { return _NoticeId; } set { _NoticeId = value; RaisePropertyChanged(nameof(NoticeId)); } }
@@ -89,7 +86,7 @@ namespace aplikacja_dziekanat.pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+                Debug.WriteLine($"Wystąpił błąd: {ex.Message}");
                 await DisplayAlert("Błąd", "Wystąpił błąd. Spróbuj ponownie.", "OK");
             }
         }
@@ -223,7 +220,7 @@ namespace aplikacja_dziekanat.pages
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+                    Debug.WriteLine($"Wystąpił błąd: {ex.Message}");
                     await DisplayAlert("Błąd", "Wystąpił błąd. Spróbuj ponownie.", "OK");
                 }
             }

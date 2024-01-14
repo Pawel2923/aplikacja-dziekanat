@@ -21,13 +21,13 @@
     <EmbeddedResource Update="pages\Admin.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="pages\AdminPanel\EditNotice.xaml">
+    <EmbeddedResource Update="pages\Editors\EditNotice.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="pages\AdminPanel\EditSchedule.xaml">
+    <EmbeddedResource Update="pages\Editors\EditSchedule.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="pages\AdminPanel\EditUser.xaml">
+    <EmbeddedResource Update="pages\Editors\EditUser.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="pages\EdytujLogin.xaml">

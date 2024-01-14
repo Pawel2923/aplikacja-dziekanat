@@ -1,3 +1,4 @@
+using aplikacja_dziekanat;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System;
@@ -6,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using aplikacja_dziekanat;
 
 namespace db
 {
@@ -315,7 +315,31 @@ namespace db
             }
         }
 
-        public async Task<List<Notice>> GetNotice(string classId)
+        public async Task<List<Notice>> GetNotices()
+        {
+            try
+            {
+                var scheduleItems = await firebase
+                    .Child("notice")
+                    .OnceAsync<Notice>();
+
+                return scheduleItems.Select(item => new Notice
+                {
+                    Author = item.Object.Author,
+                    Date = item.Object.Date,
+                    Content = item.Object.Content,
+                    Title = item.Object.Title,
+                    To = item.Object.To,
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Notice>> GetNotices(string classId)
         {
             try
             {
@@ -374,6 +398,70 @@ namespace db
             }
         }
 
+        public async Task<List<string>> GetNoticeIds(string email)
+        {
+            try
+            {
+                var scheduleItems = await firebase
+                    .Child("notice")
+                    .OnceAsync<Notice>();
+
+                var result = new List<string>();
+
+                foreach (var item in scheduleItems)
+                {
+                    if (item.Object.Author.Contains(email.Split('@')[0]))
+                    {
+                        result.Add(item.Key);
+                    }
+                }
+
+                if (result.Count == 0)
+                {
+                    throw new Exception("Brak ogłoszeń");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<string>> GetNoticeIds(string firstName, string lastName)
+        {
+            try
+            {
+                var scheduleItems = await firebase
+                    .Child("notice")
+                    .OnceAsync<Notice>();
+
+                var result = new List<string>();
+
+                foreach (var item in scheduleItems)
+                {
+                    if (item.Object.Author.Contains($"{firstName} {lastName}"))
+                    {
+                        result.Add(item.Key);
+                    }
+                }
+
+                if (result.Count == 0)
+                {
+                    throw new Exception("Brak ogłoszeń");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> SendNotice(Notice newNotice)
         {
             try
@@ -412,6 +500,24 @@ namespace db
                     Title = newNotice.Title,
                     To = newNotice.To
                 });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteNotice(string noticeId)
+        {
+            try
+            {
+                if (noticeId == null)
+                    throw new Exception("Brak danych");
+
+                await firebase.Child("notice").Child(noticeId).DeleteAsync();
 
                 return true;
             }
