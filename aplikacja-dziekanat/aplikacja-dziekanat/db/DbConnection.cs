@@ -1,3 +1,4 @@
+using aplikacja_dziekanat;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System;
@@ -6,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using aplikacja_dziekanat;
 
 namespace db
 {

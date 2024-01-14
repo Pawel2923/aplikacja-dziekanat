@@ -2,18 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EditUser : ContentPage, INotifyPropertyChanged
     {
         private User newUser;
@@ -29,7 +24,7 @@ namespace aplikacja_dziekanat.pages
         public EditUser(string email)
         {
             InitializeComponent();
-            NewUser = new User { Email = email } ;
+            NewUser = new User { Email = email };
             SetSelects();
             BindingContext = this;
         }
@@ -82,7 +77,10 @@ namespace aplikacja_dziekanat.pages
             }
 
             var confirmEmail = await DisplayPromptAsync("Potwierdź", $"Wpisz {NewUser.Email} aby potwierdzić", "OK", "Anuluj", "Wpisz email", 50, Keyboard.Email, "");
-            
+
+            if (confirmEmail == null)
+                return;
+
             if (confirmEmail == NewUser.Email)
             {
                 DbConnection dbConnection = new DbConnection();

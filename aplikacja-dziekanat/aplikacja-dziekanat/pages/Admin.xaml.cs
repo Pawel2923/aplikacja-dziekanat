@@ -1,17 +1,14 @@
-﻿using System;
+﻿using db;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using db;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Admin : ContentPage, INotifyPropertyChanged
     {
         private string _ClassId;
@@ -89,7 +86,7 @@ namespace aplikacja_dziekanat.pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+                Debug.WriteLine($"Wystąpił błąd: {ex.Message}");
                 await DisplayAlert("Błąd", "Wystąpił błąd. Spróbuj ponownie.", "OK");
             }
         }
@@ -223,7 +220,7 @@ namespace aplikacja_dziekanat.pages
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+                    Debug.WriteLine($"Wystąpił błąd: {ex.Message}");
                     await DisplayAlert("Błąd", "Wystąpił błąd. Spróbuj ponownie.", "OK");
                 }
             }

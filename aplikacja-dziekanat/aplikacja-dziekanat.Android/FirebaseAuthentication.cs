@@ -1,12 +1,11 @@
-﻿using aplikacja_dziekanat.Droid;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using Xamarin.Essentials;
-using Android.Gms.Extensions;
-using Firebase.Auth;
+﻿using Android.Gms.Extensions;
+using aplikacja_dziekanat.Droid;
 using db;
+using Firebase.Auth;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 
 [assembly: Dependency(typeof(FirebaseAuthentication))]
 namespace aplikacja_dziekanat.Droid
@@ -93,7 +92,7 @@ namespace aplikacja_dziekanat.Droid
         }
 
         private void DestroyUser()
-        { 
+        {
             currentUser = new User();
         }
 

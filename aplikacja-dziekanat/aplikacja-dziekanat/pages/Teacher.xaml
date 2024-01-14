@@ -7,23 +7,16 @@
              Title="Panel nauczyciela"
              x:Class="aplikacja_dziekanat.pages.Teacher">
     <ContentPage.Content>
-        <StackLayout Margin="20">
-            <Label Text="Zarządzaj danymi" FontSize="Large" FontAttributes="Bold" TextColor="White" />
-            <Label Text="Twoje ogłoszenia" TextColor="White" FontSize="Medium" />
-            <ListView ItemsSource="{Binding UserNotices}" SeparatorVisibility="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
-                                <Label Text="tytul" TextColor="White" FontSize="Medium" />
-                                <Label Text="tresc" TextColor="White" FontSize="Small" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Label Text="Twoje zajęcia" TextColor="White" FontSize="Medium" />
-            <Label Text="Twoje grupy" TextColor="White" FontSize="Medium" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Margin="20" >
+                <Label Text="Ogłoszenia" FontSize="Large" FontAttributes="Bold" TextColor="White" />
+                <StackLayout>
+                    <StackLayout x:Name="noticesContainer">
+
+                    </StackLayout>
+                    <Button Text="Edytuj ogłoszenie" Clicked="EditNoticeClickHandler" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

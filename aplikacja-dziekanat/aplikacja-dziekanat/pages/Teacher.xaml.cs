@@ -2,45 +2,42 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace aplikacja_dziekanat.pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Teacher : ContentPage, INotifyPropertyChanged
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class Teacher : ContentPage
     {
-        private List<Notice> userNotices = new List<Notice> { };
-
-        public List<Notice> UserNotices
-        {
-            get { return userNotices; }
-            set { userNotices = value; RaisePropertyChanged(nameof(UserNotices)); }
-        }
+        private bool isExpanded = false;
 
         public Teacher()
         {
             InitializeComponent();
-            BindingContext = this;
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            DbConnection db = new DbConnection();
-            UserNotices = await db.GetNotices();
+            GetNotices();
         }
 
-        new public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged(string propertyName)
+        private async void GetNotices()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            DbConnection db = new DbConnection();
+
+            var notices = await db.GetNotices();
+        }
+
+        private void EditNoticeClickHandler(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
