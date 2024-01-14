@@ -1,4 +1,4 @@
-﻿using db;
+using db;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
