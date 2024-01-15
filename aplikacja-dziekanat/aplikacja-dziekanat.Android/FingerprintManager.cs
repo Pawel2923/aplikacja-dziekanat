@@ -54,5 +54,20 @@ namespace aplikacja_dziekanat.Droid
                 return false;
             }
         }
+
+        public void AuthenticateFingerprint()
+        {
+            const int flags = 0;
+
+            CryptoObjectHelper cryptoHelper = new CryptoObjectHelper();
+
+            var cancellationSignal = new Android.Support.V4.OS.CancellationSignal();
+
+            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.From(Application.Context);
+
+            FingerprintManagerCompat.AuthenticationCallback authenticationCallback = new FingerprintAuthCallback(Application.Context);
+
+            fingerprintManager.Authenticate(cryptoHelper.BuildCryptoObject(), flags, cancellationSignal, authenticationCallback, null);
+        }
     }
 }

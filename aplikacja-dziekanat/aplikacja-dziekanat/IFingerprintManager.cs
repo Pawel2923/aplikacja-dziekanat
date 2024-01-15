@@ -8,5 +8,6 @@ namespace aplikacja_dziekanat
     {
         bool IsFingerprintAvailable();
         bool IsUseFingerprintEnabled();
+        void AuthenticateFingerprint();
     }
 }
