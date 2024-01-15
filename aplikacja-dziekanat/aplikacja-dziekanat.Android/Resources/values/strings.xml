@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+	<string name="fingerprint_title">Użyj biometrii, aby kontynuować</string>
+	<string name="fingerprint_caption">Umieść palec na czytniku</string>
+</resources>

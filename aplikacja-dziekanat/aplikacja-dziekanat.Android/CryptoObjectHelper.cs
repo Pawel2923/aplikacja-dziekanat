@@ -1,17 +1,8 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Security.Keystore;
+﻿using Android.Security.Keystore;
 using Android.Support.V4.Hardware.Fingerprint;
-using Android.Views;
-using Android.Widget;
 using Java.Security;
 using Javax.Crypto;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace aplikacja_dziekanat.Droid
 {

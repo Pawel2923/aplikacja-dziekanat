@@ -1,49 +1,42 @@
 ﻿using Android;
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Support.V4.Content;
 using Android.Support.V4.Hardware.Fingerprint;
-using Android.Views;
-using Android.Widget;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
+using aplikacja_dziekanat.Droid;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(FingerprintManager))]
 namespace aplikacja_dziekanat.Droid
 {
     public class FingerprintManager : IFingerprintManager
     {
-        private readonly FingerprintManagerCompat fingerprintManager;
+        private readonly FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.From(Android.App.Application.Context);
+        private static readonly string TAG = "FingerprintManager";
 
-        public FingerprintManager()
+        private bool AreRequirementsFullfilled()
         {
-            fingerprintManager = FingerprintManagerCompat.From(Application.Context);
             if (!fingerprintManager.IsHardwareDetected)
             {
-                throw new Exception("Nie znaleziono czytnika odcisku palca!");
+                DebugService.WriteLine(TAG, "AreRequirementsFullfilled", "Nie znaleziono linii papilarnych");
+                throw new Exception("Nie znaleziono czytnika linii papilarnych");
             }
 
-            KeyguardManager keyguardManager = (KeyguardManager)Application.Context.GetSystemService(Android.Content.Context.KeyguardService);
+            KeyguardManager keyguardManager = (KeyguardManager)Android.App.Application.Context.GetSystemService(Android.Content.Context.KeyguardService);
 
             if (!keyguardManager.IsKeyguardSecure)
             {
-                throw new Exception("Nie ustawiono blokady ekranu!");
+                DebugService.WriteLine(TAG, nameof(AreRequirementsFullfilled), "Nie ustawiono blokady ekranu!");
+                throw new Exception("Nie ustawiono blokady ekranu");
             }
+
+            return true;
         }
 
-        public bool IsFingerprintAvailable()
-        {
-            return fingerprintManager.HasEnrolledFingerprints;
-        }
-
-        public bool IsUseFingerprintEnabled()
+        private bool IsUseFingerprintEnabled()
         {
 #pragma warning disable CS0618 // Type or member is obsolete
-            Android.Content.PM.Permission permissionResult = ContextCompat.CheckSelfPermission(Application.Context, Manifest.Permission.UseFingerprint);
+            Android.Content.PM.Permission permissionResult = ContextCompat.CheckSelfPermission(Android.App.Application.Context, Manifest.Permission.UseFingerprint);
 #pragma warning restore CS0618 // Type or member is obsolete
             if (permissionResult == Android.Content.PM.Permission.Granted)
             {
@@ -51,9 +44,11 @@ namespace aplikacja_dziekanat.Droid
             }
             else
             {
-                return false;
+                throw new Exception("Nie ustawiono uprawnień do czytnika linii papilarnych");
             }
         }
+
+        public bool IsFingerprintAvailable() => AreRequirementsFullfilled() && fingerprintManager.HasEnrolledFingerprints && IsUseFingerprintEnabled();
 
         public void AuthenticateFingerprint()
         {
@@ -63,9 +58,9 @@ namespace aplikacja_dziekanat.Droid
 
             var cancellationSignal = new Android.Support.V4.OS.CancellationSignal();
 
-            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.From(Application.Context);
+            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.From(Android.App.Application.Context);
 
-            FingerprintManagerCompat.AuthenticationCallback authenticationCallback = new FingerprintAuthCallback(Application.Context);
+            FingerprintManagerCompat.AuthenticationCallback authenticationCallback = new FingerprintAuthCallback(Android.App.Application.Context);
 
             fingerprintManager.Authenticate(cryptoHelper.BuildCryptoObject(), flags, cancellationSignal, authenticationCallback, null);
         }

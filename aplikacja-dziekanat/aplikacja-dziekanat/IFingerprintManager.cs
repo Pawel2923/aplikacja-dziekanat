@@ -7,7 +7,6 @@ namespace aplikacja_dziekanat
     public interface IFingerprintManager
     {
         bool IsFingerprintAvailable();
-        bool IsUseFingerprintEnabled();
         void AuthenticateFingerprint();
     }
 }

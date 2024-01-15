@@ -13,20 +13,14 @@ namespace aplikacja_dziekanat.Droid
     public class FirebaseAuthentication : IFirebaseAuth
     {
         private static readonly DbConnection db = new DbConnection();
-        private static User currentUser;
-        private string token;
+        private static User currentUser = new User();
+        private string token = null;
 
         public User CurrentUser { get { return currentUser; } }
 
         public string Token()
         {
             return token;
-        }
-
-        public FirebaseAuthentication()
-        {
-            token = null;
-            currentUser = new User();
         }
 
         public async Task<string> LoginWithEmailAndPassword(string email, string password)
