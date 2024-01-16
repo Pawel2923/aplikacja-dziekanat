@@ -15,6 +15,7 @@ namespace aplikacja_dziekanat.pages
         private readonly StackLayout mainStackLayout;
         private readonly StackLayout buttonsStackLayout;
         private readonly DbConnection dbConnection = new DbConnection();
+        private IFirebaseAuth auth = DependencyService.Resolve<IFirebaseAuth>();
 
         public PlanZajec()
         {
@@ -22,8 +23,7 @@ namespace aplikacja_dziekanat.pages
             InitializeListView();
             currentDate = DateTime.Now;
             UpdateCurrentDate();
-            GetSchedule();
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            Device.StartTimer(TimeSpan.FromMinutes(30), () =>
             {
                 UpdateCurrentDate();
                 return true;
@@ -104,6 +104,15 @@ namespace aplikacja_dziekanat.pages
             };
 
             Content = mainStackLayout;
+            Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
+            {
+                if (string.IsNullOrEmpty(auth.CurrentUser.ClassId))
+                {
+                    return true;
+                }
+                GetSchedule();
+                return false;
+            });
         }
         private void UpdateCurrentDate()
         {
@@ -126,8 +135,7 @@ namespace aplikacja_dziekanat.pages
 
         private async void GetSchedule()
         {
-            var auth = DependencyService.Resolve<IFirebaseAuth>();
-            if (auth.CurrentUser.Uid == null || auth.CurrentUser.Email == null)
+            if (auth.Token() == null)
             {
                 return;
             }

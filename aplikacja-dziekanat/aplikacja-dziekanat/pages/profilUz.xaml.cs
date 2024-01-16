@@ -101,7 +101,7 @@ namespace aplikacja_dziekanat.pages
             {
                 var auth = DependencyService.Resolve<IFirebaseAuth>();
 
-                if (auth.CurrentUser.Uid == null)
+                if (auth.Token() == null)
                 {
                     throw new Exception("Nie udało się usunąć użytkownika");
                 }

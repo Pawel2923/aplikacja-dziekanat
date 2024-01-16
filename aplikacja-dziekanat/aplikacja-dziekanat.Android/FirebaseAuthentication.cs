@@ -14,7 +14,7 @@ namespace aplikacja_dziekanat.Droid
     {
         private static readonly DbConnection db = new DbConnection();
         private static User currentUser = new User();
-        private string token = null;
+        private static string token = null;
 
         public User CurrentUser { get { return currentUser; } }
 
@@ -23,11 +23,23 @@ namespace aplikacja_dziekanat.Droid
             return token;
         }
 
+        public async Task SetToken()
+        {
+            if (FirebaseAuth.Instance.CurrentUser == null)
+            {
+                return;
+            }
+
+            var tokenRequest = await FirebaseAuth.Instance.CurrentUser.GetIdToken(false).AsAsync<GetTokenResult>();
+            token = tokenRequest.Token;
+
+            currentUser = await db.GetUser(FirebaseAuth.Instance.CurrentUser.Uid);
+        }
+
         public async Task<string> LoginWithEmailAndPassword(string email, string password)
         {
             var authResult = await FirebaseAuth.Instance.SignInWithEmailAndPasswordAsync(email, password);
             var tokenResult = await (authResult.User.GetIdToken(false).AsAsync<GetTokenResult>());
-            currentUser.Uid = authResult.User.Uid;
             token = tokenResult.Token.ToString();
             currentUser = await db.GetUser(authResult.User.Uid);
 
@@ -55,10 +67,10 @@ namespace aplikacja_dziekanat.Droid
 
         public async Task ChangeUserEmail(string newEmail)
         {
-            var user = FirebaseAuth.Instance.CurrentUser;
-            currentUser.Email = newEmail;
             try
             {
+                var user = FirebaseAuth.Instance.CurrentUser;
+                currentUser.Email = newEmail;
                 await user.UpdateEmailAsync(newEmail);
             }
             catch (Exception ex)
@@ -85,14 +97,9 @@ namespace aplikacja_dziekanat.Droid
             await user.DeleteAsync();
         }
 
-        private void DestroyUser()
-        {
-            currentUser = new User();
-        }
-
         public void Logout()
         {
-            DestroyUser();
+            currentUser = new User();
             token = null;
             FirebaseAuth.Instance.SignOut();
         }

@@ -32,7 +32,7 @@ namespace aplikacja_dziekanat.pages
             base.OnAppearing();
             var auth = DependencyService.Resolve<IFirebaseAuth>();
 
-            if (auth.CurrentUser.Uid != null)
+            if (auth.Token() != null)
             {
                 if (auth.CurrentUser.Role == "admin" || auth.CurrentUser.Role == "teacher")
                 {

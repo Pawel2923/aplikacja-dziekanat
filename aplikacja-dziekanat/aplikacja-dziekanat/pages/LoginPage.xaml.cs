@@ -124,7 +124,7 @@ namespace aplikacja_dziekanat.pages
 
             var auth = DependencyService.Resolve<IFirebaseAuth>();
 
-            if (auth.CurrentUser.Uid != null)
+            if (auth.Token() != null)
             {
                 await Navigation.PushAsync(new FormsTabPage());
             }
