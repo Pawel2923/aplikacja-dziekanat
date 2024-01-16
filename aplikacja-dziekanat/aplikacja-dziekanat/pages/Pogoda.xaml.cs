@@ -113,10 +113,6 @@ namespace aplikacja_dziekanat.pages
             }
 
             // Set the background image
-            // Set the background image
-            // Set the background image
-            // Set the background image
-            // Set the background image
             Grid grid = new Grid();
 
             // Add the background image as the first element, spanning the entire grid
@@ -134,14 +130,8 @@ namespace aplikacja_dziekanat.pages
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
             };
 
-            // Add the city name
-            centerStackLayout.Children.Add(new Label
-            {
-                Text = "Nowy Sącz",
-                TextColor = Color.White,
-                FontSize = 32, // Adjust the font size as needed
-                FontAttributes = FontAttributes.Bold,
-            });
+            // Add the city name inside a black frame
+            centerStackLayout.Children.Add(CreateDataLabel("Nowy Sącz", "", 32, 0, 0, 10));
 
             // Add the rest of the information in two columns
             centerStackLayout.Children.Add(new StackLayout
@@ -151,51 +141,37 @@ namespace aplikacja_dziekanat.pages
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
 
                 Children =
-    {
-         new StackLayout
-        {
-            VerticalOptions = LayoutOptions.Start,
-            Children =
-            {
-                new Label {Text ="Temperatura:",FontAttributes = FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
-                new Label {Text=_viewModel.Temperature, TextColor = Color.White, FontSize = 18},
-                new Label {Text="Wilgotność:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
-                new Label {Text=_viewModel.Humidity, TextColor = Color.White, FontSize = 18},
-                new Label { Text = "Ciśnienie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White, FontSize = 16},
-                new Label { Text = _viewModel.Pressure, TextColor = Color.White, FontSize = 18},
-                new Label {Text ="Wiatr:",FontAttributes = FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
-                new Label {Text=_viewModel.WindSpeed, TextColor = Color.White, FontSize = 18},
-            }
-        },
-        new StackLayout
-        {
-            VerticalOptions = LayoutOptions.Start,
-            Children =
-            {
-                new Label {Text="Kierunek wiatru:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
-                new Label {Text=_viewModel.WindDirection, TextColor = Color.White, FontSize = 18},
-                new Label { Text = "Zachmurzenie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White, FontSize = 16},
-                new Label { Text = _viewModel.Cloudiness, TextColor = Color.White, FontSize = 18},
-                new Label {Text ="Widoczność:",FontAttributes = FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
-                new Label {Text=_viewModel.Visibility, TextColor = Color.White, FontSize = 18},
-                new Label {Text="Pogoda:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
-                new Label {Text=_viewModel.WeatherCondition, TextColor = Color.White, FontSize = 18},
-            }
-        }
-    }
+                {
+                    new StackLayout
+                    {
+                        VerticalOptions = LayoutOptions.Start,
+                        Children =
+                        {
+                            // Wrap each data field in a black frame
+                            CreateDataLabel("Temperatura:", _viewModel.Temperature, 16, 18, 0, 10),
+                            CreateDataLabel("Wilgotność:", _viewModel.Humidity, 16, 18, 0, 10),
+                            CreateDataLabel("Ciśnienie:", _viewModel.Pressure, 16, 18, 0, 10),
+                            CreateDataLabel("Wiatr:", _viewModel.WindSpeed, 16, 18, 0, 10),
+                        }
+                    },
+                    new StackLayout
+                    {
+                        VerticalOptions = LayoutOptions.Start,
+                        Children =
+                        {
+                            // Wrap each data field in a black frame
+                            CreateDataLabel("Kierunek wiatru:", _viewModel.WindDirection, 16, 18, 0, 10),
+                            CreateDataLabel("Zachmurzenie:", _viewModel.Cloudiness, 16, 18, 0, 10),
+                            CreateDataLabel("Widoczność:", _viewModel.Visibility, 16, 18, 0, 10),
+                            CreateDataLabel("Pogoda:", _viewModel.WeatherCondition, 16, 18, 0, 10),
+                        }
+                    }
+                }
             });
 
-            // Add the last update information
-            centerStackLayout.Children.Add(new StackLayout
-            {
-                VerticalOptions = LayoutOptions.End,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Children =
-    {
-        new Label {Text="Ostatnia aktualizacja:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
-        new Label {Text=_viewModel.LastUpdate, TextColor = Color.White, FontSize = 18},
-    }
-            });
+            // Add the last update information inside a black frame
+            centerStackLayout.Children.Add(CreateDataLabel("Ostatnia aktualizacja:", _viewModel.LastUpdate, 16, 18,
+                    0, 10));
 
             // Add the centerStackLayout to the grid
             grid.Children.Add(centerStackLayout, 0, 0);
@@ -205,9 +181,26 @@ namespace aplikacja_dziekanat.pages
             {
                 Content = grid;
             });
+        }
 
-
-
+        private Frame CreateDataLabel(string labelText, string value, int labelFontSize, int valueFontSize, int marginTop, int marginBottom)
+        {
+            return new Frame
+            {
+                BackgroundColor = Color.Black,
+                Padding = new Thickness(10),
+                CornerRadius = 10,
+                Margin = new Thickness(0, marginTop, 0, marginBottom),
+                Content = new StackLayout
+                {
+                    VerticalOptions = LayoutOptions.Start,
+                    Children =
+                    {
+                        new Label { Text = labelText, FontAttributes = FontAttributes.Bold, TextColor = Color.White, FontSize = labelFontSize },
+                        new Label { Text = value, TextColor = Color.White, FontSize = valueFontSize },
+                    }
+                }
+            };
         }
 
         private string GetWindDirectionName(int? direction)
