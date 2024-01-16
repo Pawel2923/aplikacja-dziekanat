@@ -28,8 +28,41 @@ namespace aplikacja_dziekanat.pages
         public EdytujProfil()
         {
             InitializeComponent();
-            BindingContext = this;
+            ReauthenticateUser();
             ResetForm();
+            BindingContext = this;
+        }
+
+        private async void ReauthenticateUser()
+        {
+            DebugService.WriteLine("Przeprowadzanie reautentykacji");
+            var storageService = DependencyService.Get<ISecureStorageService>();
+            try
+            {
+                var fingerprintManager = DependencyService.Get<IFingerprintManager>();
+                var auth = DependencyService.Get<IFirebaseAuth>();
+                var fingerprint = await storageService.Load($"fingerprint_{auth.CurrentUser.Uid}");
+
+                if (fingerprintManager.IsFingerprintAvailable() && fingerprint == "true")
+                {
+                    fingerprintManager.AuthenticateFingerprint(() =>
+                    {
+                        DebugService.WriteLine("Reautentykacja zakończona powodzeniem");
+                    }, async () => {
+                        await Navigation.PopAsync();
+                    });
+                }
+                else
+                {
+                    auth.ShowPasswordPrompt(async () => {
+                        await Navigation.PopAsync();
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugService.WriteLine(ex.Message, "Wystąpił błąd");
+            }
         }
 
         private void ResetForm()
@@ -89,6 +122,13 @@ namespace aplikacja_dziekanat.pages
 
             if (firstNameResult.IsValid || lastNameResult.IsValid || phoneNumberResult.IsValid || addressResult.IsValid || cityResult.IsValid || zipCodeResult.IsValid)
             {
+                firstNameLabel.IsVisible = false;
+                lastNameLabel.IsVisible = false;
+                phoneNumberLabel.IsVisible = false;
+                addressLabel.IsVisible = false;
+                cityLabel.IsVisible = false;
+                zipCodeLabel.IsVisible = false;
+
                 return true;
             }
             else
@@ -97,12 +137,65 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
+        // Metoda sprawdza czy dane formularza zostały zmienione i zwraca true jeśli tak
+        private bool IsFormChanged()
+        {
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+
+            if (FirstName != auth.CurrentUser.Profile.FirstName)
+            {
+                return true;
+            }
+
+            if (LastName != auth.CurrentUser.Profile.LastName)
+            {
+                return true;
+            }
+
+            if (PhoneNumber != auth.CurrentUser.Profile.PhoneNumber)
+            {
+                return true;
+            }
+
+            if (Address != auth.CurrentUser.Profile.Address)
+            {
+                return true;
+            }
+
+            if (City != auth.CurrentUser.Profile.City)
+            {
+                return true;
+            }
+
+            if (ZipCode != auth.CurrentUser.Profile.ZipCode)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public async void SaveClickHandler(object sender, EventArgs e)
         {
-            if (CheckForm())
+            try
             {
-                try
+                if (CheckForm())
                 {
+                    // Sprawdź czy formularz został zmieniony
+                    if (!IsFormChanged())
+                    {
+                        await DisplayAlert("Komunikat", "Nie wprowadzono żadnych zmian", "OK");
+                        return;
+                    }
+
+                    // Zapytaj użytkownika czy jest pewien zapisania zmian
+                    bool isUserSure = await DisplayAlert("Zapisz zmiany", "Czy jesteś pewien, że chcesz zapisać zmiany?", "Tak", "Nie");
+
+                    if (!isUserSure)
+                    {
+                        return;
+                    }
+
                     var dbConnection = new DbConnection();
 
                     bool isSuccess = await dbConnection.UpdateProfile(new Profile
@@ -127,11 +220,11 @@ namespace aplikacja_dziekanat.pages
                     ResetForm();
                     await Navigation.PopAsync();
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    await DisplayAlert("Błąd", ex.Message, "OK");
-                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await DisplayAlert("Błąd", ex.Message, "OK");
             }
         }
 

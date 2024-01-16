@@ -15,7 +15,6 @@ namespace aplikacja_dziekanat.pages
         {
             MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
             IsPresented = false;
-
         }
         private void Handle_Clicked1(object sender, System.EventArgs e)
         {
@@ -34,18 +33,33 @@ namespace aplikacja_dziekanat.pages
             IsPresented = false;
         }
 
-        async public void NavigateToLoginPage()
+        private async void Handle_Clicked4(object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new LoginPage());
+            IsPresented = false;
+            await Navigation.PushAsync(new Admin());
+        }
+
+        private async void Handle_Clicked5(object sender, System.EventArgs e)
+        {
+            IsPresented = false;
+            await Navigation.PushAsync(new Teacher());
         }
 
         async public void LogoutClickHandler(object sender, EventArgs e)
-        {
+        {            
             IFirebaseAuth auth = DependencyService.Get<IFirebaseAuth>();
 
             auth.Logout();
             IsPresented = false;
-            await Navigation.PopAsync();
+
+            if (Navigation.NavigationStack.Count > 1)
+            {
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await Navigation.PushAsync(new LoginPage());
+            }
         }
 
         public void MenuBtnTapHandler(object sender, EventArgs e)
@@ -58,16 +72,38 @@ namespace aplikacja_dziekanat.pages
             MainTabbedPage.CurrentPage = MainTabbedPage.Children[0];
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
             var auth = DependencyService.Resolve<IFirebaseAuth>();
+            // Set token if user is logged in
+            await auth.SetToken();
 
-            if (auth.CurrentUser.Uid == null)
+            if (auth.Token() == null)
             {
-                NavigateToLoginPage();
+                await Navigation.PushAsync(new LoginPage());
             }
+
+            Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
+            {
+                if (string.IsNullOrEmpty(auth.CurrentUser.Role))
+                {
+                    return true;
+                }
+
+                if (auth.CurrentUser.Role != "admin")
+                {
+                    adminPanelBtn.IsVisible = false;
+                }
+
+                if (auth.CurrentUser.Role != "teacher")
+                {
+                    teacherPanelBtn.IsVisible = false;
+                }
+
+                return false;
+            });
         }
     }
 }

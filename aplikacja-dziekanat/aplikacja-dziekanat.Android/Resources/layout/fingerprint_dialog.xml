@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/shaperound">
+    <TextView
+        android:text="@string/fingerprint_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="@dimen/abc_text_size_title_material"
+        android:layout_marginBottom="10dp"/>
+    <ImageView
+        android:id="@+id/fingerprint_icon"
+        android:layout_width="@dimen/notification_large_icon_height"
+        android:layout_height="@dimen/notification_large_icon_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:src="?android:attr/fingerprintAuthDrawable"
+        android:contentDescription="@android:string/fingerprint_icon_content_description" />
+    <TextView
+        android:id="@+id/fingerprint_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fingerprint_caption"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/abc_text_size_caption_material" />
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/mtrl_btn_transparent_bg_color"
+        android:textColor="#006e9f"
+        android:text="@android:string/cancel" />
+</LinearLayout>

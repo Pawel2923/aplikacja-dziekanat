@@ -7,7 +7,7 @@
     android:padding="20dp"
     android:background="@drawable/shaperound">
     <TextView
-        android:text="Wybierz kierunek i rok studiów"
+        android:text="@string/mtrl_picker_range_header_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"

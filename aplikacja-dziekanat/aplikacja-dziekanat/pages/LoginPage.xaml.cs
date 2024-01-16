@@ -21,7 +21,6 @@ namespace aplikacja_dziekanat.pages
         {
             InitializeComponent();
             BindingContext = this;
-            ResetForm();
         }
 
         private void ResetForm()
@@ -89,14 +88,13 @@ namespace aplikacja_dziekanat.pages
             await Navigation.PushAsync(new SignupPage());
             ResetForm();
         }
-
         protected async override void OnAppearing()
         {
             base.OnAppearing();
 
             var auth = DependencyService.Resolve<IFirebaseAuth>();
 
-            if (auth.CurrentUser.Uid != null)
+            if (auth.Token() != null)
             {
                 await Navigation.PushAsync(new FormsTabPage());
             }

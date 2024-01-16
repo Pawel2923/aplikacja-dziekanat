@@ -219,5 +219,12 @@ namespace aplikacja_dziekanat.pages
 
             return "Nieznany";
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var auth = DependencyService.Resolve<IFirebaseAuth>();
+        }
     }
 }

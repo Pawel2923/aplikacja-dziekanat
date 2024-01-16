@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Diagnostics;
-using System.Net.Mail;
 using Xamarin.Forms;
 
 namespace CustomRenderer
 {
-    public class Input : Entry
+    public class Textbox : Editor
     {
         public class Result
         {
@@ -34,7 +33,7 @@ namespace CustomRenderer
             }
         }
 
-        public Result CheckValidity(bool isEmail = false, bool passwordsMatch = true)
+        public Result CheckValidity()
         {
             Result result = new Result();
 
@@ -43,24 +42,6 @@ namespace CustomRenderer
                 if (string.IsNullOrEmpty(Text))
                 {
                     throw new Exception("Pole " + Placeholder + " jest puste");
-                }
-
-                if (!passwordsMatch)
-                {
-                    throw new Exception("Hasła nie są takie same");
-                }
-
-                if (isEmail)
-                {
-                    try
-                    {
-                        MailAddress address = new MailAddress(Text);
-                        result.IsValid = address.Address == Text.Trim();
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception("Podany adres email jest niepoprawny");
-                    }
                 }
 
                 result.IsValid = true;
