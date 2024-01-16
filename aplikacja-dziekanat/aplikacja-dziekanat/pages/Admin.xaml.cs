@@ -2,7 +2,6 @@ using db;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,12 +26,45 @@ namespace aplikacja_dziekanat.pages
         public Admin()
         {
             InitializeComponent();
+            ReauthenticateUser();
             classIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             daySelect.ItemsSource = daysList;
             scheduleIdSelect.ItemsSource = new List<string> { "Wybierz rok i dzień" };
             noticeIdSelect.ItemsSource = new List<string> { "Ładowanie..." };
             emailSelect.ItemsSource = new List<string> { "Ładowanie..." };
             BindingContext = this;
+        }
+
+        private async void ReauthenticateUser()
+        {
+            DebugService.WriteLine("Przeprowadzanie reautentykacji");
+            var storageService = DependencyService.Get<ISecureStorageService>();
+            try
+            {
+                var fingerprintManager = DependencyService.Get<IFingerprintManager>();
+                var auth = DependencyService.Get<IFirebaseAuth>();
+                var fingerprint = await storageService.Load($"fingerprint_{auth.CurrentUser.Uid}");
+
+                if (fingerprintManager.IsFingerprintAvailable() && fingerprint == "true")
+                {
+                    fingerprintManager.AuthenticateFingerprint(() =>
+                    {
+                        DebugService.WriteLine("Reautentykacja zakończona powodzeniem");
+                    }, async () => {
+                        await Navigation.PopAsync();
+                    });
+                }
+                else
+                {
+                    auth.ShowPasswordPrompt(async () => {
+                        await Navigation.PopAsync();
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugService.WriteLine(ex.Message, "Wystąpił błąd");
+            }
         }
 
         private async void OnEditSchedule(object sender, EventArgs e)
@@ -86,7 +118,7 @@ namespace aplikacja_dziekanat.pages
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Wystąpił błąd: {ex.Message}");
+                DebugService.WriteLine(ex.Message, "Wystąpił błąd");
                 await DisplayAlert("Błąd", "Wystąpił błąd. Spróbuj ponownie.", "OK");
             }
         }
@@ -220,7 +252,7 @@ namespace aplikacja_dziekanat.pages
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Wystąpił błąd: {ex.Message}");
+                    DebugService.WriteLine(ex.Message, "Wystąpił błąd");
                     await DisplayAlert("Błąd", "Wystąpił błąd. Spróbuj ponownie.", "OK");
                 }
             }
