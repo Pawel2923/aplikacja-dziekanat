@@ -113,53 +113,101 @@ namespace aplikacja_dziekanat.pages
             }
 
             // Set the background image
+            // Set the background image
+            // Set the background image
+            // Set the background image
+            // Set the background image
             Grid grid = new Grid();
 
-            // Add the background image as the first element
+            // Add the background image as the first element, spanning the entire grid
             grid.Children.Add(new Image
             {
                 Source = backgroundImage,
                 Aspect = Aspect.AspectFill,
-                InputTransparent = true
-            });
+                InputTransparent = true,
+            }, 0, 0); // This sets the image to span the entire grid
 
-            // Add existing UI elements as the second element
-            grid.Children.Add(new StackLayout
+            // Create a stack layout for the text and other information in the center
+            var centerStackLayout = new StackLayout
             {
-                Children =
-                {
-                    // Add your existing UI elements here
-                    new Label { Text = "Miejsce:", FontAttributes = FontAttributes.Bold, TextColor = Color.White },
-                    new Label { Text = _viewModel.City, TextColor = Color.White },
-                    new Label {Text ="Temperatura:",FontAttributes = FontAttributes.Bold,TextColor = Color.White},
-                    new Label {Text=_viewModel.Temperature, TextColor = Color.White},
-                    new Label {Text="Wilgotność:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
-                    new Label {Text=_viewModel.Humidity, TextColor = Color.White},
-                     new Label { Text = "Ciśnienie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White },
-                    new Label { Text = _viewModel.Pressure, TextColor = Color.White },
-                    new Label {Text ="Wiatr:",FontAttributes = FontAttributes.Bold,TextColor = Color.White},
-                    new Label {Text=_viewModel.WindSpeed, TextColor = Color.White},
-                    new Label {Text="Kierunek wiatru:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
-                    new Label {Text=_viewModel.WindDirection, TextColor = Color.White},
-                       new Label { Text = "Zachmurzenie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White },
-                    new Label { Text = _viewModel.Cloudiness, TextColor = Color.White },
-                    new Label {Text ="Widoczność:",FontAttributes = FontAttributes.Bold,TextColor = Color.White},
-                    new Label {Text=_viewModel.Visibility, TextColor = Color.White},
-                    new Label {Text="Pogoda:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
-                    new Label {Text=_viewModel.WeatherCondition, TextColor = Color.White},
-                      new Label {Text="Ostatnia aktualizacja:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
-                    new Label {Text=_viewModel.LastUpdate, TextColor = Color.White},
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+            };
 
-
-                    // ... Add other labels for existing UI elements
-                }
+            // Add the city name
+            centerStackLayout.Children.Add(new Label
+            {
+                Text = "Nowy Sącz",
+                TextColor = Color.White,
+                FontSize = 32, // Adjust the font size as needed
+                FontAttributes = FontAttributes.Bold,
             });
+
+            // Add the rest of the information in two columns
+            centerStackLayout.Children.Add(new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+
+                Children =
+    {
+         new StackLayout
+        {
+            VerticalOptions = LayoutOptions.Start,
+            Children =
+            {
+                new Label {Text ="Temperatura:",FontAttributes = FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
+                new Label {Text=_viewModel.Temperature, TextColor = Color.White, FontSize = 18},
+                new Label {Text="Wilgotność:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
+                new Label {Text=_viewModel.Humidity, TextColor = Color.White, FontSize = 18},
+                new Label { Text = "Ciśnienie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White, FontSize = 16},
+                new Label { Text = _viewModel.Pressure, TextColor = Color.White, FontSize = 18},
+                new Label {Text ="Wiatr:",FontAttributes = FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
+                new Label {Text=_viewModel.WindSpeed, TextColor = Color.White, FontSize = 18},
+            }
+        },
+        new StackLayout
+        {
+            VerticalOptions = LayoutOptions.Start,
+            Children =
+            {
+                new Label {Text="Kierunek wiatru:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
+                new Label {Text=_viewModel.WindDirection, TextColor = Color.White, FontSize = 18},
+                new Label { Text = "Zachmurzenie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White, FontSize = 16},
+                new Label { Text = _viewModel.Cloudiness, TextColor = Color.White, FontSize = 18},
+                new Label {Text ="Widoczność:",FontAttributes = FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
+                new Label {Text=_viewModel.Visibility, TextColor = Color.White, FontSize = 18},
+                new Label {Text="Pogoda:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
+                new Label {Text=_viewModel.WeatherCondition, TextColor = Color.White, FontSize = 18},
+            }
+        }
+    }
+            });
+
+            // Add the last update information
+            centerStackLayout.Children.Add(new StackLayout
+            {
+                VerticalOptions = LayoutOptions.End,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                Children =
+    {
+        new Label {Text="Ostatnia aktualizacja:",FontAttributes=FontAttributes.Bold,TextColor = Color.White, FontSize = 16},
+        new Label {Text=_viewModel.LastUpdate, TextColor = Color.White, FontSize = 18},
+    }
+            });
+
+            // Add the centerStackLayout to the grid
+            grid.Children.Add(centerStackLayout, 0, 0);
 
             // Set the Content of the page to the created Grid container
             Device.BeginInvokeOnMainThread(() =>
             {
                 Content = grid;
             });
+
+
+
         }
 
         private string GetWindDirectionName(int? direction)
