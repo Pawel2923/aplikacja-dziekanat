@@ -19,28 +19,6 @@ namespace db
             AuthTokenAsyncFactory = () => Task.FromResult(auth?.Token())
         });
 
-        public async Task<List<User>> GetUsers()
-        {
-            try
-            {
-                var userItems = await firebase.Child("users").OnceAsync<User>();
-
-                return userItems.Select(item => new User
-                {
-                    Uid = item.Key,
-                    Email = item.Object.Email,
-                    Role = item.Object.Role,
-                    ClassId = item.Object.ClassId,
-                    Profile = item.Object.Profile
-                }).ToList();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception: " + ex);
-                return null;
-            }
-        }
-
         public async Task<User> GetUser(string uid)
         {
             try
@@ -97,7 +75,6 @@ namespace db
         {
             try
             {
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
                 await firebase.Child("users").Child(auth.CurrentUser.Uid).PutAsync(new User
                 {
                     Email = newUser.Email,
@@ -132,8 +109,6 @@ namespace db
         {
             try
             {
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
-
                 await auth.ChangeUserEmail(email);
 
                 auth.CurrentUser.Email = email;
@@ -163,7 +138,6 @@ namespace db
 
             try
             {
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
                 await firebase.Child("users").Child(auth.CurrentUser.Uid).Child("Profile").PutAsync(new Profile
                 {
                     FirstName = newProfile.FirstName,
@@ -315,39 +289,15 @@ namespace db
             }
         }
 
-        public async Task<List<Notice>> GetNotices()
-        {
-            try
-            {
-                var scheduleItems = await firebase
-                    .Child("notice")
-                    .OnceAsync<Notice>();
-
-                return scheduleItems.Select(item => new Notice
-                {
-                    Author = item.Object.Author,
-                    Date = item.Object.Date,
-                    Content = item.Object.Content,
-                    Title = item.Object.Title,
-                    To = item.Object.To,
-                }).ToList();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception: " + ex);
-                throw new Exception(ex.Message);
-            }
-        }
-
         public async Task<List<Notice>> GetNotices(string classId)
         {
             try
             {
-                var scheduleItems = await firebase
+                var notices = await firebase
                     .Child("notice")
                     .OnceAsync<Notice>();
 
-                return scheduleItems.Select(item => item.Object.To == classId ? (new Notice
+                return notices.Select(item => item.Object.To == classId ? (new Notice
                 {
                     Author = item.Object.Author,
                     Date = item.Object.Date,
@@ -466,7 +416,6 @@ namespace db
         {
             try
             {
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
                 await firebase.Child("notice").PostAsync(new Notice
                 {
                     Author = newNotice.Author,
