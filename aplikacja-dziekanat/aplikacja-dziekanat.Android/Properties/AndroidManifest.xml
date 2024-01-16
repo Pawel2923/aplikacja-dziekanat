@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.aplikacja_dziekanat" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33" />
-	<application android:label="Aplikacja Dziekanat" android:theme="@style/MainTheme" android:icon="@drawable/Logo"></application>
+	<application android:label="Aplikacja Dziekanat" android:theme="@style/MainTheme" android:icon="@drawable/Logo">
+		<!-- Dodaj klucz API dla usług Google Maps -->
+		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCY1BL-LGwI6MG4av5-Xh-p_3xZoNWNhAE" />
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+		<!-- Możesz dodać dodatkowe konfiguracje usług Google Maps tutaj -->
+	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>

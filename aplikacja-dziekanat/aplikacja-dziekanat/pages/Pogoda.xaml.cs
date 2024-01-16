@@ -1,5 +1,4 @@
-﻿// Pogoda.xaml.cs
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -58,26 +57,109 @@ namespace aplikacja_dziekanat.pages
 
                             _viewModel.Cloudiness = $"{weatherData.Clouds?.Value}%";
                             _viewModel.Visibility = $" {weatherData.Visibility} m";
-                            
+
                             _viewModel.WeatherCondition = $" {weatherData.Weather?[0]?.Description}";
 
                             _viewModel.LastUpdate = $" {DateTime.Now}";
+
+                            // Update the background image based on weather conditions
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                UpdateBackgroundImage(weatherData.Weather?[0]?.Description);
+                            });
                         }
                         else
                         {
-                            _viewModel.ErrorMessage = "Błąd podczas przetwarzania danych pogodowych.";
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                _viewModel.ErrorMessage = "Błąd podczas przetwarzania danych pogodowych.";
+                            });
                         }
                     }
                     else
                     {
-                        _viewModel.ErrorMessage = "Błąd podczas pobierania danych pogodowych.";
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            _viewModel.ErrorMessage = "Błąd podczas pobierania danych pogodowych.";
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                _viewModel.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    _viewModel.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
+                });
             }
+        }
+
+        private void UpdateBackgroundImage(string weatherDescription)
+        {
+            string backgroundImage = "basic.jpg"; // Default background image
+
+            // Update background image based on weather conditions
+            if (!string.IsNullOrEmpty(weatherDescription))
+            {
+                if (weatherDescription.ToLower().Contains("clear"))
+                {
+                    backgroundImage = "slonce.jpg";
+                }
+                else if (weatherDescription.ToLower().Contains("cloud"))
+                {
+                    backgroundImage = "zachmurzeniezima.jpg";
+                }
+                // Add more conditions for other weather descriptions as needed
+            }
+
+            // Set the background image
+            Grid grid = new Grid();
+
+            // Add the background image as the first element
+            grid.Children.Add(new Image
+            {
+                Source = backgroundImage,
+                Aspect = Aspect.AspectFill,
+                InputTransparent = true
+            });
+
+            // Add existing UI elements as the second element
+            grid.Children.Add(new StackLayout
+            {
+                Children =
+                {
+                    // Add your existing UI elements here
+                    new Label { Text = "Miejsce:", FontAttributes = FontAttributes.Bold, TextColor = Color.White },
+                    new Label { Text = _viewModel.City, TextColor = Color.White },
+                    new Label {Text ="Temperatura:",FontAttributes = FontAttributes.Bold,TextColor = Color.White},
+                    new Label {Text=_viewModel.Temperature, TextColor = Color.White},
+                    new Label {Text="Wilgotność:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
+                    new Label {Text=_viewModel.Humidity, TextColor = Color.White},
+                     new Label { Text = "Ciśnienie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White },
+                    new Label { Text = _viewModel.Pressure, TextColor = Color.White },
+                    new Label {Text ="Wiatr:",FontAttributes = FontAttributes.Bold,TextColor = Color.White},
+                    new Label {Text=_viewModel.WindSpeed, TextColor = Color.White},
+                    new Label {Text="Kierunek wiatru:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
+                    new Label {Text=_viewModel.WindDirection, TextColor = Color.White},
+                       new Label { Text = "Zachmurzenie:", FontAttributes = FontAttributes.Bold, TextColor = Color.White },
+                    new Label { Text = _viewModel.Cloudiness, TextColor = Color.White },
+                    new Label {Text ="Widoczność:",FontAttributes = FontAttributes.Bold,TextColor = Color.White},
+                    new Label {Text=_viewModel.Visibility, TextColor = Color.White},
+                    new Label {Text="Pogoda:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
+                    new Label {Text=_viewModel.WeatherCondition, TextColor = Color.White},
+                      new Label {Text="Ostatnia aktualizacja:",FontAttributes=FontAttributes.Bold,TextColor = Color.White},
+                    new Label {Text=_viewModel.LastUpdate, TextColor = Color.White},
+
+
+                    // ... Add other labels for existing UI elements
+                }
+            });
+
+            // Set the Content of the page to the created Grid container
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Content = grid;
+            });
         }
 
         private string GetWindDirectionName(int? direction)
