@@ -1,4 +1,5 @@
 ﻿using db;
+using System;
 using System.Threading.Tasks;
 namespace aplikacja_dziekanat
 {
@@ -12,6 +13,7 @@ namespace aplikacja_dziekanat
         Task VerifyBeforeUpdateEmail(string newEmail);
         Task ChangeUserEmail(string newEmail);
         void ChangeUserPassword(string newPassword);
+        void ShowPasswordPrompt(Action onDismiss);
         void DeleteCurrentUser();
         void Logout();
     }

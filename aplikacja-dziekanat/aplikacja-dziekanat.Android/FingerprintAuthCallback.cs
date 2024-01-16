@@ -1,5 +1,4 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.Support.V4.Hardware.Fingerprint;
 using Android.Widget;
 using Javax.Crypto;
@@ -13,12 +12,11 @@ namespace aplikacja_dziekanat.Droid
         static readonly byte[] SECRET_BYTES = { 14, 4, 40, 212, 180, 25, 3, 169, 175 };
         private static readonly string TAG = "FingerprintAuthCallback";
 
-        public FingerprintAuthCallback()
-        {
-        }
+        private Action onSucceed;
 
-        public FingerprintAuthCallback(Context context)
+        public FingerprintAuthCallback(Action succeedHandler, Action cancelHandler)
         {
+            onSucceed = succeedHandler;
             DebugService.WriteLine(TAG, TAG, "Place your finger on the fingerprint scanner to verify your identity.");
             dialog = new Dialog(Xamarin.Essentials.Platform.CurrentActivity);
             dialog.SetContentView(Resource.Layout.fingerprint_dialog);
@@ -27,10 +25,16 @@ namespace aplikacja_dziekanat.Droid
             dialog.Window.SetDimAmount(0.8f);
             dialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
 
+            dialog.CancelEvent += (object sender, EventArgs e) =>
+            {
+                cancelHandler();
+            };
+
             Button btn = (Button)dialog.FindViewById(Resource.Id.button1);
             btn.Click += (object sender, EventArgs e) =>
             {
                 dialog.Dismiss();
+                cancelHandler();
             };
 
             dialog.Show();
@@ -46,6 +50,7 @@ namespace aplikacja_dziekanat.Droid
 
                     DebugService.WriteLine("Fingerprint authentication succeeded.");
                     dialog.Dismiss();
+                    onSucceed();
                 }
                 catch (BadPaddingException bpe)
                 {
@@ -70,12 +75,16 @@ namespace aplikacja_dziekanat.Droid
 
             string errorMessage = errString.ToString();
             DebugService.WriteLine(TAG, nameof(OnAuthenticationError), "Authentication error: " + errorMessage);
+            TextView status = (TextView)dialog.FindViewById(Resource.Id.fingerprint_status);
+            status.Text = "Wystąpił błąd";
         }
 
         public override void OnAuthenticationFailed()
         {
             base.OnAuthenticationFailed();
             DebugService.WriteLine(TAG, nameof(OnAuthenticationFailed), "Authentication failed.");
+            TextView status = (TextView)dialog.FindViewById(Resource.Id.fingerprint_status);
+            status.Text = "Nie rozpoznano odcisku palca";
         }
 
         public override void OnAuthenticationHelp(int helpMsgId, Java.Lang.ICharSequence helpString)
@@ -83,6 +92,8 @@ namespace aplikacja_dziekanat.Droid
             base.OnAuthenticationHelp(helpMsgId, helpString);
             string helpMessage = helpString.ToString();
             DebugService.WriteLine(TAG, nameof(OnAuthenticationHelp), "Authentication help: " + helpMessage);
+            TextView status = (TextView)dialog.FindViewById(Resource.Id.fingerprint_status);
+            status.Text = helpMessage;
         }
     }
 }

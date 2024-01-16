@@ -10,6 +10,7 @@ namespace aplikacja_dziekanat.pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class profilUz : ContentPage, INotifyPropertyChanged
     {
+        IFirebaseAuth auth = DependencyService.Resolve<IFirebaseAuth>();
         private string _FirstName;
         private string _LastName;
         private string _Course;
@@ -76,7 +77,6 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
                 if (auth.CurrentUser.Role == "admin")
                 {
                     Debug.WriteLine("Przechodzenie do panelu administracyjnego");
@@ -99,8 +99,6 @@ namespace aplikacja_dziekanat.pages
         {
             try
             {
-                var auth = DependencyService.Resolve<IFirebaseAuth>();
-
                 if (auth.Token() == null)
                 {
                     throw new Exception("Nie udało się usunąć użytkownika");
@@ -140,9 +138,53 @@ namespace aplikacja_dziekanat.pages
             }
         }
 
+        private async void FingerprintClickHandler(object sender, EventArgs e)
+        {
+            var secureStorage = DependencyService.Resolve<ISecureStorageService>();
+            string fingerprintEnabled = await secureStorage.Load($"fingerprint_{auth.CurrentUser.Uid}");
+
+            Debug.WriteLine($"fingerprintEnabled value: {fingerprintEnabled}");
+
+            if (fingerprintEnabled == "true")
+            {
+                secureStorage.Delete($"fingerprint_{auth.CurrentUser.Uid}");
+                addFingerprintButton.Text = "Dodaj odcisk palca";
+                return;
+            }
+
+            var fingerprintManager = DependencyService.Resolve<IFingerprintManager>();
+
+            try
+            {
+                if (fingerprintManager.IsFingerprintAvailable())
+                {
+                    fingerprintManager.AuthenticateFingerprint(() => {
+                        secureStorage.Save($"fingerprint_{auth.CurrentUser.Uid}", "true");
+                        addFingerprintButton.Text = "Usuń odcisk palca";
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                if (ex.Message.ToLower().Contains("nie znaleziono czytnika linii papilarnych"))
+                {
+                    await DisplayAlert("Błąd", "Nie znaleziono czytnika linii papilarnych", "OK");
+                }
+                else if (ex.Message.ToLower().Contains("nie ustawiono blokady ekranu"))
+                {
+                    await DisplayAlert("Błąd", "Nie ustawiono blokady ekranu", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Błąd", "Wystąpił błąd podczas logowania", "OK");
+                }
+            }
+        }
+
         private async void UpdateProfile()
         {
-            var auth = DependencyService.Resolve<IFirebaseAuth>();
+            var secureStorage = DependencyService.Resolve<ISecureStorageService>();
 
             if (auth.CurrentUser != null)
             {
@@ -211,6 +253,11 @@ namespace aplikacja_dziekanat.pages
             {
                 Debug.WriteLine("Wystąpił błąd podczas aktualizowania profilu użytkownika");
                 await DisplayAlert("Błąd", "Nie znaleziono użytkownika", "OK");
+            }
+
+            if (await secureStorage.Load($"fingerprint_{auth.CurrentUser.Uid}") == "true")
+            {
+                addFingerprintButton.Text = "Usuń odcisk palca";
             }
         }
     }

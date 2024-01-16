@@ -88,36 +88,6 @@ namespace aplikacja_dziekanat.pages
             await Navigation.PushAsync(new SignupPage());
             ResetForm();
         }
-
-        private void FingerprintClickHandler(object sender, EventArgs e)
-        {
-            var fingerprintManager = DependencyService.Resolve<IFingerprintManager>();
-            
-            try
-            {
-                if (fingerprintManager.IsFingerprintAvailable())
-                {
-                    fingerprintManager.AuthenticateFingerprint();
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                if (ex.Message.ToLower().Contains("nie znaleziono czytnika linii papilarnych"))
-                {
-                    DisplayAlert("Błąd", "Nie znaleziono czytnika linii papilarnych", "OK");
-                }
-                else if (ex.Message.ToLower().Contains("nie ustawiono blokady ekranu"))
-                {
-                    DisplayAlert("Błąd", "Nie ustawiono blokady ekranu", "OK");
-                }
-                else
-                {
-                    DisplayAlert("Błąd", "Wystąpił błąd podczas logowania", "OK");
-                }
-            }
-        }
-
         protected async override void OnAppearing()
         {
             base.OnAppearing();

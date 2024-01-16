@@ -31,9 +31,6 @@
                         Style="{StaticResource btnSecondaryStyle}"
                         Clicked="SignupClickHandler"/>
             </StackLayout>
-            <Button Text="Zaloguj się odciskiem palca"
-                    Style="{StaticResource btnPrimaryStyle}"
-                    Clicked="FingerprintClickHandler"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

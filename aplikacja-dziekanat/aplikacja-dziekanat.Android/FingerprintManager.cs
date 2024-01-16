@@ -5,6 +5,7 @@ using Android.Support.V4.Hardware.Fingerprint;
 using System;
 using aplikacja_dziekanat.Droid;
 using Xamarin.Forms;
+using System.Dynamic;
 
 [assembly: Dependency(typeof(FingerprintManager))]
 namespace aplikacja_dziekanat.Droid
@@ -50,7 +51,7 @@ namespace aplikacja_dziekanat.Droid
 
         public bool IsFingerprintAvailable() => AreRequirementsFullfilled() && fingerprintManager.HasEnrolledFingerprints && IsUseFingerprintEnabled();
 
-        public void AuthenticateFingerprint()
+        public void AuthenticateFingerprint(Action onSucceed, Action onCancel = null)
         {
             const int flags = 0;
 
@@ -58,11 +59,25 @@ namespace aplikacja_dziekanat.Droid
 
             var cancellationSignal = new Android.Support.V4.OS.CancellationSignal();
 
+            void cancelHandler()
+            {
+                if (onCancel != null)
+                {
+                    onCancel();
+                    cancellationSignal.Cancel();
+                }
+                else
+                {
+                    cancellationSignal.Cancel();
+                }
+            }
+
             FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.From(Android.App.Application.Context);
 
-            FingerprintManagerCompat.AuthenticationCallback authenticationCallback = new FingerprintAuthCallback(Android.App.Application.Context);
+            FingerprintManagerCompat.AuthenticationCallback authenticationCallback = new FingerprintAuthCallback(onSucceed, cancelHandler);
 
             fingerprintManager.Authenticate(cryptoHelper.BuildCryptoObject(), flags, cancellationSignal, authenticationCallback, null);
         }
+
     }
 }

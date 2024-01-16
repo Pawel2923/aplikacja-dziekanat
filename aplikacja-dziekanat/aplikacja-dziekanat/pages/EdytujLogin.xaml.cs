@@ -24,10 +24,42 @@ namespace aplikacja_dziekanat.pages
         public EdytujLogin()
         {
             InitializeComponent();
+            ReauthenticateUser();
             ResetForm();
             BindingContext = this;
         }
 
+        private async void ReauthenticateUser()
+        {
+            DebugService.WriteLine("Przeprowadzanie reautentykacji");
+            var storageService = DependencyService.Get<ISecureStorageService>();
+            try
+            {
+                var fingerprintManager = DependencyService.Get<IFingerprintManager>();
+                var auth = DependencyService.Get<IFirebaseAuth>();
+                var fingerprint = await storageService.Load($"fingerprint_{auth.CurrentUser.Uid}");
+
+                if (fingerprintManager.IsFingerprintAvailable() && fingerprint == "true")
+                {
+                    fingerprintManager.AuthenticateFingerprint(() =>
+                    {
+                        DebugService.WriteLine("Reautentykacja zakończona powodzeniem");
+                    }, async () => {
+                        await Navigation.PopAsync();
+                    });
+                }
+                else
+                {
+                    auth.ShowPasswordPrompt(async () => {
+                        await Navigation.PopAsync();
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugService.WriteLine(ex.Message, "Wystąpił błąd");
+            }
+        }
         private void ResetForm()
         {
             var auth = DependencyService.Resolve<IFirebaseAuth>();

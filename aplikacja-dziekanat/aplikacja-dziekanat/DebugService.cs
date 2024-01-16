@@ -11,6 +11,11 @@ namespace aplikacja_dziekanat
             Debug.WriteLine(message);
         }
 
+        public static void WriteLine(string exception, string message)
+        {
+            Debug.WriteLine($"{exception}: {message}");
+        }
+
         public static void WriteLine(string className, string methodName, string message)
         {
             Debug.WriteLine($"X: {className} at {methodName} method - {message}");

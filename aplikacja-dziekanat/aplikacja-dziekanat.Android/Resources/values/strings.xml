@@ -2,4 +2,7 @@
 <resources>
 	<string name="fingerprint_title">Użyj biometrii, aby kontynuować</string>
 	<string name="fingerprint_caption">Umieść palec na czytniku</string>
+	<string name="password_title">Użyj hasła, aby kontynuować</string>
+	<string name="password_caption">Wypełnij pole</string>
+	<string name="password_hint">Hasło</string>
 </resources>
