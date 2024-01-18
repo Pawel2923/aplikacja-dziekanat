@@ -69,6 +69,11 @@ namespace aplikacja_dziekanat.pages
         {
             var auth = DependencyService.Resolve<IFirebaseAuth>();
 
+            if (auth == null || auth.CurrentUser == null)
+            {
+                return;
+            }
+
             FirstName = auth.CurrentUser.Profile.FirstName;
             firstNameLabel.Text = "";
             firstNameLabel.IsVisible = false;

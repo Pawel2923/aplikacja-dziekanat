@@ -11,7 +11,6 @@ namespace aplikacja_dziekanat.pages
     public partial class Ogloszenia : ContentPage
     {
         private readonly DbConnection dbConnection = new DbConnection();
-        private List<User> users = new List<User>();
         private List<Notice> notices = new List<Notice>();
         private Image plusImage;
         private Entry titleEntry;
@@ -32,7 +31,7 @@ namespace aplikacja_dziekanat.pages
             base.OnAppearing();
             var auth = DependencyService.Resolve<IFirebaseAuth>();
 
-            if (auth.Token() != null)
+            if (auth.Token() != null && auth.CurrentUser != null)
             {
                 if (auth.CurrentUser.Role == "admin" || auth.CurrentUser.Role == "teacher")
                 {
