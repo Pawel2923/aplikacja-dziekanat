@@ -87,6 +87,11 @@ namespace aplikacja_dziekanat.pages
 
             Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
             {
+                if (auth == null || auth.CurrentUser == null)
+                {
+                    return false;
+                }
+
                 if (string.IsNullOrEmpty(auth.CurrentUser.Role))
                 {
                     return true;

@@ -246,18 +246,18 @@ namespace aplikacja_dziekanat.pages
                     adminTeacherPanel.IsVisible = false;
                 }
 
+                // Ustaw tekst przycisku dodawania odcisku palca
+                if (await secureStorage.Load($"fingerprint_{auth.CurrentUser.Uid}") == "true")
+                {
+                    addFingerprintButton.Text = "Usuń odcisk palca";
+                }
+
                 Debug.WriteLine("Profil został zaktualizowany");
             }
-
             else
             {
                 Debug.WriteLine("Wystąpił błąd podczas aktualizowania profilu użytkownika");
                 await DisplayAlert("Błąd", "Nie znaleziono użytkownika", "OK");
-            }
-
-            if (await secureStorage.Load($"fingerprint_{auth.CurrentUser.Uid}") == "true")
-            {
-                addFingerprintButton.Text = "Usuń odcisk palca";
             }
         }
     }

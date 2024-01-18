@@ -106,7 +106,7 @@ namespace aplikacja_dziekanat.pages
             Content = mainStackLayout;
             Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
             {
-                if (string.IsNullOrEmpty(auth.CurrentUser.ClassId))
+                if (string.IsNullOrEmpty(auth.CurrentUser?.ClassId))
                 {
                     return true;
                 }
