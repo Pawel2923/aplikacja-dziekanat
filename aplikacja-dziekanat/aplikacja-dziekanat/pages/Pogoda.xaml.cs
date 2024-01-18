@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using aplikacja_dziekanat.pages.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using aplikacja_dziekanat.pages.models;
+using System.Globalization;
 
 namespace aplikacja_dziekanat.pages
 {
@@ -46,8 +46,13 @@ namespace aplikacja_dziekanat.pages
 
                             float temperaturaWKelwinach = weatherData.Main?.Temp ?? 0;
                             float temperaturaWCelsjuszach = temperaturaWKelwinach - 273.15f;
+                            var provider = new NumberFormatInfo { 
+                                NumberDecimalDigits = 1,
+                                NumberDecimalSeparator = ","
+                            };
+                            string temperatura = temperaturaWCelsjuszach.ToString("N", provider);
 
-                            _viewModel.Temperature = $"{temperaturaWCelsjuszach}°C";
+                            _viewModel.Temperature = $"{temperatura}°C";
                             _viewModel.FeelsLike = $"{weatherData.Main?.FeelsLike}°C";
                             _viewModel.Humidity = $" {weatherData.Main?.Humidity}%";
                             _viewModel.Pressure = $" {weatherData.Main?.Pressure} hPa";
